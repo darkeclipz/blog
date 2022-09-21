@@ -1,4 +1,4 @@
-baseURL = 'http://blog.rotgers.io/'
+baseURL = 'https://rotgers.io/'
 languageCode = 'en-us'
 title = "Lars' blog"
 theme = 'hugo-book'
