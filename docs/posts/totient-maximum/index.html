@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In this post we will look at solving problem 69 on Project Euler. This problem is about using Euler&rsquo;s totient function to find a given maximum. Without any further introduction, let&rsquo;s dive into it.
+Problem statement#Euler&rsquo;s Totient function, $\varphi(n)$, is used to determine the number of numbers less than $n$ which are relatively prime to $n$. For example, as 1, 2, 4, 5, 7, and 8, are all less than nine, and relatively prime to nine, $\varphi(9) = 6$.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Totient maximum" />
+<meta property="og:description" content="In this post we will look at solving problem 69 on Project Euler. This problem is about using Euler&rsquo;s totient function to find a given maximum. Without any further introduction, let&rsquo;s dive into it.
+Problem statement#Euler&rsquo;s Totient function, $\varphi(n)$, is used to determine the number of numbers less than $n$ which are relatively prime to $n$. For example, as 1, 2, 4, 5, 7, and 8, are all less than nine, and relatively prime to nine, $\varphi(9) = 6$." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.rotgers.io/posts/totient-maximum/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-26T08:47:11+01:00" />
+<meta property="article:modified_time" content="2022-03-26T08:47:11+01:00" />
+
+<title>Totient maximum | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e195b873ca254d6365f5847191f9c26e71e34c50dddf7363cd19d08fb0aafd38.css" integrity="sha256-4ZW4c8olTWNl9YRxkfnCbnHjTFDd33NjzRnQj7Cq/Tg=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>Lars&#39; blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <hr />
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/totient-maximum/" class="active">Totient maximum</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/probability-analysis-of-monopoly/" class="">Monopoly odds</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/compartment-model-epidemiology/" class="">Compartment model for epidemiology</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/my-first-post/" class="">My First Post</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+<hr />
+
+<div>
+  <img src="https://projecteuler.net/profile/darkeclipz.png" alt="project euler badge" />
+</div>
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Totient maximum</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#problem-statement">Problem statement</a></li>
+    <li><a href="#eulers-totient-function">Euler&rsquo;s Totient function</a></li>
+    <li><a href="#naive-implementation">Naive implementation</a></li>
+    <li><a href="#fundamental-theorem-of-arithmetic">Fundamental theorem of arithmetic</a></li>
+    <li><a href="#sieve-of-eratosthenes">Sieve of Eratosthenes</a></li>
+    <li><a href="#solving-the-problem">Solving the problem</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/totient-maximum/">Totient maximum</a>
+  </h1>
+  
+  <h5>March 26, 2022</h5>
+
+
+
+  
+
+  
+
+
+
+<p>In this post we will look at solving problem 69 on Project Euler. This problem is about using Euler&rsquo;s totient function to find a given maximum. Without any further introduction, let&rsquo;s dive into it.</p>
+<h2 id="problem-statement">
+  Problem statement
+  <a class="anchor" href="#problem-statement">#</a>
+</h2>
+<p>Euler&rsquo;s Totient function, $\varphi(n)$, is used to determine the number of numbers less than $n$ which are relatively prime to $n$. For example, as 1, 2, 4, 5, 7, and 8, are all less than nine, and relatively prime to nine, $\varphi(9) = 6$. It can be seen that $n=6$ produces a maximum for $n / \varphi(n)$ for $n \leq 10$.</p><p>Find the value of $n \leq 1,000,000$ for which $n / \varphi (n)$ is maximum.</p>
+<p><em>The table has been left out for brevity.</em></p>
+<h2 id="eulers-totient-function">
+  Euler&rsquo;s Totient function
+  <a class="anchor" href="#eulers-totient-function">#</a>
+</h2>
+<p>Euler&rsquo;s totient function, $\varphi(n)$, counts all the numbers up to $n$ that do not divide $n$. In other words, it counts all the numbers $k$ for which $\text{GCD}(k, n) = 1$. This function has been introduced by Leonhard Euler in 1763. The function is a multiplicative function, meaning that if $\text{GCD}(m, n) = 1$, then $\varphi(m) \cdot \varphi(n) = \varphi(mn)$. There is an example in the problem statement that demonstrates how to calculate the function.</p>
+<p>Reading further on the Wikipedia page gives us another definition of $\varphi(n)$:</p>
+<p>$$
+\varphi(n) = n \prod\limits_{p | n} \left ( 1 - \dfrac{1}{p} \right ),
+$$</p>
+<p>which is a product over the distinct prime numbers dividing $n$.</p>
+<h2 id="naive-implementation">
+  Naive implementation
+  <a class="anchor" href="#naive-implementation">#</a>
+</h2>
+<p>A simple approach to this problem is to define a method <code>int EulersTotient(int n)</code> which loops from 1 to $n - 1$, and count if $\text{GCD}(k, n) = 1$. The implementation of this idea can be found in the code snippet below.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#2b91af">bool</span> IsCoprime(<span style="color:#2b91af">int</span> a, <span style="color:#2b91af">int</span> b) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">return</span> GCD(a, b) == 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#2b91af">int</span> EulersTotient(<span style="color:#2b91af">int</span> n)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#2b91af">int</span> count = 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> k = 2; k &lt; n; k++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        <span style="color:#00f">if</span> (IsCoprime(a, b))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            count++;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    <span style="color:#00f">return</span> count;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>}</span></span></code></pre></div>
+<p>Note that this function grows linearly based on $n$. However, to solve the problem, we need to calculate the function for all numbers up to $n$, which will result in around $n^2 / 2$ calculations. I did implement this method and executed the code, but after a few minutes I terminated the application and started looking for a more efficient method, because this was clearly going to take a few hours.</p>
+<h2 id="fundamental-theorem-of-arithmetic">
+  Fundamental theorem of arithmetic
+  <a class="anchor" href="#fundamental-theorem-of-arithmetic">#</a>
+</h2>
+<p>The fundamental theorem of arithmetic states that any number can be written as a product of prime numbers. A number is either a prime number, or a composite number, where the composite number is a product of prime numbers. This fact is used to proof the alternative formula of $\varphi(n)$, which we will do now.</p>
+<p>There exists a unique expression $n = p_1^{k_1} p_2^{k_2} \cdots p_r^{k_r}$, where $p_1, p_2, \ldots, p_r$ are prime numbers and each $k_i \geq 1$. This is a number written out as its product of primes. Since neither of the primes can divide another prime, we can use the multiplicative property of Euler&rsquo;s totient, which gives</p>
+<p>$$
+\begin{aligned}\varphi(n) &amp;= \varphi(p_1^{k_1})\ \varphi( p_2^{k_2}) \cdots \varphi(p_r^{k_r}) \\ &amp;= p_1^{k_1-1}(p_1 - 1)\ p_2^{k_2-1}(p_2 - 1)\cdots p_r^{k_r-1}(p_r - 1) \\ &amp;= p_1^{k_1}\left(1 - \frac{1}{p_1}\right)\ p_2^{k_2}\left(1 - \frac{1}{p_2}\right) \cdots p_r^{k_r}\left(1 - \frac{1}{p_r}\right) \\ &amp;= p_1^{k_1}\ p_2^{k_2} \cdots p_r^{k_r} \left(1 - \frac{1}{p_1}\right) \left(1 - \frac{1}{p_2}\right) \cdots \left(1 - \frac{1}{p_r}\right) \\ &amp;= n \left(1 - \frac{1}{p_1}\right) \left(1 - \frac{1}{p_2}\right) \cdots \left(1 - \frac{1}{p_r}\right).\end{aligned}
+$$</p>
+<p>Instead of calculating the greatest common divisor for all numbers up to $n$, we can use a product of the prime factorization of $n$. This method is a lot less computationally intensive, although we now have a new problem, finding the prime factorization of $n$.</p>
+<h2 id="sieve-of-eratosthenes">
+  Sieve of Eratosthenes
+  <a class="anchor" href="#sieve-of-eratosthenes">#</a>
+</h2>
+<p>The idea of the sieve of Eratosthenes is to cross out composite numbers by using multiples of prime numbers, until only the prime numbers remain in the sieve. The explanation is very brief, because the sieve is used in a lot more project Euler problems, and I don&rsquo;t really want to get into it for this post, because <a href="https://blog.rotgers.io/2021/01/divisibility-properties-prime-numbers.html" target="_blank">I have written another post about this topic</a>. To get the general idea, this is the algorithm that is used to generate the sieve:</p>
+<pre tabindex="0"><code>Initialize an array S of Booleans of size n+1.
+Set all values in S to true.
+Set S[0] to false.
+Set S[1] to false.
+For i in [2, (int)sqrt(n)]:
+  If i is prime:
+    While i * j &lt; n:
+       Set i * j to false
+       Increment j by 1
+</code></pre><p>However, instead of using an array of Booleans, this implementation will use an array of integers. A number is prime if the element in the array is zero, and otherwise the element will contain the largest prime divisor (e.g. $S[ij] = i$). This allows us to use the sieve to factorize a number into its prime factorization. This leads to the following implementation:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">class</span> <span style="color:#2b91af">FactorizationSieve</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#2b91af">int</span> _size { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#2b91af">int</span>[] _sieve { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#00f">const</span> <span style="color:#2b91af">int</span> PRIME = 0;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#00f">public</span> FactorizationSieve(<span style="color:#2b91af">int</span> n)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        _size = n + 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        _sieve = <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[_size];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        InitializeSieve(_size);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    <span style="color:#00f">void</span> InitializeSieve(<span style="color:#2b91af">int</span> n)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        _sieve[0] = 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>        _sieve[1] = 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>        <span style="color:#2b91af">int</span> upperBound = (<span style="color:#2b91af">int</span>)Math.Sqrt(n);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>        <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 2; i &lt; upperBound; i++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>            <span style="color:#00f">if</span> (IsPrime(i))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>            {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>                <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> j = 2; i * j &lt; _size; j++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>                {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>                    _sieve[i * j] = i;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>                }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>    <span style="color:#00f">public</span> <span style="color:#2b91af">bool</span> IsPrime(<span style="color:#2b91af">int</span> k) =&gt; _sieve[k] == PRIME;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>    <span style="color:#00f">public</span> IEnumerable&lt;<span style="color:#2b91af">int</span>&gt; PrimeFactors(<span style="color:#2b91af">int</span> k)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>        List&lt;<span style="color:#2b91af">int</span>&gt; factors = <span style="color:#00f">new</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>        <span style="color:#00f">while</span> (k != 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>            <span style="color:#2b91af">int</span> factor = _sieve[k];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>            <span style="color:#00f">if</span> (factor == PRIME)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>            {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>                factors.Add(k);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>                <span style="color:#00f">return</span> factors;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>            factors.Add(factor);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>            k /= factor;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>        <span style="color:#00f">return</span> factors;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>    <span style="color:#00f">public</span> IEnumerable&lt;<span style="color:#2b91af">int</span>&gt; DistinctPrimeFactors(<span style="color:#2b91af">int</span> k)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>        <span style="color:#00f">return</span> PrimeFactors(k).Distinct();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>}</span></span></code></pre></div>
+<h2 id="solving-the-problem">
+  Solving the problem
+  <a class="anchor" href="#solving-the-problem">#</a>
+</h2>
+<p>With all that in place, we can redefine $\varphi(n)$ in terms of the product of primes, instead of counting when the greatest common divisor is one. This gives an improved implementation of the Euler&rsquo;s totient function:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#2b91af">double</span> EulersTotient(<span style="color:#2b91af">int</span> n, FactorizationSieve sieve) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#2b91af">var</span> distinctPrimeFactors = sieve.DistinctPrimeFactors(n).ToArray();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#00f">if</span> (distinctPrimeFactors.Length == 0)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#00f">return</span> 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    <span style="color:#2b91af">double</span> product = n;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; distinctPrimeFactors.Length; i++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        product *= (1.0 - 1.0 / (<span style="color:#2b91af">double</span>)distinctPrimeFactors[i]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    <span style="color:#00f">return</span> product;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>}</span></span></code></pre></div>
+<p>If we run this function with $n=1,000,000$, then it finds the solution in around 170 milliseconds! In the comments another user mentioned a simple optimization—which I will not spoil here—that reduced the runtime to 26 milliseconds. It can be found by carefully looking at the local minima and maxima of $n / \varphi(n)$.</p>
+<p>An even more beautiful explanation can be found in the document that gets unlocked after solving the puzzle, which I&rsquo;m also not going to spoil here, but this clever thinking allows it to be solved by hand!</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#problem-statement">Problem statement</a></li>
+    <li><a href="#eulers-totient-function">Euler&rsquo;s Totient function</a></li>
+    <li><a href="#naive-implementation">Naive implementation</a></li>
+    <li><a href="#fundamental-theorem-of-arithmetic">Fundamental theorem of arithmetic</a></li>
+    <li><a href="#sieve-of-eratosthenes">Sieve of Eratosthenes</a></li>
+    <li><a href="#solving-the-problem">Solving the problem</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
