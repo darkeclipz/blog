@@ -3,6 +3,9 @@ languageCode = 'en-us'
 title = "Lars' blog"
 theme = 'hugo-book'
 
+[taxonomies]
+  tag = 'tags'
+
 [markup]
   [markup.highlight]
     anchorLineNos = false

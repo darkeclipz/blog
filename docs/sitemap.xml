@@ -3,10 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rotgers.io/</loc>
-    <lastmod>2022-03-26T08:47:11+01:00</lastmod>
+    <lastmod>2022-08-10T00:00:00+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/ordered-fractions/</loc>
+    <lastmod>2022-08-10T00:00:00+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/</loc>
-    <lastmod>2022-03-26T08:47:11+01:00</lastmod>
+    <lastmod>2022-08-10T00:00:00+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/totient-maximum/</loc>
     <lastmod>2022-03-26T08:47:11+01:00</lastmod>
@@ -40,8 +43,6 @@
   </url><url>
     <loc>https://rotgers.io/list-repos-python/</loc>
     <priority>0</priority>
-  </url><url>
-    <loc>https://rotgers.io/categories/</loc>
   </url><url>
     <loc>https://rotgers.io/tags/</loc>
   </url>

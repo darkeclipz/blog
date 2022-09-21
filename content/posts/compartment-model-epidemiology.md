@@ -4,10 +4,6 @@ date: 2020-03-14T08:47:11+01:00
 draft: false
 ---
 
-<style>
-img { width: 75%; }
-</style>
-
 This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.
 
 ## SEIRD-model
@@ -109,3 +105,5 @@ Without the lockdown there is a maximum of 38.000 infected cases, while with a g
 The only variable that we can use to have impact on the model is the exposure rate $β$. If we restrict contact moments between humans, we lower the peak of total infected persons. The other variables are properties for the disease, such as how susceptible a human is to infection, how long it takes to show symptoms (and be infectious), how long it takes to recover, and the death rate.
 
 It is also important for a disease to not be too deadly. If a disease is too deadly, the infected will barely have a chance to infect other people, and the disease quickly dies out.
+
+[The notebook that has been used to create the plots can be found here.](https://colab.research.google.com/drive/1AjiTnED6CjMaIqqLvJr7pcwYzgLSAPuX)
