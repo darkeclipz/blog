@@ -18,6 +18,16 @@ Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positiv
     </item>
     
     <item>
+      <title>Path sum: two ways</title>
+      <link>https://rotgers.io/posts/path-sum-two-ways/</link>
+      <pubDate>Fri, 10 Jun 2022 00:00:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/path-sum-two-ways/</guid>
+      <description>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
+Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.</description>
+    </item>
+    
+    <item>
       <title>Totient maximum</title>
       <link>https://rotgers.io/posts/totient-maximum/</link>
       <pubDate>Sat, 26 Mar 2022 08:47:11 +0100</pubDate>

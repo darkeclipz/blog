@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
+Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Path sum: two ways" />
+<meta property="og:description" content="In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
+Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/path-sum-two-ways/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-10T00:00:00+01:00" />
+<meta property="article:modified_time" content="2022-06-10T00:00:00+01:00" />
+
+<title>Path sum: two ways | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.2724f6a4082584b9539b1ff64cb928afbc0d791f4c56b34369bd6b5361fed47e.css" integrity="sha256-JyT2pAglhLlTmx/2TLkor7wNeR9MVrNDab1rU2H&#43;1H4=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>Lars&#39; blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <hr />
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/ordered-fractions/" class="">Ordered fractions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/path-sum-two-ways/" class="active">Path sum: two ways</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/totient-maximum/" class="">Totient maximum</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/probability-analysis-of-monopoly/" class="">Monopoly odds</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/compartment-model-epidemiology/" class="">Compartment model for epidemiology</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/my-first-post/" class="">My First Post</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Path sum: two ways</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#problem-statement">Problem statement</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#solving-the-example-problem">Solving the example problem</a></li>
+    <li><a href="#finding-the-answer">Finding the answer</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/path-sum-two-ways/">Path sum: two ways</a>
+  </h1>
+  
+  <h5>June 10, 2022</h5>
+
+
+
+  
+
+
+
+<p>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.</p>
+<h2 id="problem-statement">
+  Problem statement
+  <a class="anchor" href="#problem-statement">#</a>
+</h2>
+<p>In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by <strong>only moving to the right and down</strong>, is indicated in bold red and is equal to 2427.</p>
+<p>$$
+M = \begin{pmatrix}
+\color{red}{131} &amp; 673 &amp; 234 &amp; 103 &amp; 18\\
+\color{red}{201} &amp; \color{red}{96} &amp; \color{red}{342} &amp; 965 &amp; 150\\
+630 &amp; 803 &amp; \color{red}{746} &amp; \color{red}{422} &amp; 111\\
+537 &amp; 699 &amp; 497 &amp; \color{red}{121} &amp; 956\\
+805 &amp; 732 &amp; 524 &amp; \color{red}{37} &amp; \color{red}{331}
+\end{pmatrix}
+$$</p>
+<p>Find the minimal path sum of the 80 by 80 matrix that is included with the problem.</p>
+<h2 id="approach">
+  Approach
+  <a class="anchor" href="#approach">#</a>
+</h2>
+<p>The problem requires us to find the minimal path sum which is an optimization problem. It is also possible to split the problem into multiple sub-problems. Because of these two characteristics, dynamic programming (DP) is a good approach for solving this problem.</p>
+<p>Let $M$ be the matrix that is defined in the problem statement, where we have $m$ rows and $n$ columns. The element $M[i, j]$ is the element at the $i^\text{th}$ row and $j^\text{th}$ column. Note that we have zero-based numbering. To use dynamic programming to solve the problem, we have to define a <em>recursive relationship</em> that identifies the optimal policy at each stage. Because of the recursive relationship, the solution procedure starts at the end and moves backward. If we start at the last element $M[4, 4] = 331$, then we have two routes that lead to this element. The element above it, which is $M[3, 4] = 956$, and the element to the left of it, which is $M[4, 3] = 37$. Of those two elements, there also is a left and top element that leads to <i>that</i> element. If we follow this pattern and create a diagram of it, we can see that the following structure is emerging.</p>
+
+
+<script src="/mermaid.min.js"></script>
+
+  <script>mermaid.initialize({
+  "flowchart": {
+    "useMaxWidth":true
+  },
+  "theme": "default"
+}
+)</script>
+
+
+
+
+<p class="mermaid text-center">
+
+flowchart LR
+
+  331 --> 956
+  
+  331 --> 37
+  956 --> 111
+  
+  956 --> 121
+  37 --> 121
+  37 --> 524
+  
+  111 --> 150
+  111 --> 422
+  121 --> 422
+  121 --> 497
+  524 --> 497
+  524 --> 732
+
+</p>
+
+<p>We can use this structure to define the recursive relationship. The idea is to add all the distances together, and use the minimum distance if there are two possibilities. This leads to to the recursive relationship</p>
+<p>$$
+f(i, j) = M[i, j] + \min\left(f(i + 1, j), f(i, j + 1)\right).
+$$</p>
+<p>Note that the boundary conditions have been left out, to keep it more simple. The last element at $(4, 4)$ is the base case, and in that case, the equation should give $M[4, 4]$. This also doesn&rsquo;t check if the values are within the bounds of the array, but to fix this, the value <code>int.MaxValue</code> is returned if we access a value outside of the matrix. This trick allows us to have a more simple algorithm. We could define the recursive relationship mathematically correct, but the extra notation won&rsquo;t make it easier to understand in my opinion.</p>
+<p>We can visualize the recursive relationship by changing the diagram. Note that <code>int.MaxValue</code> is used when we access an element outside the bounds of the array, which is indicated with $\infty$.</p>
+
+
+<p class="mermaid text-center">
+flowchart LR
+  331 --> 956["956 + min(331, ∞)"]
+  
+  331 --> 37["37 + min(∞, 331)"]
+  956 --> 111["111 + min(956 + min(331, ∞), ∞)"]
+  
+  956 --> 121["121 + min(37 + min(∞, 331), 956 + min(331, ∞))"]
+  37 --> 121
+  37 --> 524["524 + min(∞, 37 + min(∞, 331))"]
+</p>
+
+<p>Of course we need to do this up to $M[0, 0]$, but for brevity, this has been left out of the diagram. I think by now you should get the gist of the approach that we are using to solve the problem.</p>
+<h2 id="solving-the-example-problem">
+  Solving the example problem
+  <a class="anchor" href="#solving-the-example-problem">#</a>
+</h2>
+<p>Before we will solve the 80 by 80 matrix, we will solve the example problem first. This is the 5 by 5 matrix. To do so, we will first create the matrix $M$.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#2b91af">int</span>[,] M = <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[,]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    { 131, 673, 234, 103,  18 },
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    { 201,  96, 342, 965, 150 },
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    { 630, 803, 746, 422, 111 },
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    { 537, 699, 497, 121, 956 },
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>    { 805, 732, 524,  37, 331 }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>};</span></span></code></pre></div>
+<p>We will use the recursive relationship and create a recursive function to find the solution to the problem, however, doing so will lead to extra unnecessary computations. Note that if we start at $(i, j)$, the function calculates $(i + 1, j)$ and $(i, j + 1)$. Because of the recursion, $(i + 1, j)$ will result in calculating $(i + 2, j)$ and $(i + 1, j + 1)$. If we do the same thing for $(i, j + 1)$ we need to calculate $(i + 1, j + 1)$ and $(i, j + 2)$. Note that we are calculating $(i + 1, j + 1)$ two times! To prevent this, we will add memoization. First we define a data structure for the memo.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">using</span> Memo = System.Collections.Generic.Dictionary&lt;(<span style="color:#2b91af">int</span>, <span style="color:#2b91af">int</span>), <span style="color:#2b91af">int</span>&gt;;</span></span></code></pre></div>
+<p>With that in place, we define the recursive method <code>int PathSum(int[,] M, Memo memo, int i, int j)</code> which results in the following implementation:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#2b91af">int</span> PathSum(<span style="color:#2b91af">int</span>[,] M, Memo memo, <span style="color:#2b91af">int</span> i, <span style="color:#2b91af">int</span> j)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#008000">// Base case.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">if</span> (i == M.GetLength(0) - 1 &amp;&amp; j == M.GetLength(1) - 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">return</span> M[i, j];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#008000">// Out of bounds.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    <span style="color:#00f">if</span> (i &gt;= M.GetLength(0))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">return</span> <span style="color:#2b91af">int</span>.MaxValue;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    <span style="color:#008000">// Out of bounds.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#00f">if</span> (j &gt;= M.GetLength(0))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        <span style="color:#00f">return</span> <span style="color:#2b91af">int</span>.MaxValue;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#008000">// Memoization.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    <span style="color:#00f">if</span> (!memo.ContainsKey((i, j)))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>        memo[(i, j)] = M[i, j] + Math.Min(PathSum(M, memo, i + 1, j), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>                                          PathSum(M, memo, i, j + 1));
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    <span style="color:#00f">return</span> memo[(i, j)];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>}</span></span></code></pre></div>
+<p>Which we can call in the following way to solve the example problem.</p>
+<p><strong>Input</strong></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Memo memo = <span style="color:#00f">new</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#2b91af">int</span> sum = PathSum(M, memo, 0, 0);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>Console.WriteLine(<span style="color:#a31515">$&#34;Solution = {sum}&#34;</span>);</span></span></code></pre></div>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>2427
+</code></pre><p>We find that the minimum path sum of the 5 by 5 matrix is indeed 2427. Hooray, our algorithm is correct.</p>
+<h2 id="finding-the-answer">
+  Finding the answer
+  <a class="anchor" href="#finding-the-answer">#</a>
+</h2>
+<p>Now that we have validated our implementation. Let&rsquo;s load in the 80 by 80 matrix. The following code reads in the text file and converts it to a 2D array of integers.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#2b91af">int</span>[,] FromFile(<span style="color:#2b91af">string</span> filepath)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#2b91af">string</span>[] lines = File.ReadAllLines(filepath);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#2b91af">int</span> m = lines.Length;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#2b91af">int</span> n = lines[0].Split(<span style="color:#a31515">&#39;,&#39;</span>).Length;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#2b91af">int</span>[,] matrix = <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[m, n];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; m; i++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        <span style="color:#2b91af">int</span>[] elements = lines[i]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            .Split(<span style="color:#a31515">&#39;,&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            .Select(v =&gt; <span style="color:#2b91af">int</span>.Parse(v))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>            .ToArray();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> j = 0; j &lt; n; j++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>            matrix[i, j] = elements[j];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#00f">return</span> matrix;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>}</span></span></code></pre></div>
+<p>If we run the <code>PathSum(&hellip;)</code> method on the 80 by 80 matrix, it finds the correct solution in just 5 milliseconds! The time complexity of the DP approach with memoization is $\Theta(mn - 1)$, whereas a naive implementation where we evaluate all the routes is at worst $O(2^{m + n - 3})$. For the 80 by 80 matrix, this means that with the DP approach the recursive relationship is evaluated 6399 times (not counting the base cases and when it is out of bounds), whereas a naive implementation is absolutely exploding with a total of 182687704666362864775460604089535377456991567872 steps.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#problem-statement">Problem statement</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#solving-the-example-problem">Solving the example problem</a></li>
+    <li><a href="#finding-the-answer">Finding the answer</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

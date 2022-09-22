@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lars&#39; blog</title>
+    <link>https://rotgers.io/</link>
+    <description>Recent content on Lars&#39; blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Aug 2022 00:00:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ordered fractions</title>
+      <link>https://rotgers.io/posts/ordered-fractions/</link>
+      <pubDate>Wed, 10 Aug 2022 00:00:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/ordered-fractions/</guid>
+      <description>In this post we will look at solving Project Euler&amp;rsquo;s problem #71, which is about ordered fractions. I have been puzzling with pen and paper for a while during this problem, and researching about fractions really paid off big time for this problem. The final solution is pretty elegant in my opinion. Let&amp;rsquo;s get into it!
+Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positive integers.</description>
+    </item>
+    
+    <item>
+      <title>Path sum: Two ways</title>
+      <link>https://rotgers.io/posts/path-sum-two-ways/</link>
+      <pubDate>Fri, 10 Jun 2022 00:00:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/path-sum-two-ways/</guid>
+      <description>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
+Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.</description>
+    </item>
+    
+    <item>
+      <title>Totient maximum</title>
+      <link>https://rotgers.io/posts/totient-maximum/</link>
+      <pubDate>Sat, 26 Mar 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/totient-maximum/</guid>
+      <description>In this post we will look at solving problem 69 on Project Euler. This problem is about using Euler&amp;rsquo;s totient function to find a given maximum. Without any further introduction, let&amp;rsquo;s dive into it.
+Problem statement#Euler&amp;rsquo;s Totient function, $\varphi(n)$, is used to determine the number of numbers less than $n$ which are relatively prime to $n$. For example, as 1, 2, 4, 5, 7, and 8, are all less than nine, and relatively prime to nine, $\varphi(9) = 6$.</description>
+    </item>
+    
+    <item>
+      <title>Monopoly odds</title>
+      <link>https://rotgers.io/posts/probability-analysis-of-monopoly/</link>
+      <pubDate>Sun, 28 Feb 2021 11:42:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/probability-analysis-of-monopoly/</guid>
+      <description>Introduction#A few years ago I have written a detailed analysis of the probabilities in Monopoly. However, because of handwaving many rules to make it easier to analyze, I wanted to redo it and use all the rules this time. The main motivation for doing this is to solve a question on Project Euler. While we are at it, I also wanted to take the time to answer a few different questions as well.</description>
+    </item>
+    
+    <item>
+      <title>Compartment model for epidemiology</title>
+      <link>https://rotgers.io/posts/compartment-model-epidemiology/</link>
+      <pubDate>Sat, 14 Mar 2020 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/compartment-model-epidemiology/</guid>
+      <description>This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.
+SEIRD-model#The population is divided into compartments, with the assumption that every individual has the same characteristics. There are a total of five compartments:
+Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) The population flows in the following direction between the compartments.</description>
+    </item>
+    
+    <item>
+      <title>My First Post</title>
+      <link>https://rotgers.io/posts/my-first-post/</link>
+      <pubDate>Tue, 26 Mar 2019 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/my-first-post/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer leo nibh, semper nec gravida a, lobortis ac nulla. Etiam eget sem volutpat, scelerisque augue eget, volutpat dui. Curabitur aliquet venenatis eleifend. Sed commodo semper varius. Vivamus a nibh in lorem suscipit blandit. Cras tempor accumsan est nec varius. Vestibulum pharetra eget neque quis faucibus. Sed ut lectus varius, lacinia dui quis, varius leo. Duis enim metus, consequat vitae mattis et, luctus eu odio.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-cpp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-cpp/</guid>
+      <description> OpenGL game engine for learning C++/OpenGL Virtual Machine (CPU emulator) in C++ CTF challenge - Reverse engineering Sudoku solver </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-cs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-cs/</guid>
+      <description> Wave function collapse demo Min-conflict CSP solver for N-Queens (N = 128) Prototype of a CSP solver that solves expressions Solving Sudoku as a CSP with Forward Propagation Physics Light 2D Google Proxy Simple CSP solver Procedural mesh editor in Unity Newtonian Physics in Unity Raytracing Graph Theory Algorithms Flappy Bird VR with Unity 2D Platform game with Unity Computing System with Logical Gates Maze generator with Kruskal&amp;rsquo;s algorithm </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-glsl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-glsl/</guid>
+      <description> Fractal Shaders 2D Fractals </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-jsts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-jsts/</guid>
+      <description> Dungeon generation with Newton&amp;rsquo;s law of gravitation Equirectangular to cubemap projection HTML5 TypeScript Template 3D L-systems Procedural generation 3D engine with Canvas Simple perspective projection Binary search tree algorithm (BST) Convex hull algorithm </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-ml/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-ml/</guid>
+      <description> Principle Component Analysis with R Applying PCA on a heart disease dataset with R (dutch) k-Means clustering </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-other/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-other/</guid>
+      <description> Age of Empires II - AI Blender 8K Fractals Sudoku solver in Delphi </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://rotgers.io/list-repos-python/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rotgers.io/list-repos-python/</guid>
+      <description> Project Euler Problem Solving Library Funny graph theory problem Image to polygon Calcupy CSP solver Gradient descent Probability Analysis of Monopoly (Approximated) Probability Analysis of Monopoly (Analytical) Modeling endemic diseases with ODE&amp;rsquo;s Strategy Backtesting for Algorithmic Trading Technical Analysis library for Algorithmic Trading </description>
+    </item>
+    
+  </channel>
+</rss>
