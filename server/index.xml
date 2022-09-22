@@ -18,13 +18,55 @@ Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positiv
     </item>
     
     <item>
-      <title>Path sum: Two ways</title>
+      <title>Counting rectangles</title>
+      <link>https://rotgers.io/posts/counting-rectangles/</link>
+      <pubDate>Wed, 06 Jul 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/counting-rectangles/</guid>
+      <description>In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
+Problem statement
+By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
+Naïve&amp;nbsp;solution
+As usual, I always try to define a naïve implementation first, and build from there.</description>
+    </item>
+    
+    <item>
+      <title>Path sum: two ways</title>
       <link>https://rotgers.io/posts/path-sum-two-ways/</link>
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/path-sum-two-ways/</guid>
       <description>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
 Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.</description>
+    </item>
+    
+    <item>
+      <title>Plotting trees recursively</title>
+      <link>https://rotgers.io/posts/plotting-trees-recursively/</link>
+      <pubDate>Wed, 18 May 2022 11:42:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/plotting-trees-recursively/</guid>
+      <description>The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.</description>
+    </item>
+    
+    <item>
+      <title>Sqrt(x)</title>
+      <link>https://rotgers.io/posts/sqrt-x/</link>
+      <pubDate>Thu, 12 May 2022 11:42:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/sqrt-x/</guid>
+      <description>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
+My approach was to determine a upper and a lower bound, and do a binary search to find the solution.</description>
+    </item>
+    
+    <item>
+      <title>Gambler Fallacy</title>
+      <link>https://rotgers.io/posts/gamblers-fallacy/</link>
+      <pubDate>Sun, 27 Mar 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/gamblers-fallacy/</guid>
+      <description>Suppose we are throwing coins and bet if it is going to be head ($H$) or tails ($T$). After throwing the coin three times, it resulted in heads all of the throws. Do you think that the fourth throw will be heads, or will it be tails?&amp;nbsp;
+Most people would assume that it is not likely to throw heads three times in a row, and it is even more unlikely that it would be four times.</description>
     </item>
     
     <item>

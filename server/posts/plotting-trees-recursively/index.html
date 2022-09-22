@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Plotting trees recursively" />
+<meta property="og:description" content="The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/plotting-trees-recursively/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-18T11:42:11+01:00" />
+<meta property="article:modified_time" content="2022-05-18T11:42:11+01:00" />
+
+<title>Plotting trees recursively | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.2724f6a4082584b9539b1ff64cb928afbc0d791f4c56b34369bd6b5361fed47e.css" integrity="sha256-JyT2pAglhLlTmx/2TLkor7wNeR9MVrNDab1rU2H&#43;1H4=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>Lars&#39; blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <hr />
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/ordered-fractions/" class="">Ordered fractions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/counting-rectangles/" class="">Counting rectangles</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/path-sum-two-ways/" class="">Path sum: two ways</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/plotting-trees-recursively/" class="active">Plotting trees recursively</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/sqrt-x/" class="">Sqrt(x)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/gamblers-fallacy/" class="">Gambler Fallacy</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/totient-maximum/" class="">Totient maximum</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/probability-analysis-of-monopoly/" class="">Monopoly odds</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/compartment-model-epidemiology/" class="">Compartment model for epidemiology</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/my-first-post/" class="">My First Post</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Plotting trees recursively</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/plotting-trees-recursively/">Plotting trees recursively</a>
+  </h1>
+  
+  <h5>May 18, 2022</h5>
+
+
+
+  
+
+
+
+
+<style>
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.plot {
+    margin: 18px auto;
+    text-align: center;
+}
+
+.plot * {
+    box-sizing: border-box;
+}
+
+.node {
+    display: inline-flex;
+    position: relative;
+    overflow: hidden;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    gap: 8px;
+    padding: 8px;
+    padding-top: 22px;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15);
+    min-width: 40px;
+    border-radius: 4px;
+    font-size: 90%;
+}
+
+.plot > .node {   
+    background-color: #aaa;
+
+}
+    
+.isometric {
+    transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg) scale(1.25);
+}
+
+.label {
+    position: absolute;
+    text-align: center;
+    font-family: Roboto;
+    width: 100%;
+    top: 2px;
+    left: 0;
+    white-space: nowrap;
+}
+
+.node-leaf {
+    padding: 6px;
+}
+
+
+    
+.scheme-hsl > .node {
+    background-color: hsl(0, 50%, 80%);
+}
+.scheme-hsl > * > .node {
+    background-color: hsl(30, 50%, 80%);
+}
+.scheme-hsl > * > * > .node {
+    background-color: hsl(60, 50%, 80%);
+}
+.scheme-hsl > * > * > * > .node {
+    background-color: hsl(90, 50%, 80%);
+}
+.scheme-hsl > * > * > * > * > .node {
+    background-color: hsl(120, 50%, 80%);
+}
+.scheme-hsl > * > * > * > * > * > .node {
+    background-color: hsl(150, 50%, 80%);
+}
+.scheme-hsl > * > * > * > * > * > * > .node {
+    background-color: hsl(180, 50%, 80%);
+}
+.scheme-hsl > * > * > * > * > * > * > * > .node {
+    background-color: hsl(230, 50%, 80%);
+}
+
+
+
+.scheme-magma > .node {
+    background-color: #310496;
+    color: white;
+}
+.scheme-magma > * > .node {
+    background-color: #6D01A7;
+}
+.scheme-magma > * > * > .node {
+    background-color: #9B169E;
+}
+.scheme-magma > * > * > * > .node {
+    background-color: #C03B82;
+}
+.scheme-magma > * > * > * > * > .node {
+    background-color: #DB5C66;
+}
+.scheme-magma > * > * > * > * > * > .node {
+    background-color: #F0814D;
+}
+.scheme-magma > * > * > * > * > * > * > .node {
+    background-color: #FBAE32;
+}
+.scheme-magma > * > * > * > * > * > * > * > .node {
+    background-color: #F7DF23;
+}
+</style>
+
+<script>
+Direction = { 
+    Horizontal: "flex-row",
+    Vertical: "flex-col"
+}
+
+class Node {
+
+    name = "Node";
+    children = [];
+    
+    constructor(name) {
+        this.name = name;
+    }
+
+    addNode(name) {
+        const node = new Node(name);
+        this.children.push(node);
+        return node;
+    }
+
+    length() {
+        let sum = this.children.length;
+        for (let child of this.children) {
+            sum += child.length();
+        }
+        return sum;
+    }
+
+    find(name) {
+        if (this.name === name) {
+            return this;
+        }
+        for (let child of this.children) {
+            const result = child.find(name);
+            if (result) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    copy() {
+        return JSON.parse(
+            JSON.stringify(this)
+        );
+    }
+
+}
+    
+class RecursivePlot {
+
+    element;
+
+    constructor(elementId) {
+        this.element = document.getElementById(elementId);
+    }
+
+    draw(node, isometric = false) {
+
+        const __draw = (node, element, direction) => {
+
+            // Flip direction
+            direction = direction == Direction.Horizontal
+                ? Direction.Vertical
+                : Direction.Horizontal;
+
+            for(let child of node.children) {
+
+                const div = document.createElement('div');
+                div.classList.add('node');
+                div.classList.add(direction);
+                element.appendChild(div);
+            
+                __draw(child, div, direction);
+            }
+
+            const label = document.createElement('div');
+            label.classList.add('label');
+            if (node.children.length == 0) {
+                label.classList.add('node-leaf');
+            }
+
+            element.appendChild(label);
+            label.innerHTML = node.name;
+        }
+
+        const container = document.createElement('div');
+        container.classList.add('node');
+        container.classList.add(Direction.Vertical);
+            if (isometric) {
+            container.classList.add('isometric'); 
+        }
+        this.element.appendChild(container);
+
+        __draw(node, container, Direction.Vertical);
+    }
+
+}
+    
+    const generateTree = (labels, size, depth) => {
+    const __generate = (node, labels, size, depth) => {
+        if (depth < 0) {
+        return;
+        }
+
+        for (let i = 0; i < size[depth]; i++) {
+        const child = node.addNode(labels[depth] + i);
+        __generate(child, labels, size, depth - 1);
+        }
+    }
+
+    const root = new Node(labels[depth]);
+    __generate(root, labels, size, depth - 1);
+    return root;
+    }
+
+    const tree = (size) => {
+    if (size[0] != 1) {
+        console.warn('First node should have size 1. Ignoring size.');
+    }
+    const labels = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+    return generateTree(
+        labels.slice(0, size.length).reverse(), 
+        size.reverse(), 
+        size.length - 1
+    );
+    }
+</script>
+
+<p>
+The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.</p>
+
+<div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjP4Carm5y1PmbMmuPvyU3WD2zPJMaBWHrNipWseE-o6yeYIsNUiz2dnQlJn_CSkyW3e_P86robPl-dEV2xkmxK-5GtYmuUR7Uog_lZOgV-eKJwJhKAyQbc8O0qPTxiQXI5BzUYthk8N6_UA2oBhPYCNoNhxmohR5P_JJ6QCKmil57QfzfpzuFQ5z2Qpg/s1346/recursion-plot.png"><img border="0" data-original-height="1083" data-original-width="1346" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjP4Carm5y1PmbMmuPvyU3WD2zPJMaBWHrNipWseE-o6yeYIsNUiz2dnQlJn_CSkyW3e_P86robPl-dEV2xkmxK-5GtYmuUR7Uog_lZOgV-eKJwJhKAyQbc8O0qPTxiQXI5BzUYthk8N6_UA2oBhPYCNoNhxmohR5P_JJ6QCKmil57QfzfpzuFQ5z2Qpg/s16000/recursion-plot.png" /></a></div>
+
+<h3 style="text-align: left;">A data structure for trees</h3>
+<p>The first thing that we will need is a data structure that can model trees. We can do this by creating a class <code>Node</code>, and giving that class a property <code>children: Node[]</code> in which we collect a bunch of other nodes. If we do this recursively, then we have a tree. We will also add a <code>name: string</code> property, which we will use to give a name to the node. Finally, we add a <code>addNode(name: string)</code> function to the class, which we use to easily add a new node under an existing node. All in all, this results in the following code:</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">class</span> Node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    name = <span style="color:#a31515">&#34;Untitled node&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    children = [];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    constructor(name) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#00f">this</span>.name = name;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    addNode(name) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        <span style="color:#00f">const</span> node = <span style="color:#00f">new</span> Node(name);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        <span style="color:#00f">this</span>.children.push(node);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        <span style="color:#00f">return</span> node;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>}</span></span></code></pre></div>
+
+<h3>Generating the plot recursively</h3>
+<p>
+    The next thing that we will do is write a class that will generate the HTML of a tree. The idea is to alternate between have a horizontal and a vertical layout. We will start with a horizontal layout, which is for the first node. Then the second layer of the tree is layed out vertically. The third layer is horizontal again, and so on. This is done with the <code>flex-direction</code> property of CSS.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Direction = { 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    Horizontal: <span style="color:#a31515">&#34;flex-row&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    Vertical: <span style="color:#a31515">&#34;flex-col&#34;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>}</span></span></code></pre></div>
+
+<p>
+    The next thing we will do is define a class <code>RecursivePlot</code> that will generate the HTML elements for the plot. This class has a constructor with a <code>elementId: string</code> argument, which is the ID of the element in which we want to add the generated HTML. This class also has a method <code>draw(node: Node)</code> which we will use to generate the HTML. 
+</p>
+
+<p>
+    In this function we will define another function <code>__draw(node: Node, element: HTMLElement, direction: Direction)</code> which is called recursively to generate the HTML element for the entire tree. The HTML that we will generate is simply a <code>div</code> and a class <code>.node</code> which we'll use for styling. We will also set the <code>flex-direction</code> property alternating between <code>row</code> and <code>column</code>.
+</p>
+
+<p>
+    Once we have the <code>__draw</code> function defined, we will create a <code>div</code> for the root node. We will also add the <code>.node</code> class to this element. We will then call <code>__draw</code>, and pass in the root node, the element of the root node, and the direction for flexbox. If we combine all of this, we get the following class:
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">class</span> RecursivePlot {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    constructor(elementId) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        <span style="color:#00f">this</span>.element = document.getElementById(elementId);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    draw(node) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#00f">const</span> __draw = (node, element, direction) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            <span style="color:#008000">// Alternate between the direction.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#008000"></span>            direction = direction == Direction.Horizontal
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>                ? Direction.Vertical
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>                : Direction.Horizontal;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            <span style="color:#008000">// Create a div for each child node, and recursively call
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#008000"></span>            <span style="color:#008000">// this function.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span><span style="color:#008000"></span>            <span style="color:#00f">for</span> (<span style="color:#00f">let</span> child <span style="color:#00f">of</span> node.children) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>                <span style="color:#00f">const</span> div = document.createElement(<span style="color:#a31515">&#39;div&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>                div.classList.add(<span style="color:#a31515">&#39;node&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>                div.classList.add(direction);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>                element.appendChild(div);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>                __draw(child, div, direction);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>            <span style="color:#008000">// Create a label for the name of the node.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span><span style="color:#008000"></span>            <span style="color:#00f">const</span> label = document.createElement(<span style="color:#a31515">&#39;div&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>            label.classList.add(<span style="color:#a31515">&#39;label&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>            element.appendChild(label);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>            label.innerHTML = node.name;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>            <span style="color:#008000">// If the node doesn&#39;t have any children, indicate
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span><span style="color:#008000"></span>            <span style="color:#008000">// that this node is a leaf.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span><span style="color:#008000"></span>            <span style="color:#00f">if</span> (node.children.length == 0) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>                label.classList.add(<span style="color:#a31515">&#39;node-leaf&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>        <span style="color:#008000">// Default direction to start with (sets flex-direction).
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span><span style="color:#008000"></span>        <span style="color:#00f">const</span> defaultDirection = Direction.Vertical;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>        <span style="color:#008000">// Create the container for the root node.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span><span style="color:#008000"></span>        <span style="color:#00f">const</span> container = document.createElement(<span style="color:#a31515">&#39;div&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>        container.classList.add(<span style="color:#a31515">&#39;node&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>        container.classList.add(defaultDirection);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>        <span style="color:#00f">this</span>.element.appendChild(container);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>        __draw(node, container, defaultDirection);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span>}</span></span></code></pre></div>
+
+<h3>Styling the recursive tree plot</h3>
+
+<p>
+    Now that we have a method to generate the HTML elements, we need to style them. We will start with adding a few utility classes for <code>flex-direction</code>. Note that these class names are also defined in the <code>Direction</code> enum.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.flex-row {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    flex-direction: row;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>.flex-col {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    flex-direction: column;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>}</span></span></code></pre></div>
+
+<p>
+    With that out of the way, we are going to style the node itself. We want to set the display mode to <code>display: inline-flex</code>, because we want the plot to be as small as possible and only grow bigger if there is more content in it. You could also have the plot fill the entire container by setting it to <code>display: flex</code>. We also set <code>flex-wrap: wrap</code> in the case we have a lot of elements and <code>flex-grow: 1</code> so that the elements fill the entire container. The position should be set to <code>position: relative</code>, because we will need this to show the labels in the correct position. So far this gives us the following:
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    display: inline-flex;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    position: relative;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    overflow: hidden;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    flex-wrap: wrap;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    flex-grow: 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>    ...
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>}</span></span></code></pre></div>
+
+<p>
+    To let the nodes have some space around it we will set <code>padding: 8px</code> and <code>gap: 8px</code>. On the top of the node we reserve some space for the label by setting <code>padding-top: 22px</code>. The background color of the node is a white transparent color with an opacity of $33\%$, giving <code>background-color: rgba(255, 255, 255, 0.33)</code>. This gives a nice effect when we are stacking nodes on top of each other. To give the illusion of depth, we will add two different <code>box-shadow</code>'s. The idea is to imagine that there is a light on the top of the page, and we are rendering the resulting shadow. A second shadow gives a more realistic look. To ensure the label is visible we set <code>min-width: 40px</code>. We will also add <code>border-radius: 4px</code> to smooth the corners, but this is a personal preference. Finally we set the font size <code>font-size: 90%</code>. Note that the $90\%$ is applied consecutively as we nest more nodes. This ensures that the font size of the label is getting smaller and smaller.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>.node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    ...
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    gap: 8px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    padding: 8px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    padding-top: 22px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    background-color: rgba(255, 255, 255, 0.33);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    box-shadow: 0 0 4px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.1);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    min-width: 40px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    border-radius: 4px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    font-size: 90%;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>}</span></span></code></pre></div>
+
+<p>Because the nodes in the plot are set to <code>display: inline</code> (by setting <code>display: inline-flex</code>), we also want to center the content of the plot. This ensures that the plot is always centered in the container that it is rendered in.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.plot {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    text-align: center;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}</span></span></code></pre></div>
+
+<p>We also want to set the <code>box-sizing: border-box</code>, because this fixes the weird sizing when applying padding. Actually, this should have been the default value in browsers anyway, but sadly it's not.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.plot * {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    box-sizing: border-box;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}</span></span></code></pre></div>
+
+<p>Because we can have a white background, which doesn't work well with the transparent background, we also want to set a background for the first node.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.plot &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    background-color: <span style="">#</span>aaa;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}</span></span></code></pre></div>
+
+<p>
+    Finally, we will put the label in the correct position. We have already added some extra padding to the top of the node, which we will now use to position the label.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.label {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    position: absolute;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    font-family: Arial;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    text-align: center;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    white-space: nowrap;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    width: 100%;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>    top: 4px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>    left: 0;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span>}</span></span></code></pre></div>
+
+<p>In the case we have a reached a leaf node, we want to display the label in vertically in the center also.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.node-leaf {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    height: 100%;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    padding: unset;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    transform: translateY(50%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    top: -6px;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}</span></span></code></pre></div>
+
+
+<h3>Bringing it all together</h3>
+
+<p>
+    Let's test what we have so far. We will first need to define a small tree. We will define a helper method in a moment for this, but lets do it by hand this time.
+</p>
+
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">const</span> root = <span style="color:#00f">new</span> Node(<span style="color:#a31515">&#39;A&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#00f">const</span> A = root.addNode(<span style="color:#a31515">&#39;B&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>A.addNode(<span style="color:#a31515">&#39;a1&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>A.addNode(<span style="color:#a31515">&#39;a2&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#00f">const</span> B = root.addNode(<span style="color:#a31515">&#39;C&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>B.addNode(<span style="color:#a31515">&#39;b1&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#00f">const</span> b2 = B.addNode(<span style="color:#a31515">&#39;b2&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>b2.addNode(<span style="color:#a31515">&#39;c1&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span>b2.addNode(<span style="color:#a31515">&#39;c2&#39;</span>);</span></span></code></pre></div>
+
+<p>
+    If we now plot this with the <code>RecursivePlot</code> class:
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>&gt; (<span style="color:#00f">new</span> RecursivePlot(<span style="color:#a31515">&#39;plot-0&#39;</span>)).draw(root);</span></span></code></pre></div>
+
+<div class="plot" id="plot0"></div>
+
+<script>
+const root = new Node('A');
+const A = root.addNode('B');
+A.addNode('a1');
+A.addNode('a2');
+const B = root.addNode('C');
+B.addNode('b1');
+const b2 = B.addNode('b2');
+b2.addNode('c1');
+b2.addNode('c2');
+(new RecursivePlot('plot0')).draw(root);
+</script>
+
+<p>
+Because it is quite some work to create the tree by hand, here is a hacked together utility method, that will recursively generate a tree. The input of the method is an list of nodes for that level, e.g. <code>[1, 2, 2, 2]</code> for a binary tree.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">const</span> tree = (size) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">const</span> __tree = (labels, size, depth) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        <span style="color:#00f">const</span> __generate = (node, labels, size, depth) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>            <span style="color:#00f">if</span> (depth &lt; 0) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>                <span style="color:#00f">return</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>            
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            <span style="color:#00f">for</span> (<span style="color:#00f">let</span> i = 0; i &lt; size[depth]; i++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>                <span style="color:#00f">const</span> child = node.addNode(labels[depth] + i);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>                __generate(child, labels, size, depth - 1);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        <span style="color:#00f">const</span> root = <span style="color:#00f">new</span> Node(labels[depth]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>        __generate(root, labels, size, depth - 1);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        <span style="color:#00f">return</span> root;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    <span style="color:#00f">if</span> (size[0] != 1) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>        console.warn(<span style="color:#a31515">&#39;First node should have size 1. Ignoring size.&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#00f">const</span> labels = [...<span style="color:#a31515">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span>];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    <span style="color:#00f">return</span> __tree(
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>        labels.slice(0, size.length).reverse(), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>        size.reverse(), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>        size.length - 1
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    );
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>}</span></span></code></pre></div>
+
+<p>We can now use <code>tree</code> function to generate a binary tree. Let's see what this looks like.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>&gt; (<span style="color:#00f">new</span> RecursivePlot(<span style="color:#a31515">&#39;plot1&#39;</span>)).draw(tree([1, 2, 2, 2, 2, 2, 2]));</span></span></code></pre></div>
+
+<div class="plot" id="plot1"></div>
+
+<script>
+    (new RecursivePlot('plot1')).draw(tree([1, 2, 2, 2, 2, 2, 2]), false);
+</script>
+
+<p>Pretty neat so far! I'm quite happy with the result. Let's see what else we can do with it.</p>
+
+<h3>Isometric projection</h3>
+
+<p>
+    To get the same effect as in the first illustration, we will project the plot isometrically. Luckily this is quite easy with the following CSS class, that I've found  after some googling around.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>.isometric {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg) scale(1.25);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}</span></span></code></pre></div>
+
+<p>
+    We apply the <code>.isometric</code> class to the HTML element of the root node. Note that we will only have to add this class once! We will add an argument <code>isometric</code> to the <code>draw</code> function. If this is set to <code>true</code>, the <code>.isometric</code> class is added to the element of the root node. I've included an example below to show the isometric projection.
+</p>
+
+<div class="plot" id="plot-isometric"></div>
+<script>
+    (new RecursivePlot('plot-isometric')).draw(tree([1, 4, 4, 2, 2]), true);
+</script>
+
+<h3>HSL color scheme</h3>
+
+<p>
+    To add some colors to the plot, we will define a HSL color scheme. This scheme starts from <code>hsl(0, 50%, 80%)</code>, and eight steps, where at each step there is an increment of $30$ for the hue. The scheme can be applied to the plot by adding the <code>.scheme-hsl</code> class to the element in which the plot is rendered.
+</p>
+
+<div style="align-items: stretch; display: flex; flex-direction: row; flex-grow: 1; justify-items: stretch; place-items: stretch;">
+    <div style="aspect-ratio: 1 / 1; background-color: #e6b3b3; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #e6ccb3; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #e6e6b3; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #cce6b3; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #b3e6b3; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #b3e6cc; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #b3e6e6; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #b3cce6; flex-grow: 1; min-width: 64px;"></div>
+</div>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>.scheme-hsl &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    background-color: hsl(0, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>.scheme-hsl &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    background-color: hsl(30, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>.scheme-hsl &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    background-color: hsl(60, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>.scheme-hsl &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    background-color: hsl(90, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>.scheme-hsl &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    background-color: hsl(120, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>.scheme-hsl &gt; * &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    background-color: hsl(150, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>.scheme-hsl &gt; * &gt; * &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    background-color: hsl(180, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>.scheme-hsl &gt; * &gt; * &gt; * &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    background-color: hsl(210, 50%, 80%);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>}</span></span></code></pre></div>
+
+<div class="plot scheme-hsl" id="plot-hsl"></div>
+<script>
+    (new RecursivePlot('plot-hsl')).draw(tree([1, 2, 4, 2, 2, 1]), true);  
+</script>
+
+<h3>Magma color scheme</h3>
+
+<p>The magma color scheme comes from matplotlib, a library for plotting in Python. The scheme can be applied by adding the <code>.scheme-magma</code> class to the element in which the plot is rendered.</p>
+
+<div style="align-items: stretch; display: flex; flex-direction: row; flex-grow: 1; justify-items: stretch; place-items: stretch;">
+    <div style="aspect-ratio: 1 / 1; background-color: #310496; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #6d01a7; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #9b169e; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #c03b82; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #db5c66; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #f0814d; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #fbae32; flex-grow: 1; min-width: 64px;"></div>
+    <div style="aspect-ratio: 1 / 1; background-color: #f7df23; flex-grow: 1; min-width: 64px;"></div>
+</div>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>.scheme-magma &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    background-color: <span style="">#</span>310496;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>.scheme-magma &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    background-color: <span style="">#</span>6D01A7;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>.scheme-magma &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    background-color: <span style="">#</span>9B169E;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>.scheme-magma &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    background-color: <span style="">#</span>C03B82;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>.scheme-magma &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    background-color: <span style="">#</span>DB5C66;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>.scheme-magma &gt; * &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    background-color: <span style="">#</span>F0814D;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>.scheme-magma &gt; * &gt; * &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    background-color: <span style="">#</span>FBAE32;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>.scheme-magma &gt; * &gt; * &gt; * &gt; * &gt; * &gt; * &gt; * &gt; .node {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    background-color: <span style="">#</span>F7DF23;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>}</span></span></code></pre></div>
+
+<div class="plot scheme-magma" id="plot-magma"></div>
+<script>
+    (new RecursivePlot('plot-magma')).draw(tree([1, 2, 4, 2, 2, 1]), true);  
+</script>
+
+<h3>Sources</h3>
+<p>
+    The entire <a rel="noopener" href="https://github.com/darkeclipz/recursive-plot" target="_blank">source code of this project can be found on my GitHub</a>.
+</p>
+
+
+
+
+
+
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

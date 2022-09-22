@@ -1,0 +1,37 @@
+---
+title: "Sqrt(x)"
+date: 2022-05-12T11:42:11+01:00
+draft: false
+---
+
+<p>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as <code>Math.Pow</code> or <code>x**0.5</code>. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.</p><p>My approach was to determine a upper and a lower bound, and do a binary search to find the solution. Let $L$ be the lower bound. Since we know that a square root function requires that $x &gt; 0$, we can set $L = 0$. Likewise, let $U$ be the upper bound. We know that $\sqrt x &lt; x$ (if $x &gt; 1$), which we use to define the upper bound $U = \max(1, x)$.</p><p>Now we are going to guess what $\sqrt x$ is. We know that $\sqrt{x}$ lies between $L &lt; \sqrt x &lt; U$. Let $k$ be our guess and initially set this to $k = \frac{L + U}{2}$.</p><p>Next we calculate the <i>error</i>&nbsp;of our guess, which we can do with $\left|\ \sqrt{x} - k\ \right| \leq \epsilon$. However, because we cannot calculate square root functions, we need to square it and compare $k^2$ with $x$, giving $\left|\ x - k^2\ \right| \leq \epsilon$.</p><p>While the error is bigger than $\epsilon$, we need to adjust our guess. We do this by comparing $k^2$ to $x$.</p><p></p><ul style="text-align: left;"><li>If $x &lt; k^2$ then we adjust the upper bound and set it to $U = k$.</li><li>If $x &gt; k^2$ then we adjust the lower bound and set it to $L = k$.</li></ul><div>Once the bounds are updated, we recalculate our guess. The illustration below demonstrates the entire process by calculating $\sqrt 8$ as an example. The red cross is the guess $k$, and the green cross is the answer.</div><p></p>
+
+<img src="/sqrt_x.png" alt="sqrt x" >
+
+<div>This entire idea is the same as a well known game where you have to guess a number between $0$ and $100$. After every guess the player will learn if the guess was above the number or below the number. Based on that information, the player can adjust the guess. The binary search technique is a common strategy for solving this game.</div><div>The implementation of the algorithm can be found below. It has been implemented in C#. The time complexity of the algorithm is $O(\log x)$, because the search space is reduced by half on each iteration.<br /><p></p>{{< highlight csharp >}}public class Solution {
+    public int MySqrt(int x) {
+        
+        double lowerBound = 0;
+        double upperBound = Math.Max(1, x);
+        double guess = (upperBound + lowerBound) / 2;
+        double epsilon = 0.1;
+        
+        while (Math.Abs(guess * guess - x) &gt; epsilon || guess * guess &lt; x) {
+            
+            double guess2 = guess * guess;
+            
+            if (x &lt; guess2) {
+                upperBound = guess;
+            }
+            
+            if (x &gt; guess2) {
+                lowerBound = guess;
+            }
+            
+            guess = (upperBound + lowerBound) / 2;
+        }
+        
+        return (int)guess;
+    }
+}{{< /highlight >}}
+<p>The extra check <code>guess * guess &lt; x</code> ensures that we are always over estimating $x$ and getting the correct answer after truncating the output.</p></div></div>
