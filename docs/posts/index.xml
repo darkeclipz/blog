@@ -18,6 +18,19 @@ Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positiv
     </item>
     
     <item>
+      <title>Counting rectangles</title>
+      <link>https://rotgers.io/posts/counting-rectangles/</link>
+      <pubDate>Wed, 06 Jul 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/counting-rectangles/</guid>
+      <description>In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
+Problem statement
+By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
+Naïve&amp;nbsp;solution
+As usual, I always try to define a naïve implementation first, and build from there.</description>
+    </item>
+    
+    <item>
       <title>Path sum: two ways</title>
       <link>https://rotgers.io/posts/path-sum-two-ways/</link>
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0100</pubDate>
