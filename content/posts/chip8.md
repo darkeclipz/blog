@@ -1,7 +1,7 @@
 ---
 title: "CHIP-8"
 date: 2022-10-08T10:08:00+01:00
-draft: false
+draft: true
 ---
 
 In this post we will look at an implementation of a CHIP-8 emulator. CHIP-8 is an interpreted programming language that was initially used on the COSMAC VIP and Telmac 1800 8-bit microcomputers in the mid-1970s. The programming language has been developed by Joseph Weisbecker. Because of its long history and its simplicity, it is one of the best projects to start with if one is interested in writing emulators.
@@ -323,7 +323,7 @@ Originally the display is updated at 60 Hz, but we are only going to update the 
 
 ### Timing
 
-There are also two different timers that run independently from the fetch-decode-execute loop. The first timer is a delay timer. This timer runs at 60Hz and decreases the timer by one on each tick, so every 1/60th of a second. The timer doesn't do anything on itself, but it is used by the program. The program can set the timer and read the value that is left in the timer.
+There are also two different timers that run independently from the fetch-decode-execute loop. The first timer is a delay timer. This timer runs at 60 Hz and decreases the timer by one on each tick, so every 1/60th of a second. The timer doesn't do anything on itself, but it is used by the program. The program can set the timer and read the value that is left in the timer.
 
 The second timer is an audio timer. This timer runs on the same interval as the delay timer. This timer makes the computer beep as long as the timer is above zero. However, because we are not using audio, this has not been implemented.
 
