@@ -14,7 +14,7 @@
 <title>Lars&#39; blog | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.109abd2619c0b5a7eb892535a13567a7eccd9b5a43c6e57566f99a32ab1c9a89.css" integrity="sha256-EJq9JhnAtafriSU1oTVnp&#43;zNm1pDxuV1ZvmaMqscmok=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.7fb6c82f9e6ff09a0673c2e7c09435e5505ed99a2796982726dee9e100b59222.css" integrity="sha256-f7bIL55v8JoGc8LnwJQ15VBe2ZonlpgnJt7p4QC1kiI=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://rotgers.io/index.xml" title="Lars' blog" />
 <!--
@@ -32,9 +32,17 @@ https://github.com/alex-shpak/hugo-book
         
   <nav>
 <h2 class="book-brand">
-  <a class="flex align-center" href="/"><span>Lars&#39; blog</span>
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS ROTGERS
+        </span>
+      </div>
+    </div>
   </a>
 </h2>
+
+<div>Software engineer</div>
 
 
 
@@ -249,58 +257,87 @@ https://github.com/alex-shpak/hugo-book
       
       
     <main aria-role="main">
-      <header class="homepage-header">
-        <h1>Lars&#39; blog</h1>
-        
-      </header>
+      
       <div class="homepage-content">
         
         
       </div>
 
-
       
       
-      
-      <h2>Recent posts</h2>
-      <div>
+      <h2>LATEST</h2>
+      <div class="book-summaries">
           
-              <h3><a href="https://rotgers.io/posts/ordered-fractions/">Ordered fractions&nbsp;(August 10, 2022)</a></h3>
-              <p>In this post we will look at solving Project Euler&rsquo;s problem #71, which is about ordered fractions. I have been puzzling with pen and paper for a while during this problem, and researching about fractions really paid off big time for this problem. The final solution is pretty elegant in my opinion. Let&rsquo;s get into it!
-Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positive integers.</p>
-              <a href="https://rotgers.io/posts/ordered-fractions/" rel="noopener" class="book-btn">Read more</a>
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/ordered-fractions/">Ordered fractions</a></h3>
+              <div class="book-post-date">August 10, 2022</div>
+              
+            </div>
           
-              <h3><a href="https://rotgers.io/posts/counting-rectangles/">Counting rectangles&nbsp;(July 6, 2022)</a></h3>
-              <p>In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
-Problem statement
-By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
-Naïve&nbsp;solution
-As usual, I always try to define a naïve implementation first, and build from there.</p>
-              <a href="https://rotgers.io/posts/counting-rectangles/" rel="noopener" class="book-btn">Read more</a>
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/counting-rectangles/">Counting rectangles</a></h3>
+              <div class="book-post-date">July 6, 2022</div>
+              
+            </div>
           
-              <h3><a href="https://rotgers.io/posts/path-sum-two-ways/">Path sum: two ways&nbsp;(June 10, 2022)</a></h3>
-              <p>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
-Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.</p>
-              <a href="https://rotgers.io/posts/path-sum-two-ways/" rel="noopener" class="book-btn">Read more</a>
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/path-sum-two-ways/">Path sum: two ways</a></h3>
+              <div class="book-post-date">June 10, 2022</div>
+              
+            </div>
           
-              <h3><a href="https://rotgers.io/posts/plotting-trees-recursively/">Plotting trees recursively&nbsp;(May 18, 2022)</a></h3>
-              <p>The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.</p>
-              <a href="https://rotgers.io/posts/plotting-trees-recursively/" rel="noopener" class="book-btn">Read more</a>
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/plotting-trees-recursively/">Plotting trees recursively</a></h3>
+              <div class="book-post-date">May 18, 2022</div>
+              
+            </div>
           
-              <h3><a href="https://rotgers.io/posts/sqrt-x/">Sqrt(x)&nbsp;(May 12, 2022)</a></h3>
-              <p>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
-My approach was to determine a upper and a lower bound, and do a binary search to find the solution.</p>
-              <a href="https://rotgers.io/posts/sqrt-x/" rel="noopener" class="book-btn">Read more</a>
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/sqrt-x/">Sqrt(x)</a></h3>
+              <div class="book-post-date">May 12, 2022</div>
+              
+            </div>
+          
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/gamblers-fallacy/">Gambler&#39;s Fallacy</a></h3>
+              <div class="book-post-date">March 27, 2022</div>
+              
+            </div>
+          
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/totient-maximum/">Totient maximum</a></h3>
+              <div class="book-post-date">March 26, 2022</div>
+              
+            </div>
+          
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/probability-analysis-of-monopoly/">Monopoly odds</a></h3>
+              <div class="book-post-date">February 28, 2021</div>
+              
+            </div>
+          
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/compartment-model-epidemiology/">Compartment model for epidemiology</a></h3>
+              <div class="book-post-date">March 14, 2020</div>
+              
+            </div>
+          
+            <div class="book-post-summary">
+              <h3><a href="https://rotgers.io/posts/my-first-post/">My First Post</a></h3>
+              <div class="book-post-date">March 26, 2019</div>
+              
+            </div>
           
       </div>
 
+      <hr />
 
       <h2>Repositories</h2>
       <p>
         I have lots of repositories with completed projects, uncompleted projects, proof-of-concepts, ideas, and course notes.
         To make this a bit more navigatable, this is a list of my most interesting projects. Not all projects are finished, and actually, when is software really finished?
       </p>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr);">
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
         <div>
           <b>C#</b>
           <ul>
@@ -447,14 +484,9 @@ My approach was to determine a upper and a lower bound, and do a binary search t
         </div>
       </div>
 
-      <h2>Coding challenges</h2>
-      <div>
-        <ul><li>Participated in Google Hash Code 2020 and got rank 366 out of 10,724 participants world wide and rank 6 out of 141 participants in The Netherlands, with a total score of 26,883,344.</li></ul>
-      </div>
-      <div style="display: flex; justify-content: space-between">
-        <img src="https://projecteuler.net/profile/darkeclipz.png" alt="project euler badge" />
-        <img src="https://www.codewars.com/users/larsrotgers/badges/large" alt="codewars badge" />
-      </div>
+      
+
+      <hr />
 
       <h2>Fractals</h2>
       <p>
