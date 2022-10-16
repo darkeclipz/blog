@@ -16,15 +16,15 @@ draft: false
         double guess = (upperBound + lowerBound) / 2;
         double epsilon = 0.1;
         
-        while (Math.Abs(guess * guess - x) &gt; epsilon || guess * guess &lt; x) {
+        while (Math.Abs(guess * guess - x) > epsilon || guess * guess < x) {
             
             double guess2 = guess * guess;
             
-            if (x &lt; guess2) {
+            if (x < guess2) {
                 upperBound = guess;
             }
             
-            if (x &gt; guess2) {
+            if (x > guess2) {
                 lowerBound = guess;
             }
             

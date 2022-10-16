@@ -1,0 +1,89 @@
+---
+title: "Newton fractals"
+date: 2020-12-20T07:47:11+01:00
+draft: false
+---
+
+<p>
+    Another interesting set of fractals, are Newton fractals.
+    Newton fractals are created by applying Newton's method to complex function $f(z)$. The method uses the iterated equation
+    
+    $$
+        z_{n+1} = z - \frac{f(z)}{f'(z)}.
+    $$
+    
+    If we want to apply Newton's method, we also need to find the derivative of the function $f(z)$.
+    Since Newton's method is used to find the zero's of a function, if we repeatedly apply it to a point $z$, then $f(z_{n\rightarrow\infty}) = 0$. 
+    Note that not every point wil converge to a root, they could also end up in a cycle.
+  </p>
+  
+  <p>
+    If we have the function $f(z) = z^3 - 1$, then the derivative is $f'(z) = 3z^2$. This function has three roots.
+    If we apply Newton's method for all the points in the plane $[-1, 1]\times[-1, 1]$, then each of these points will end up at one of those three roots.
+    We can then visualize the result by giving the resulting pixel value a color. 
+    In this case the color is determined by looking at the angle of the root, and then get a color from a color map. The color map used in this example is <code>hsv2rgb(angle + 0.1, 1, 1)</code>.
+  </p>
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-p-D_4p-tBxc/X99KQ7V-YwI/AAAAAAAAEqM/MMfXW5omzj0lzWh1iM0R4U2O1Dv0hBK5QCLcBGAsYHQ/s1540/download%2B%25289%2529.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" width="600" data-original-height="866" data-original-width="1540" src="https://1.bp.blogspot.com/-p-D_4p-tBxc/X99KQ7V-YwI/AAAAAAAAEqM/MMfXW5omzj0lzWh1iM0R4U2O1Dv0hBK5QCLcBGAsYHQ/s600/download%2B%25289%2529.png"/></a></div>
+  <div style="text-align: center">Plot of $\textrm{arg}(z)$ of $f : z \rightarrow z^3-1$.</div>
+  
+  <p>
+    It took a few attempts to get this image. The biggest error I made, was using a function that has only 1, or 2 roots. This simply results in an image with only one, or two colors.
+  </p>
+  
+  <h2>Relaxed Newton's method</h2>
+  
+  <p>
+  We can modify the method by adding a relaxation parameter $R$ to it. This is a real value that is used to decrease/increase the step size. The relaxed Newton's method is
+  
+  $$  
+    z_{n+1} = z_n - R\cdot\frac{f(z)}{(f'(z)}.
+  $$
+    
+  If we then let the value of R animate between $[0.2, 2.2]$, we can see what the effect of this relaxation parameter is.
+  Press play in the shader below, to see the animation.
+  </p>
+  
+  <div style="text-align: center;">
+      <iframe width="640" height="360" frameborder="0" src="https://www.shadertoy.com/embed/ttcyRH?gui=true&t=10&paused=true&muted=false" allowfullscreen></iframe>
+  </div>
+  
+  <h2>Generalized Newton's method</h2>
+  <p>
+    Another thing we can do is generalize the method. This can be done by adding a complex number $a$ to the method:
+    
+    $$
+        z_{n+1} = z_n - a\cdot\frac{f(z)}{f'(z)}.
+    $$
+    
+    If we then let $\Re(z)$ and $\Im(z)$ animate between the values $[-1, 1]$, in this case with a Lissajous curve, we can see the effect $a$ has on the method.
+    Press play in the shader below to see the animation.
+  </p>
+  
+  <div style="text-align: center">
+      <iframe width="640" height="360" frameborder="0" src="https://www.shadertoy.com/embed/tlcyRH?gui=true&t=10&paused=true&muted=false" allowfullscreen></iframe>
+  </div>
+  
+  <h2>Using a different color map</h2>
+  
+  <p>
+    Instead of using the HSV color map, which gives us a rainbow based on the angle of the complex number, we are going to look at the magnitude of the complex number, which is $|z|$. We will also use the magma color map from matplotlib, which is <a href="https://www.shadertoy.com/view/WlfXRN" target="_blank">created by Mattz and available on ShaderToy</a>. I have slightly modified the color map, because I wanted it to wrap at the edges, instead of having a discontinuity.
+  </p>
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-dN40Pj941DE/X99awdD62II/AAAAAAAAEqc/BYFNAqm4N6U0IZ5IcMH3-SIe7-USGuKDgCLcBGAsYHQ/s1534/cmap.PNG" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" width="600" data-original-height="152" data-original-width="1534" src="https://1.bp.blogspot.com/-dN40Pj941DE/X99awdD62II/AAAAAAAAEqc/BYFNAqm4N6U0IZ5IcMH3-SIe7-USGuKDgCLcBGAsYHQ/s600/cmap.PNG"/></a></div>
+  
+  <p>
+    Because we want to loop our color map, we will only use the fractional part of $|z|$. The following image is the Newton fractals rendered with the color map.
+  </p>
+  
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-GOrYHeHu9Vk/X99dc-zOLEI/AAAAAAAAEqo/6NLrjqMSBKoQt8ZbOCTlT5JbYbjHbW6LACLcBGAsYHQ/s2048/download%2B%252810%2529.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" width="600" data-original-height="1152" data-original-width="2048" src="https://1.bp.blogspot.com/-GOrYHeHu9Vk/X99dc-zOLEI/AAAAAAAAEqo/6NLrjqMSBKoQt8ZbOCTlT5JbYbjHbW6LACLcBGAsYHQ/s600/download%2B%252810%2529.png"/></a></div>
+  <div style="text-align: center">Plot of $|z|$ of $f : z \rightarrow z^3 - 1$ with $a=(0.04352, 0.300609)$.</div>
+  
+  
+  <h2>References</h2>
+  <ul>
+    <li><a href="https://en.wikipedia.org/wiki/Newton_fractal" target="_blank">https://en.wikipedia.org/wiki/Newton_fractal</a></li>
+    <li><a href="https://fractalfoundation.org/OFC/OFC-5-5.html" target="_blank">https://fractalfoundation.org/OFC/OFC-5-5.html</a></li>
+    <li>https://wiki2.org/en/Nova_fractal</li>
+  </ul>

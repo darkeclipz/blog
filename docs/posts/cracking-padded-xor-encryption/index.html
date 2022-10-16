@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A method for unbreakable encryption, is the one-time pad. To encrypt a message with this method, we need a list of truly random integers with the same length as the message. If we then XOR the ASCII values of the letters in the message, with the list of random integers, the resulting ciphertext is unbreakable.
+However, most of the time people use a password to encrypt a message. If for example, the password is $\text{code}$, then the letters are used multiple times to encrypt the message.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Cracking padded XOR encryption" />
+<meta property="og:description" content="A method for unbreakable encryption, is the one-time pad. To encrypt a message with this method, we need a list of truly random integers with the same length as the message. If we then XOR the ASCII values of the letters in the message, with the list of random integers, the resulting ciphertext is unbreakable.
+However, most of the time people use a password to encrypt a message. If for example, the password is $\text{code}$, then the letters are used multiple times to encrypt the message." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/cracking-padded-xor-encryption/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-11-27T08:47:11+01:00" />
+<meta property="article:modified_time" content="2020-11-27T08:47:11+01:00" />
+
+<title>Cracking padded XOR encryption | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.64dcb251c1f91b7ee0345c056d282f5a9bf8879f2ccc9cf5db8ecac5a228cf51.css" integrity="sha256-ZNyyUcH5G37gNFwFbSgvWpv4h58szJz1247KxaIoz1E=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div>Software engineer</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <hr />
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/n-body/" class="">N-body simulation in 2D</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/ordered-fractions/" class="">Ordered fractions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/counting-rectangles/" class="">Counting rectangles</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/path-sum-two-ways/" class="">Path sum: two ways</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/plotting-trees-recursively/" class="">Plotting trees recursively</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/sqrt-x/" class="">Sqrt(x)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/gamblers-fallacy/" class="">Gambler&#39;s Fallacy</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/totient-maximum/" class="">Totient maximum</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/probability-analysis-of-monopoly/" class="">Monopoly odds</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/dungeon-generation/" class="">Dungeon generation with Newton&#39;s law of gravity</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/caustics_2d/" class="">Caustics 2D</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/ifs/" class="">Iterated function systems</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/nova-fractals/" class="">Nova fractals</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/newton-fractals/" class="">Newton fractals</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/julia-set-explorer/" class="">Julia set explorer</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/cracking-padded-xor-encryption/" class="active">Cracking padded XOR encryption</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/compartment-model-epidemiology/" class="">Compartment model for epidemiology</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Cracking padded XOR encryption</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/cracking-padded-xor-encryption/">Cracking padded XOR encryption</a>
+  </h1>
+  
+  <h5>November 27, 2020</h5>
+
+
+
+  
+
+
+
+
+<p>A method for unbreakable encryption, is the one-time pad. To encrypt a message with this method, we need a list of truly random integers with the same length as the message. If we then XOR the ASCII values of the letters in the message, with the list of random integers, the resulting ciphertext is unbreakable.</p>
+
+<p>However, most of the time people use a password to encrypt a message. If for example, the password is $\text{code}$, then the letters are used multiple times to encrypt the message. If the letters are used multiple times, it is no longer a one-time pad, and also no longer unbreakable. Let's use this password to encrypt the message $\text{secret message}$. This results in the following calculations.</p>
+
+<pre>115 ^  99 =  16
+101 ^ 111 =  10
+ 99 ^ 100 =   7
+114 ^ 101 =  23
+101 ^  99 =   6
+116 ^ 111 =  27
+ 32 ^ 100 =  68
+109 ^ 101 =   8
+101 ^  99 =   6
+115 ^ 111 =  28
+115 ^ 100 =  23
+ 97 ^ 101 =   4
+103 ^  99 =   4
+101 ^ 111 =  10</pre>
+
+<p>Of course this is a very simple message, but otherwise this list would get very long. If we now apply the same procedure to the following longer text.</p>
+
+<pre>Although life was hard, these people lived on Greenland for many 
+years and it became their home. They built houses that were snug and 
+strong from stone, wood and turf.</pre>
+
+<p>We end up with the following list of integers.</p>
+
+<pre>34, 3, 16, 13, 12, 26, 3, 13, 67, 3, 13, 3, 6, 79, 19, 4, 16, 
+79, 12, 4, 17, 11, 72, 69, 23, 7, 1, 22, 6, 79, 20, 0, 12, 31, 
+8, 0, 67, 3, 13, 19, 6, 11, 68, 10, 13, 79, 35, 23, 6, 10, 10, 
+9, 2, 1, 0, 69, 5, 0, 22, 69, 14, 14, 10, 28, 67, 101, 29, 0, 
+2, 29, 23, 69, 2, 1, 0, 69, 10, 27, 68, 7, 6, 12, 5, 8, 6, 79, 
+16, 13, 6, 6, 22, 69, 11, 0, 9, 0, 77, 79, 48, 13, 6, 22, 68, 
+7, 22, 6, 8, 17, 67, 7, 11, 16, 16, 10, 23, 69, 23, 7, 5, 17, 
+67, 24, 1, 23, 6, 79, 23, 11, 22, 8, 68, 4, 13, 11, 68, 22, 
+23, 29, 11, 11, 4, 79, 110, 3, 17, 0, 9, 69, 16, 27, 11, 11, 
+6, 67, 68, 18, 12, 0, 0, 69, 2, 1, 0, 69, 23, 26, 22, 3, 77</pre>
+
+<p>Let's assume that we have intercepted this message, and don't know the password. How would we decipher it?</p>
+
+<h2>Letter frequencies</h2>
+
+<p>
+A good approach would be to look at how the letters are distributed in an English text. In the illustration below we see the letter distribution in an English dictionary.
+</p>
+
+<div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-PExkCQ8yKoo/X8FeIrowiNI/AAAAAAAAEjg/4xywu2cMDBoy5gUuPAafxTqa4v2u2s_AQCLcBGAsYHQ/s1200/english-letter-frequency.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" width="400" data-original-height="960" data-original-width="1200" src="https://1.bp.blogspot.com/-PExkCQ8yKoo/X8FeIrowiNI/AAAAAAAAEjg/4xywu2cMDBoy5gUuPAafxTqa4v2u2s_AQCLcBGAsYHQ/s400/english-letter-frequency.png"/></a></div>
+
+<p>
+With this information we can create a simple list for the letter frequencies.
+</p>
+
+<p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>alphabet_frequency = [0.082, 0.015, 0.028, 0.043, 0.13, 0.022, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>                      0.02, 0.061, 0.07, 0.0015, 0.0077, 0.04, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>                      0.024, 0.067, 0.075, 0.019, 0.00095, 0.06, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>                      0.063, 0.091, 0.028, 0.0098, 0.024, 0.0015, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>                      0.02, 0.00074]</span></span></code></pre></div>
+</p>
+
+<p>If we assume that the password was a single character, then the main idea is to guess that character, decode the message, and compare that frequency table to the English alphabet frequency table. The following method will create a frequency table for the characters a-z for any given string.</p>
+
+<p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> count_frequency(text):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    alphabet = <span style="color:#a31515">&#34;&#34;</span>.join(map(chr, range(97, 97 + 26)))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    n = len(text) - text.count(<span style="color:#a31515">&#39; &#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    frequencies = [text.count(letter) / n <span style="color:#00f">for</span> letter <span style="color:#00f">in</span> alphabet]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    <span style="color:#00f">return</span> frequencies</span></span></code></pre></div>
+</p>
+
+<p>If the password would've been two characters, we will split them into two lists. We do this because the first character has encrypted all the odd indexed numbers, and the second character has encrypted all the even indexed numbers. After that we will guess for two characters, one for each list. Expanding on this, if we the password has $n$ characters, then we would've gotten $n$ different lists.</p>
+
+<h2>Chi-squared test</h2>
+
+<p>The Chi-squared test is used to get a test statistic for two lists of frequencies. In essence, it compares how closely related two lists of frequencies are. This can be used perfectly to compare the letter frequencies in this problem.</p>
+
+<p>The Chi-squared statistic is determined by
+
+<p>
+  $$
+  \chi^2 = \sum\frac{(f-e)^2}{e},
+  $$
+</p>
+
+<p>where $f$ is the actual frequency, and $e$ is the expected frequency.</p>
+
+<p>This results in the following method that we can use to calculate the Chi-squared statistic.</p>
+
+<p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> chi_squared(f, e):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    <span style="color:#00f">return</span> sum([(f[i] - e[i])**2 / e[i] <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(len(f))])</span></span></code></pre></div>
+</p>
+
+<p>If two frequencies differ greatly, then the Chi-squared statistic is very large, and if they are closely together, the value is very small.</p>
+
+<h2>Cracking the message</h2>
+
+<p>To crack the message, we first need to split all the values in the list which are encrypted by the same character in the password into seperate lists. In this case the pad length is 4, thus we would get four different lists. Each character in the password will be cracked seperately. We will iterate over each index in the pad, and try each ASCII value (0-255). The list for that character is then decrypted with that value, and compared with the Chi-squared test to the English letter distribution. We also need to keep track of the lowest Chi-square statistic, and the corresponding ASCII value. After we have tested every ASCII value, the one with the lowest Chi-squared statistic is <i>probably</i> the correct one.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">def</span> decipher_xor_pad(cipher, pad_length):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    ciphers = [cipher[i::pad_length] <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(pad_length)]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    pad = [0] * pad_length
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(pad_length):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        min_error = inf
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        min_pad = 0
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#00f">for</span> p <span style="color:#00f">in</span> range(256):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            decoded_cipher = [c^p <span style="color:#00f">for</span> c <span style="color:#00f">in</span> ciphers[i]]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            decoded_text = <span style="color:#a31515">&#34;&#34;</span>.join(map(chr, decoded_cipher))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            frequencies = count_frequency(decoded_text)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            error = chi_squared(frequencies, alphabet_frequency)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            <span style="color:#00f">if</span> error &lt; min_error:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>                min_error, min_pad = error, p
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        pad[i] = min_pad
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(len(cipher)):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        cipher[i] ^= pad[i % pad_length]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    <span style="color:#00f">return</span> pad, cipher</span></span></code></pre></div>
+    
+<p>If we apply this to our encrypted message, with a pad length of four, it will succesfully crack the message.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>pad, text = decipher_xor_pad(ciphertext, 4)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>print(<span style="color:#a31515">&#34;&#34;</span>.join(list(map(chr, text))))</span></span></code></pre></div>
+
+<p>Which gives back our original message.</p>
+
+<pre>Although life was hard, these people lived on Greenland for many 
+years and it became their home. They built houses that were snug 
+and strong from stone, wood and turf.</pre>
+
+<p>Of course if we didn't know the password, we would have no idea of the pad length. The next section will explain on how to find the pad length. It is also worthwhile to note that this method is not very accurate if the encrypted message is very small. It simply doesn't have enough letters to construct a good frequency list.</p>
+
+<h2>Guessing the pad length</h2>
+
+<p>If we want to guess the length $n$ of the pad that has been used, we can try for each value of $[1, n]$, get all the letters decrypted by the first letter of the pad, and calculate the Chi-squared statistic. If we guess the correct length, then most of the letters will decrypt back to the alphabet, and the Chi-squared statistic would become very small. Here we also keep track of the smallest Chi-squared statistic, and by which pad length it was produced. The following method will guess the pad length, based on this procedure.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">def</span> guess_pad_length(cipher, max_length):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    min_error = inf
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    min_i = 0
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(1, max_length + 1):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">for</span> j <span style="color:#00f">in</span> range(256):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>            decoded_cipher = [c^j <span style="color:#00f">for</span> c <span style="color:#00f">in</span> cipher[i::i]]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>            decoded_cipher_text = <span style="color:#a31515">&#34;&#34;</span>.join(map(chr, decoded_cipher))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            frequencies = count_frequency(decoded_cipher_text)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            error = chi_squared(frequencies, alphabet_frequency)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            <span style="color:#00f">if</span> error &lt; min_error:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>                min_error, min_i = error, i
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#00f">return</span> min_i</span></span></code></pre></div>
+    
+<p>We will apply this method to our encrypted message, with a maximum pad length of eight, because we do not want to wait forever.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>guess_pad_length(ciphertext, 8) = 4</span></span></code></pre></div>
+
+<p>It returns the correct length of the password that has been used. We can combine these two methods to crack the message entirely, but I will omit the code here.</p>
+
+<h2>Final notes</h2>
+
+<p>If a message is encrypted with a simple encryption schema, such as a Ceasar cipher, or padded XOR, looking at the letter frequencies is a good method to crack them. Of course, this method would do nothing against modern encryption schemas, but it is an interesting method nonetheless.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

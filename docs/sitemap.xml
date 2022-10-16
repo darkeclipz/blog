@@ -3,12 +3,15 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rotgers.io/</loc>
-    <lastmod>2022-08-10T00:00:00+01:00</lastmod>
+    <lastmod>2022-10-16T07:47:11+01:00</lastmod>
   </url><url>
-    <loc>https://rotgers.io/posts/ordered-fractions/</loc>
-    <lastmod>2022-08-10T00:00:00+01:00</lastmod>
+    <loc>https://rotgers.io/posts/n-body/</loc>
+    <lastmod>2022-10-16T07:47:11+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/</loc>
+    <lastmod>2022-10-16T07:47:11+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/ordered-fractions/</loc>
     <lastmod>2022-08-10T00:00:00+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/counting-rectangles/</loc>
@@ -32,11 +35,29 @@
     <loc>https://rotgers.io/posts/probability-analysis-of-monopoly/</loc>
     <lastmod>2021-02-28T11:42:11+01:00</lastmod>
   </url><url>
+    <loc>https://rotgers.io/posts/dungeon-generation/</loc>
+    <lastmod>2021-02-03T08:47:11+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/caustics_2d/</loc>
+    <lastmod>2021-01-15T10:08:00+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/ifs/</loc>
+    <lastmod>2020-12-22T08:47:11+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/nova-fractals/</loc>
+    <lastmod>2020-12-20T08:47:11+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/newton-fractals/</loc>
+    <lastmod>2020-12-20T07:47:11+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/julia-set-explorer/</loc>
+    <lastmod>2020-12-19T08:47:11+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/cracking-padded-xor-encryption/</loc>
+    <lastmod>2020-11-27T08:47:11+01:00</lastmod>
+  </url><url>
     <loc>https://rotgers.io/posts/compartment-model-epidemiology/</loc>
     <lastmod>2020-03-14T08:47:11+01:00</lastmod>
-  </url><url>
-    <loc>https://rotgers.io/posts/my-first-post/</loc>
-    <lastmod>2019-03-26T08:47:11+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/list-repos-cpp/</loc>
     <priority>0</priority>

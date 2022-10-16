@@ -360,10 +360,10 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/n-body/">N-body simulation in 2D</a>
+      <a href="/posts/caustics_2d/">Caustics 2D</a>
     </h2>
     
-  <h5>October 16, 2022</h5>
+  <h5>January 15, 2021</h5>
 
 
 
@@ -372,19 +372,18 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-    <p>A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
-It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.
-        <a href="/posts/n-body/">...</a>
+    <p>This is a 2D shader that uses a Monte Carlo method to render the scene. For every pixel, multiple samples are taken to determine the colour of the pixel. Each sample will have a random direction ray. We will then only check if the ray hits a light source, or misses a light source. If a light source is hit, then that lights colour will contribute to the pixel sample.
+        <a href="/posts/caustics_2d/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/ordered-fractions/">Ordered fractions</a>
+      <a href="/posts/ifs/">Iterated function systems</a>
     </h2>
     
-  <h5>August 10, 2022</h5>
+  <h5>December 22, 2020</h5>
 
 
 
@@ -393,19 +392,18 @@ It uses a vectorized form of calculating the acceleration matrix, which is used 
 
 
 
-    <p>In this post we will look at solving Project Euler&rsquo;s problem #71, which is about ordered fractions. I have been puzzling with pen and paper for a while during this problem, and researching about fractions really paid off big time for this problem. The final solution is pretty elegant in my opinion. Let&rsquo;s get into it!
-Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positive integers.
-        <a href="/posts/ordered-fractions/">...</a>
+    <p>In this post I will explain a simple iterated function system, also called IFS.We will start of with explaining the basic transformations that we apply, and finally work our way up to get a result like this.I have also included a live demo below that is hosted on ShaderToy.Click play to run the shader. You can change the scaling parameter with the $y$ value of the mouse, and the rotation parameter can be changed with the $x$ value of the mouse.
+        <a href="/posts/ifs/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/counting-rectangles/">Counting rectangles</a>
+      <a href="/posts/nova-fractals/">Nova fractals</a>
     </h2>
     
-  <h5>July 6, 2022</h5>
+  <h5>December 20, 2020</h5>
 
 
 
@@ -414,22 +412,18 @@ Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positiv
 
 
 
-    <p>In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
-Problem statement
-By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
-Naïve&nbsp;solution
-As usual, I always try to define a naïve implementation first, and build from there.
-        <a href="/posts/counting-rectangles/">...</a>
+    <p>In the previous post we looked at creating Newton fractals. We can generalize the method even further, which is then known as a Nova fractal.The "Mandelbrot" version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.The Nova fractal is created by using Newton's method, and adding a parameter $c$ to the end:$$z_{n+1} = z - \frac{f(z)}{f'(z)} + c.$$We can get a "
+        <a href="/posts/nova-fractals/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/path-sum-two-ways/">Path sum: two ways</a>
+      <a href="/posts/newton-fractals/">Newton fractals</a>
     </h2>
     
-  <h5>June 10, 2022</h5>
+  <h5>December 20, 2020</h5>
 
 
 
@@ -438,19 +432,18 @@ As usual, I always try to define a naïve implementation first, and build from t
 
 
 
-    <p>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
-Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.
-        <a href="/posts/path-sum-two-ways/">...</a>
+    <p>Another interesting set of fractals, are Newton fractals.Newton fractals are created by applying Newton's method to complex function $f(z)$. The method uses the iterated equation$$z_{n+1} = z - \frac{f(z)}{f'(z)}.$$If we want to apply Newton's method, we also need to find the derivative of the function $f(z)$.Since Newton's method is used to find the zero's of a function, if we repeatedly apply it to a point $z$, then $f(z_{n\rightarrow\infty}) = 0$.
+        <a href="/posts/newton-fractals/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/plotting-trees-recursively/">Plotting trees recursively</a>
+      <a href="/posts/julia-set-explorer/">Julia set explorer</a>
     </h2>
     
-  <h5>May 18, 2022</h5>
+  <h5>December 19, 2020</h5>
 
 
 
@@ -459,18 +452,18 @@ Problem statement#In the 5 by 5 matrix below, the minimal path sum from the to
 
 
 
-    <p>The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.
-        <a href="/posts/plotting-trees-recursively/">...</a>
+    <p>A live demo of this shader is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image.
+        <a href="/posts/julia-set-explorer/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/sqrt-x/">Sqrt(x)</a>
+      <a href="/posts/cracking-padded-xor-encryption/">Cracking padded XOR encryption</a>
     </h2>
     
-  <h5>May 12, 2022</h5>
+  <h5>November 27, 2020</h5>
 
 
 
@@ -479,19 +472,19 @@ Problem statement#In the 5 by 5 matrix below, the minimal path sum from the to
 
 
 
-    <p>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
-My approach was to determine a upper and a lower bound, and do a binary search to find the solution.
-        <a href="/posts/sqrt-x/">...</a>
+    <p>A method for unbreakable encryption, is the one-time pad. To encrypt a message with this method, we need a list of truly random integers with the same length as the message. If we then XOR the ASCII values of the letters in the message, with the list of random integers, the resulting ciphertext is unbreakable.
+However, most of the time people use a password to encrypt a message. If for example, the password is $\text{code}$, then the letters are used multiple times to encrypt the message.
+        <a href="/posts/cracking-padded-xor-encryption/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/gamblers-fallacy/">Gambler&#39;s Fallacy</a>
+      <a href="/posts/compartment-model-epidemiology/">Compartment model for epidemiology</a>
     </h2>
     
-  <h5>March 27, 2022</h5>
+  <h5>March 14, 2020</h5>
 
 
 
@@ -500,70 +493,10 @@ My approach was to determine a upper and a lower bound, and do a binary search t
 
 
 
-    <p>Suppose we are throwing coins and bet if it is going to be head ($H$) or tails ($T$). After throwing the coin three times, it resulted in heads all of the throws. Do you think that the fourth throw will be heads, or will it be tails?&nbsp;
-Most people would assume that it is not likely to throw heads three times in a row, and it is even more unlikely that it would be four times.
-        <a href="/posts/gamblers-fallacy/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/totient-maximum/">Totient maximum</a>
-    </h2>
-    
-  <h5>March 26, 2022</h5>
-
-
-
-  
-
-
-
-
-    <p>In this post we will look at solving problem 69 on Project Euler. This problem is about using Euler&rsquo;s totient function to find a given maximum. Without any further introduction, let&rsquo;s dive into it.
-Problem statement#Euler&rsquo;s Totient function, $\varphi(n)$, is used to determine the number of numbers less than $n$ which are relatively prime to $n$. For example, as 1, 2, 4, 5, 7, and 8, are all less than nine, and relatively prime to nine, $\varphi(9) = 6$.
-        <a href="/posts/totient-maximum/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/probability-analysis-of-monopoly/">Monopoly odds</a>
-    </h2>
-    
-  <h5>February 28, 2021</h5>
-
-
-
-  
-
-
-
-
-    <p>Introduction#A few years ago I have written a detailed analysis of the probabilities in Monopoly. However, because of handwaving many rules to make it easier to analyze, I wanted to redo it and use all the rules this time. The main motivation for doing this is to solve a question on Project Euler. While we are at it, I also wanted to take the time to answer a few different questions as well.
-        <a href="/posts/probability-analysis-of-monopoly/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/dungeon-generation/">Dungeon generation with Newton&#39;s law of gravity</a>
-    </h2>
-    
-  <h5>February 3, 2021</h5>
-
-
-
-  
-
-
-
-
-    <p>You might wonder what Newton's law of gravitation has to do with the generation of dungeons, but if we use this concept we can use it to generate a dungeon of rooms. Instead of using something like a BSP algorithm, my idea was to just throw a bunch of rooms on top of each other, and let them push each other away until there are no longer any collisions. The result looks like this.
-        <a href="/posts/dungeon-generation/">...</a>
+    <p>This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.
+SEIRD-model#The population is divided into compartments, with the assumption that every individual has the same characteristics. There are a total of five compartments:
+Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) The population flows in the following direction between the compartments.
+        <a href="/posts/compartment-model-epidemiology/">...</a>
       
     </p>
   </article>
@@ -571,23 +504,23 @@ Problem statement#Euler&rsquo;s Totient function, $\varphi(n)$, is used to det
 
   
     <ul class="pagination pagination-default">
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="First" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;&laquo;</span></a>
+      <li class="page-item">
+        <a href="/posts/" aria-label="First" class="page-link" role="button"><span aria-hidden="true">&laquo;&laquo;</span></a>
       </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Previous" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;</span></a>
+      <li class="page-item">
+        <a href="/posts/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/posts/" aria-label="Page 1" class="page-link" role="button">1</a>
       </li>
       <li class="page-item active">
-        <a aria-current="page" aria-label="Page 1" class="page-link" role="button">1</a>
+        <a aria-current="page" aria-label="Page 2" class="page-link" role="button">2</a>
       </li>
-      <li class="page-item">
-        <a href="/posts/page/2/" aria-label="Page 2" class="page-link" role="button">2</a>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Next" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;</span></a>
       </li>
-      <li class="page-item">
-        <a href="/posts/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
-      </li>
-      <li class="page-item">
-        <a href="/posts/page/2/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Last" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  

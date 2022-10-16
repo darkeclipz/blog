@@ -1,0 +1,162 @@
+---
+title: "Cracking padded XOR encryption"
+date: 2020-11-27T08:47:11+01:00
+draft: false
+---
+
+<p>A method for unbreakable encryption, is the one-time pad. To encrypt a message with this method, we need a list of truly random integers with the same length as the message. If we then XOR the ASCII values of the letters in the message, with the list of random integers, the resulting ciphertext is unbreakable.</p>
+
+<p>However, most of the time people use a password to encrypt a message. If for example, the password is $\text{code}$, then the letters are used multiple times to encrypt the message. If the letters are used multiple times, it is no longer a one-time pad, and also no longer unbreakable. Let's use this password to encrypt the message $\text{secret message}$. This results in the following calculations.</p>
+
+<pre>115 ^  99 =  16
+101 ^ 111 =  10
+ 99 ^ 100 =   7
+114 ^ 101 =  23
+101 ^  99 =   6
+116 ^ 111 =  27
+ 32 ^ 100 =  68
+109 ^ 101 =   8
+101 ^  99 =   6
+115 ^ 111 =  28
+115 ^ 100 =  23
+ 97 ^ 101 =   4
+103 ^  99 =   4
+101 ^ 111 =  10</pre>
+
+<p>Of course this is a very simple message, but otherwise this list would get very long. If we now apply the same procedure to the following longer text.</p>
+
+<pre>Although life was hard, these people lived on Greenland for many 
+years and it became their home. They built houses that were snug and 
+strong from stone, wood and turf.</pre>
+
+<p>We end up with the following list of integers.</p>
+
+<pre>34, 3, 16, 13, 12, 26, 3, 13, 67, 3, 13, 3, 6, 79, 19, 4, 16, 
+79, 12, 4, 17, 11, 72, 69, 23, 7, 1, 22, 6, 79, 20, 0, 12, 31, 
+8, 0, 67, 3, 13, 19, 6, 11, 68, 10, 13, 79, 35, 23, 6, 10, 10, 
+9, 2, 1, 0, 69, 5, 0, 22, 69, 14, 14, 10, 28, 67, 101, 29, 0, 
+2, 29, 23, 69, 2, 1, 0, 69, 10, 27, 68, 7, 6, 12, 5, 8, 6, 79, 
+16, 13, 6, 6, 22, 69, 11, 0, 9, 0, 77, 79, 48, 13, 6, 22, 68, 
+7, 22, 6, 8, 17, 67, 7, 11, 16, 16, 10, 23, 69, 23, 7, 5, 17, 
+67, 24, 1, 23, 6, 79, 23, 11, 22, 8, 68, 4, 13, 11, 68, 22, 
+23, 29, 11, 11, 4, 79, 110, 3, 17, 0, 9, 69, 16, 27, 11, 11, 
+6, 67, 68, 18, 12, 0, 0, 69, 2, 1, 0, 69, 23, 26, 22, 3, 77</pre>
+
+<p>Let's assume that we have intercepted this message, and don't know the password. How would we decipher it?</p>
+
+<h2>Letter frequencies</h2>
+
+<p>
+A good approach would be to look at how the letters are distributed in an English text. In the illustration below we see the letter distribution in an English dictionary.
+</p>
+
+<div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-PExkCQ8yKoo/X8FeIrowiNI/AAAAAAAAEjg/4xywu2cMDBoy5gUuPAafxTqa4v2u2s_AQCLcBGAsYHQ/s1200/english-letter-frequency.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" width="400" data-original-height="960" data-original-width="1200" src="https://1.bp.blogspot.com/-PExkCQ8yKoo/X8FeIrowiNI/AAAAAAAAEjg/4xywu2cMDBoy5gUuPAafxTqa4v2u2s_AQCLcBGAsYHQ/s400/english-letter-frequency.png"/></a></div>
+
+<p>
+With this information we can create a simple list for the letter frequencies.
+</p>
+
+<p>
+{{< highlight python >}}alphabet_frequency = [0.082, 0.015, 0.028, 0.043, 0.13, 0.022, 
+                      0.02, 0.061, 0.07, 0.0015, 0.0077, 0.04, 
+                      0.024, 0.067, 0.075, 0.019, 0.00095, 0.06, 
+                      0.063, 0.091, 0.028, 0.0098, 0.024, 0.0015, 
+                      0.02, 0.00074]{{< /highlight >}}
+</p>
+
+<p>If we assume that the password was a single character, then the main idea is to guess that character, decode the message, and compare that frequency table to the English alphabet frequency table. The following method will create a frequency table for the characters a-z for any given string.</p>
+
+<p>
+{{< highlight python >}}def count_frequency(text):
+    alphabet = "".join(map(chr, range(97, 97 + 26)))
+    n = len(text) - text.count(' ')
+    frequencies = [text.count(letter) / n for letter in alphabet]
+    return frequencies{{< /highlight >}}
+</p>
+
+<p>If the password would've been two characters, we will split them into two lists. We do this because the first character has encrypted all the odd indexed numbers, and the second character has encrypted all the even indexed numbers. After that we will guess for two characters, one for each list. Expanding on this, if we the password has $n$ characters, then we would've gotten $n$ different lists.</p>
+
+<h2>Chi-squared test</h2>
+
+<p>The Chi-squared test is used to get a test statistic for two lists of frequencies. In essence, it compares how closely related two lists of frequencies are. This can be used perfectly to compare the letter frequencies in this problem.</p>
+
+<p>The Chi-squared statistic is determined by
+
+<p>
+  $$
+  \chi^2 = \sum\frac{(f-e)^2}{e},
+  $$
+</p>
+
+<p>where $f$ is the actual frequency, and $e$ is the expected frequency.</p>
+
+<p>This results in the following method that we can use to calculate the Chi-squared statistic.</p>
+
+<p>
+{{< highlight python >}}def chi_squared(f, e):
+    return sum([(f[i] - e[i])**2 / e[i] for i in range(len(f))]){{< /highlight >}}
+</p>
+
+<p>If two frequencies differ greatly, then the Chi-squared statistic is very large, and if they are closely together, the value is very small.</p>
+
+<h2>Cracking the message</h2>
+
+<p>To crack the message, we first need to split all the values in the list which are encrypted by the same character in the password into seperate lists. In this case the pad length is 4, thus we would get four different lists. Each character in the password will be cracked seperately. We will iterate over each index in the pad, and try each ASCII value (0-255). The list for that character is then decrypted with that value, and compared with the Chi-squared test to the English letter distribution. We also need to keep track of the lowest Chi-square statistic, and the corresponding ASCII value. After we have tested every ASCII value, the one with the lowest Chi-squared statistic is <i>probably</i> the correct one.</p>
+
+{{< highlight python >}}def decipher_xor_pad(cipher, pad_length):
+    ciphers = [cipher[i::pad_length] for i in range(pad_length)]
+    pad = [0] * pad_length
+    for i in range(pad_length):
+        min_error = inf
+        min_pad = 0
+        for p in range(256):
+            decoded_cipher = [c^p for c in ciphers[i]]
+            decoded_text = "".join(map(chr, decoded_cipher))
+            frequencies = count_frequency(decoded_text)
+            error = chi_squared(frequencies, alphabet_frequency)
+            if error < min_error:
+                min_error, min_pad = error, p
+        pad[i] = min_pad
+    for i in range(len(cipher)):
+        cipher[i] ^= pad[i % pad_length]
+    return pad, cipher{{< /highlight >}}
+    
+<p>If we apply this to our encrypted message, with a pad length of four, it will succesfully crack the message.</p>
+
+{{< highlight python >}}pad, text = decipher_xor_pad(ciphertext, 4)
+print("".join(list(map(chr, text)))){{< /highlight >}}
+
+<p>Which gives back our original message.</p>
+
+<pre>Although life was hard, these people lived on Greenland for many 
+years and it became their home. They built houses that were snug 
+and strong from stone, wood and turf.</pre>
+
+<p>Of course if we didn't know the password, we would have no idea of the pad length. The next section will explain on how to find the pad length. It is also worthwhile to note that this method is not very accurate if the encrypted message is very small. It simply doesn't have enough letters to construct a good frequency list.</p>
+
+<h2>Guessing the pad length</h2>
+
+<p>If we want to guess the length $n$ of the pad that has been used, we can try for each value of $[1, n]$, get all the letters decrypted by the first letter of the pad, and calculate the Chi-squared statistic. If we guess the correct length, then most of the letters will decrypt back to the alphabet, and the Chi-squared statistic would become very small. Here we also keep track of the smallest Chi-squared statistic, and by which pad length it was produced. The following method will guess the pad length, based on this procedure.</p>
+
+{{< highlight python >}}def guess_pad_length(cipher, max_length):
+    min_error = inf
+    min_i = 0
+    for i in range(1, max_length + 1):
+        for j in range(256):
+            decoded_cipher = [c^j for c in cipher[i::i]]
+            decoded_cipher_text = "".join(map(chr, decoded_cipher))
+            frequencies = count_frequency(decoded_cipher_text)
+            error = chi_squared(frequencies, alphabet_frequency)
+            if error < min_error:
+                min_error, min_i = error, i
+    return min_i{{< /highlight >}}
+    
+<p>We will apply this method to our encrypted message, with a maximum pad length of eight, because we do not want to wait forever.</p>
+
+{{< highlight python >}}guess_pad_length(ciphertext, 8) = 4{{< /highlight >}}
+
+<p>It returns the correct length of the password that has been used. We can combine these two methods to crack the message entirely, but I will omit the code here.</p>
+
+<h2>Final notes</h2>
+
+<p>If a message is encrypted with a simple encryption schema, such as a Ceasar cipher, or padded XOR, looking at the letter frequencies is a good method to crack them. Of course, this method would do nothing against modern encryption schemas, but it is an interesting method nonetheless.</p>

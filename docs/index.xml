@@ -6,7 +6,17 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Aug 2022 00:00:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Oct 2022 07:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>N-body simulation in 2D</title>
+      <link>https://rotgers.io/posts/n-body/</link>
+      <pubDate>Sun, 16 Oct 2022 07:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/n-body/</guid>
+      <description>A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
+It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.</description>
+    </item>
+    
     <item>
       <title>Ordered fractions</title>
       <link>https://rotgers.io/posts/ordered-fractions/</link>
@@ -89,6 +99,70 @@ Problem statement#Euler&amp;rsquo;s Totient function, $\varphi(n)$, is used to
     </item>
     
     <item>
+      <title>Dungeon generation with Newton&#39;s law of gravity</title>
+      <link>https://rotgers.io/posts/dungeon-generation/</link>
+      <pubDate>Wed, 03 Feb 2021 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/dungeon-generation/</guid>
+      <description>You might wonder what Newton&#39;s law of gravitation has to do with the generation of dungeons, but if we use this concept we can use it to generate a dungeon of rooms. Instead of using something like a BSP algorithm, my idea was to just throw a bunch of rooms on top of each other, and let them push each other away until there are no longer any collisions. The result looks like this.</description>
+    </item>
+    
+    <item>
+      <title>Caustics 2D</title>
+      <link>https://rotgers.io/posts/caustics_2d/</link>
+      <pubDate>Fri, 15 Jan 2021 10:08:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/caustics_2d/</guid>
+      <description>This is a 2D shader that uses a Monte Carlo method to render the scene. For every pixel, multiple samples are taken to determine the colour of the pixel. Each sample will have a random direction ray. We will then only check if the ray hits a light source, or misses a light source. If a light source is hit, then that lights colour will contribute to the pixel sample.</description>
+    </item>
+    
+    <item>
+      <title>Iterated function systems</title>
+      <link>https://rotgers.io/posts/ifs/</link>
+      <pubDate>Tue, 22 Dec 2020 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/ifs/</guid>
+      <description>In this post I will explain a simple iterated function system, also called IFS.We will start of with explaining the basic transformations that we apply, and finally work our way up to get a result like this.I have also included a live demo below that is hosted on ShaderToy.Click play to run the shader. You can change the scaling parameter with the $y$ value of the mouse, and the rotation parameter can be changed with the $x$ value of the mouse.</description>
+    </item>
+    
+    <item>
+      <title>Nova fractals</title>
+      <link>https://rotgers.io/posts/nova-fractals/</link>
+      <pubDate>Sun, 20 Dec 2020 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/nova-fractals/</guid>
+      <description>In the previous post we looked at creating Newton fractals. We can generalize the method even further, which is then known as a Nova fractal.The &#34;Mandelbrot&#34; version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.The Nova fractal is created by using Newton&#39;s method, and adding a parameter $c$ to the end:$$z_{n+1} = z - \frac{f(z)}{f&#39;(z)} + c.$$We can get a &#34;</description>
+    </item>
+    
+    <item>
+      <title>Newton fractals</title>
+      <link>https://rotgers.io/posts/newton-fractals/</link>
+      <pubDate>Sun, 20 Dec 2020 07:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/newton-fractals/</guid>
+      <description>Another interesting set of fractals, are Newton fractals.Newton fractals are created by applying Newton&#39;s method to complex function $f(z)$. The method uses the iterated equation$$z_{n+1} = z - \frac{f(z)}{f&#39;(z)}.$$If we want to apply Newton&#39;s method, we also need to find the derivative of the function $f(z)$.Since Newton&#39;s method is used to find the zero&#39;s of a function, if we repeatedly apply it to a point $z$, then $f(z_{n\rightarrow\infty}) = 0$.</description>
+    </item>
+    
+    <item>
+      <title>Julia set explorer</title>
+      <link>https://rotgers.io/posts/julia-set-explorer/</link>
+      <pubDate>Sat, 19 Dec 2020 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/julia-set-explorer/</guid>
+      <description>A live demo of this shader is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image.</description>
+    </item>
+    
+    <item>
+      <title>Cracking padded XOR encryption</title>
+      <link>https://rotgers.io/posts/cracking-padded-xor-encryption/</link>
+      <pubDate>Fri, 27 Nov 2020 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/cracking-padded-xor-encryption/</guid>
+      <description>A method for unbreakable encryption, is the one-time pad. To encrypt a message with this method, we need a list of truly random integers with the same length as the message. If we then XOR the ASCII values of the letters in the message, with the list of random integers, the resulting ciphertext is unbreakable.
+However, most of the time people use a password to encrypt a message. If for example, the password is $\text{code}$, then the letters are used multiple times to encrypt the message.</description>
+    </item>
+    
+    <item>
       <title>Compartment model for epidemiology</title>
       <link>https://rotgers.io/posts/compartment-model-epidemiology/</link>
       <pubDate>Sat, 14 Mar 2020 08:47:11 +0100</pubDate>
@@ -97,15 +171,6 @@ Problem statement#Euler&amp;rsquo;s Totient function, $\varphi(n)$, is used to
       <description>This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.
 SEIRD-model#The population is divided into compartments, with the assumption that every individual has the same characteristics. There are a total of five compartments:
 Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) The population flows in the following direction between the compartments.</description>
-    </item>
-    
-    <item>
-      <title>My First Post</title>
-      <link>https://rotgers.io/posts/my-first-post/</link>
-      <pubDate>Tue, 26 Mar 2019 08:47:11 +0100</pubDate>
-      
-      <guid>https://rotgers.io/posts/my-first-post/</guid>
-      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer leo nibh, semper nec gravida a, lobortis ac nulla. Etiam eget sem volutpat, scelerisque augue eget, volutpat dui. Curabitur aliquet venenatis eleifend. Sed commodo semper varius. Vivamus a nibh in lorem suscipit blandit. Cras tempor accumsan est nec varius. Vestibulum pharetra eget neque quis faucibus. Sed ut lectus varius, lacinia dui quis, varius leo. Duis enim metus, consequat vitae mattis et, luctus eu odio.</description>
     </item>
     
     <item>

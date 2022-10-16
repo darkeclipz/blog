@@ -17,7 +17,7 @@ My approach was to determine a upper and a lower bound, and do a binary search t
 <title>Sqrt(x) | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.7fb6c82f9e6ff09a0673c2e7c09435e5505ed99a2796982726dee9e100b59222.css" integrity="sha256-f7bIL55v8JoGc8LnwJQ15VBe2ZonlpgnJt7p4QC1kiI=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.64dcb251c1f91b7ee0345c056d282f5a9bf8879f2ccc9cf5db8ecac5a228cf51.css" integrity="sha256-ZNyyUcH5G37gNFwFbSgvWpv4h58szJz1247KxaIoz1E=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
@@ -66,6 +66,19 @@ https://github.com/alex-shpak/hugo-book
 
   
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/n-body/" class="">N-body simulation in 2D</a>
+  
+
+        </li>
+      
     
       
         <li>
@@ -178,7 +191,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/posts/compartment-model-epidemiology/" class="">Compartment model for epidemiology</a>
+    <a href="/posts/dungeon-generation/" class="">Dungeon generation with Newton&#39;s law of gravity</a>
   
 
         </li>
@@ -191,7 +204,85 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/posts/my-first-post/" class="">My First Post</a>
+    <a href="/posts/caustics_2d/" class="">Caustics 2D</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/ifs/" class="">Iterated function systems</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/nova-fractals/" class="">Nova fractals</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/newton-fractals/" class="">Newton fractals</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/julia-set-explorer/" class="">Julia set explorer</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/cracking-padded-xor-encryption/" class="">Cracking padded XOR encryption</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/compartment-model-epidemiology/" class="">Compartment model for epidemiology</a>
   
 
         </li>
@@ -284,15 +375,15 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#2b91af">double</span> guess = (upperBound + lowerBound) / 2;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#2b91af">double</span> epsilon = 0.1;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">while</span> (Math.Abs(guess * guess - x) &amp;gt; epsilon || guess * guess &amp;lt; x) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">while</span> (Math.Abs(guess * guess - x) &gt; epsilon || guess * guess &lt; x) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            <span style="color:#2b91af">double</span> guess2 = guess * guess;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            <span style="color:#00f">if</span> (x &amp;lt; guess2) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            <span style="color:#00f">if</span> (x &lt; guess2) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>                upperBound = guess;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>            }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>            
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>            <span style="color:#00f">if</span> (x &amp;gt; guess2) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>            <span style="color:#00f">if</span> (x &gt; guess2) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>                lowerBound = guess;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>            }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>            

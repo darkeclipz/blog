@@ -1,0 +1,70 @@
+---
+title: "Julia set explorer"
+date: 2020-12-19T08:47:11+01:00
+draft: false
+---
+
+<p>
+    A <a href="https://www.shadertoy.com/view/wltyRr" target="_blank">live demo of this shader</a> is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.
+  </p>
+  
+  <div style="text-align: center">
+      <iframe width="810" height="448" frameborder="0" src="https://www.shadertoy.com/embed/wltyRr?gui=true&t=10&paused=false&muted=false" allowfullscreen></iframe>
+  </div>
+  
+  <p>
+      Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. 
+        If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image.
+        This problem is better suited to be calculated on the GPU, in parellel, and using GLSL (a programming language for shaders) is an efficient method to do this.
+        Actually, rendering the Mandelbrot set with GLSL, can be seen as the hello world of GLSL.
+  </p>
+  
+  <p>
+    The Mandelbrot set is calculated with the following iterated function
+    $$
+    z_{n+1} = z^2 +c,
+    $$
+    where $z$ and $c$ are complex numbers. I am not going to explain how <a href="https://www.youtube.com/watch?v=nT3WYFxvPLk" target="_blank">complex arithmetic</a> works, there are plenty of resources already available.
+    To render it, $z$ would be set to $0$, and $c$ is the normalized pixel position written as a complex number.
+  </p>
+  
+  <h2>Julia set</h2>
+  
+  <p>
+    The Julia set can be found when $z$ is set to the normalized pixel position, and $c$ is a fixed position.
+    If for example, we let $c = (-0.161, 0.6483)$, the following Julia set will be rendered:
+  </p>
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/--axP7Jaay7Q/X96G1XX9g3I/AAAAAAAAEpw/pYxMocjo4n0bOovtvy0sfz5jgXye0eqjACLcBGAsYHQ/s1505/julia1.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" height="400" data-original-height="1505" data-original-width="1503" src="https://1.bp.blogspot.com/--axP7Jaay7Q/X96G1XX9g3I/AAAAAAAAEpw/pYxMocjo4n0bOovtvy0sfz5jgXye0eqjACLcBGAsYHQ/s400/julia1.png"/></a></div>
+  <div style="text-align: center">Julia set at $(−0.161, 0.6483)$</div>
+  
+  <p>
+    Something which I find very fascinating is that if we look at a region in the Mandelbrot set, the Julia set for that region will display the same patterns. 
+    In essence, the Mandelbrot can be seen as the super version of all Julia sets. In this perspective, the Mandelbrot is essentially a map for all the Julia sets.
+  </p>
+  
+  <p>
+    Knowing this, I always wanted to make a shader where you can choose a point in the Mandelbrot set, and see the corresponding Julia set. With this shader, I have finally created exactly that.
+  </p>
+  
+  <h2>The main cardioid</h2>
+  
+  <p>
+    Another thing I always wanted to do, is let the point follow a path along the main cardioid. This way, the most interesting Julia sets can be seen with a cool animation.
+    I found <a href="http://cosinekitty.com/mandel_orbits_analysis.html">a method to find the main cardioid on this website</a>. The main cardioid is located at
+    $$ 
+    c = \frac{\textrm{e}^{i\theta}}{2} - \frac{\textrm{e}^{2i\theta}}{4},
+    $$
+    where $\theta \in [0, 2\pi]$. Because GLSL doesn't handle complex numbers this way, it can also be rewritten as:
+    
+    $$
+    c = \frac{1}{4}\left(2\cos\theta-\cos(2\theta)\right) + i\sin(\theta)\sin^2\left(\frac{\theta}{2}\right)
+    $$
+    
+    If we <a href="https://www.desmos.com/calculator/bc8hqvuc3p" target="_blank">plot this with Desmos</a>, we will indeed see that it is the cardioid:
+  </p>
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-6yeBXg-lfeM/X96R-0pnO8I/AAAAAAAAEp8/mqEucgP3aU0jsSugyjBM4sDD1xn2u_2kQCLcBGAsYHQ/s916/cardioid.PNG" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" height="320" data-original-height="916" data-original-width="915" src="https://1.bp.blogspot.com/-6yeBXg-lfeM/X96R-0pnO8I/AAAAAAAAEp8/mqEucgP3aU0jsSugyjBM4sDD1xn2u_2kQCLcBGAsYHQ/s320/cardioid.PNG"/></a></div>
+  
+  
+  
