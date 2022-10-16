@@ -6,7 +6,19 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Oct 2022 07:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Oct 2022 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2-body potential energy function</title>
+      <link>https://rotgers.io/posts/2-body-potential-energy/</link>
+      <pubDate>Sun, 16 Oct 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/2-body-potential-energy/</guid>
+      <description>Suppose that we have the sun-earth system. The potential energy of a satellite (any point $(x, y)$ in the system) is determined by the following equation:
+$$ u = -\frac{1-\mu}{\sqrt{(x + \mu)^2 + y^2}} - \frac{\mu}{\sqrt{[x - (1 - \mu)]^2 + y^2}} - \frac{1}{2}(x^2 + y^2), $$
+where $\mu$ is the distance from the center of rotation (the barycenter).
+If we use the equation to create a contour plot, we get a pretty cool visualization of the potential energy in the sun-earth system.</description>
+    </item>
+    
     <item>
       <title>N-body simulation in 2D</title>
       <link>https://rotgers.io/posts/n-body/</link>
@@ -14,7 +26,7 @@
       
       <guid>https://rotgers.io/posts/n-body/</guid>
       <description>A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
-It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.</description>
+Vectorized n-body implementation#It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.</description>
     </item>
     
     <item>

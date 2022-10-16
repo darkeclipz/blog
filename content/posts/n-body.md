@@ -6,7 +6,9 @@ draft: false
 
 A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
 
-![10-body animation](/ten-bodies.gif)
+![10-body animation](/ten-bodies-axes.gif)
+
+## Vectorized n-body implementation
 
 It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.
 
@@ -72,4 +74,3 @@ anim = animation.FuncAnimation(
 
 anim.save('filename.gif', writer='imagemagick')
 {{< /highlight >}}
-
