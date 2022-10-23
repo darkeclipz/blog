@@ -78,6 +78,19 @@ https://github.com/alex-shpak/hugo-book
   
 
   
+    <a href="/posts/mandelbrot-rust/" class="">Mandelbrot with Rust</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
     <a href="/posts/2-body-potential-energy/" class="">2-body potential energy function</a>
   
 
@@ -188,19 +201,6 @@ https://github.com/alex-shpak/hugo-book
         </li>
       
     
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/probability-analysis-of-monopoly/" class="">Monopoly odds</a>
-  
-
-        </li>
-      
-    
   </ul>
 
 
@@ -259,6 +259,29 @@ https://github.com/alex-shpak/hugo-book
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/mandelbrot-rust/">Mandelbrot with Rust</a>
+    </h2>
+    
+  <h5>October 23, 2022</h5>
+
+
+
+  
+
+
+
+
+    <p>This write-up will explain how an image of the Mandelbrot set can be created with Rust.
+Importing the image crate#To generate images in Rust we can use the image crate. We can add this crate by adding a dependency in the Cargo.toml file.
+1[dependencies] 2image = &#34;0.24.4&#34; And by importing the symbol.
+1extern crate image; Defining Complex arithmetic#To create the Mandelbrot set, we will first define a Complex type that will implement Add, Mul, and a method for the conjugate().
+        <a href="/posts/mandelbrot-rust/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -449,26 +472,6 @@ Most people would assume that it is not likely to throw heads three times in a r
     <p>In this post we will look at solving problem 69 on Project Euler. This problem is about using Euler&rsquo;s totient function to find a given maximum. Without any further introduction, let&rsquo;s dive into it.
 Problem statement#Euler&rsquo;s Totient function, $\varphi(n)$, is used to determine the number of numbers less than $n$ which are relatively prime to $n$. For example, as 1, 2, 4, 5, 7, and 8, are all less than nine, and relatively prime to nine, $\varphi(9) = 6$.
         <a href="/posts/totient-maximum/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/probability-analysis-of-monopoly/">Monopoly odds</a>
-    </h2>
-    
-  <h5>February 28, 2021</h5>
-
-
-
-  
-
-
-
-
-    <p>Introduction#A few years ago I have written a detailed analysis of the probabilities in Monopoly. However, because of handwaving many rules to make it easier to analyze, I wanted to redo it and use all the rules this time. The main motivation for doing this is to solve a question on Project Euler. While we are at it, I also wanted to take the time to answer a few different questions as well.
-        <a href="/posts/probability-analysis-of-monopoly/">...</a>
       
     </p>
   </article>

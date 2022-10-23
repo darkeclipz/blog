@@ -6,7 +6,19 @@
     <description>Recent content in Posts on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Oct 2022 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Oct 2022 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mandelbrot with Rust</title>
+      <link>https://rotgers.io/posts/mandelbrot-rust/</link>
+      <pubDate>Sun, 23 Oct 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/mandelbrot-rust/</guid>
+      <description>This write-up will explain how an image of the Mandelbrot set can be created with Rust.
+Importing the image crate#To generate images in Rust we can use the image crate. We can add this crate by adding a dependency in the Cargo.toml file.
+1[dependencies] 2image = &amp;#34;0.24.4&amp;#34; And by importing the symbol.
+1extern crate image; Defining Complex arithmetic#To create the Mandelbrot set, we will first define a Complex type that will implement Add, Mul, and a method for the conjugate().</description>
+    </item>
+    
     <item>
       <title>2-body potential energy function</title>
       <link>https://rotgers.io/posts/2-body-potential-energy/</link>
