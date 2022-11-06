@@ -17,7 +17,7 @@ Instead of looking at the conjugate of the complex number to determine if the or
 The sine function of a complex number $z$ is defined with the relationship
 
 $$
-\sin(z) = \sin(a + bi) = \sin a + \cosh b + (\cos a + \sinh b)i,
+\sin(z) = \sin(a + bi) = \sin a \cdot \cosh b + (\cos a \cdot \sinh b)i,
 $$
 
 which is used to define the `complex_sin` function.
