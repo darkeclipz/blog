@@ -50,7 +50,7 @@ fn csinz(x: f32, y: f32) -> f32 {
 }
 {{</highlight>}}
 
-Because this is a Julia set, we pick the point $(1, 0i)$ as a start. The fractal is colored with the function that is defined in the [Mandelbrot with Rust](mandelbrot-rust) post.
+Because this is a Julia set, we pick the point $1 + 0i$ as a start. The fractal is colored with the function that is defined in the [Mandelbrot with Rust](mandelbrot-rust) post.
 
 ![sinz](/sinz.png)
 <figcaption>Plot of $f(z) = c \sin(z)$ at $c = 1.0 + 0i$.</figcaption>
