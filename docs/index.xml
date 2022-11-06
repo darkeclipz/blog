@@ -6,7 +6,18 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Oct 2022 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Nov 2022 10:42:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sin(z) fractals</title>
+      <link>https://rotgers.io/posts/sinz_fractal/</link>
+      <pubDate>Sun, 06 Nov 2022 10:42:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/sinz_fractal/</guid>
+      <description>Another interesting set of fractals is produced by looking at the Julia set of the iterated function
+$$ z_{n+1} = \sin (z_n) \cdot c. $$
+Instead of looking at the conjugate of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.</description>
+    </item>
+    
     <item>
       <title>Mandelbrot with Rust</title>
       <link>https://rotgers.io/posts/mandelbrot-rust/</link>
