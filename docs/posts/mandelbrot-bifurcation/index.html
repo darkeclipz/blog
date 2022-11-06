@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This is one of those thing that absolutely blew my mind when I found about it. The first the I came across this is in a video about the logistics map by Veritasium.I suggest to check out the video if you want to know more about it.The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Bifurcation diagram of the logistics map in the Mandelbrot set" />
+<meta property="og:description" content="This is one of those thing that absolutely blew my mind when I found about it. The first the I came across this is in a video about the logistics map by Veritasium.I suggest to check out the video if you want to know more about it.The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/mandelbrot-bifurcation/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-06T18:47:11+01:00" />
+<meta property="article:modified_time" content="2022-11-06T18:47:11+01:00" />
+
+<title>Bifurcation diagram of the logistics map in the Mandelbrot set | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.29add83282cec367aebeec1b5aeac29e81b60edabacef3870611f294cd836eac.css" integrity="sha256-Ka3YMoLOw2euvuwbWurCnoG2Dtq6zvOHBhHylM2Dbqw=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div>Software engineer</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <hr />
+
+
+
+
+
+  
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/posts">Posts</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <hr />
+  <b>Latest posts</b>
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/mandelbrot-bifurcation/" class="active">Bifurcation diagram of the logistics map in the Mandelbrot set</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/sinz_fractal/" class="">Sin(z) fractals</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/mandelbrot-rust/" class="">Mandelbrot with Rust</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/2-body-potential-energy/" class="">2-body potential energy function</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/n-body/" class="">N-body simulation in 2D</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/ordered-fractions/" class="">Ordered fractions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/counting-rectangles/" class="">Counting rectangles</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/path-sum-two-ways/" class="">Path sum: two ways</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/plotting-trees-recursively/" class="">Plotting trees recursively</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/sqrt-x/" class="">Sqrt(x)</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Bifurcation diagram of the logistics map in the Mandelbrot set</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/mandelbrot-bifurcation/">Bifurcation diagram of the logistics map in the Mandelbrot set</a>
+  </h1>
+  
+  <h5>November 6, 2022</h5>
+
+
+
+  
+
+
+
+
+This is one of those thing that absolutely blew my mind when I found about it. 
+The first the I came across this is in a <a href="https://www.youtube.com/watch?v=ovJcsL7vyrk">video about the logistics map by Veritasium</a>.
+I suggest to check out the video if you want to know more about it.
+The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis.
+You can use the mouse to move it around.
+
+<div style="width: 100%; display: flex; margin: 24px 0; border: 1px #ddd solid; border-radius: 8px;">
+    <div id="render" style="width: min(670px, 100%); aspect-ratio: 1;"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script>
+    const element = document.getElementById('render');
+
+    const scene = new THREE.Scene();
+    // const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    // const aspect = window.innerWidth/window.innerHeight;
+    // const camera = new THREE.OrthographicCamera(aspect, -aspect, 1, -1, 1, 10 );
+
+    var w = 3;
+    var h = 3;
+    var viewSize = h;
+    var aspectRatio = element.clientWidth / element.clientHeight;
+
+    viewport = {
+        viewSize: viewSize,
+        aspectRatio: aspectRatio,
+        left: (-aspectRatio * viewSize) / 2,
+        right: (aspectRatio * viewSize) / 2,
+        top: viewSize / 2,
+        bottom: -viewSize / 2,
+        near: 0,
+        far: 10
+    }
+
+    camera = new THREE.OrthographicCamera ( 
+        viewport.left, 
+        viewport.right, 
+        viewport.top, 
+        viewport.bottom, 
+        viewport.near, 
+        viewport.far 
+    );
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const controls = new THREE.OrbitControls( camera, renderer.domElement );
+    renderer.setSize(element.clientWidth, element.clientHeight);
+    element.appendChild(renderer.domElement);
+    
+    const geometry = new THREE.BufferGeometry();
+
+    let points = [];
+    let colors = [];
+    
+    material = new THREE.PointsMaterial({ 
+        size: 1, 
+        sizeAttenuation: false, 
+        // vertexAlphas: true,
+        // transparent: true,
+        vertexColors: THREE.VertexColors });
+    
+    // material.color.setRGB(1.0, 0.0, 0.0);
+    particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+
+    const grid = new THREE.GridHelper(4, 10);
+    // scene.add(grid);
+
+    const axh = new THREE.AxesHelper(2.5);
+    // scene.add(axh);
+
+    // Rasterize a [-2, 2] x [-2, 2] grid into n*n rectangles.
+    const scaleZ = 0.5;
+
+    map = (cx, cy) => {
+        const MAX_ITER = 512;
+        let x = 0, y = 0, x2 = 0, y2 = 0, i = 0;
+        let reals = [];
+        while (i++ < MAX_ITER) {
+            y = (x + x) * y + cy;
+            x = x2 - y2 + cx;
+            x2 = x * x;
+            y2 = y * y;
+
+            if (x2 + y2 > 4.0) {
+                return { "reals": [], "density": 0.0 };
+            }
+
+            reals.push(x);
+        }
+
+        let idx = reals.length - 1;
+        let last_real_value = reals[idx];
+        
+        for (let j = reals.length - Math.min(MAX_ITER, 512); j < reals.length - 1; j++) {
+            if (reals[j] == last_real_value) {
+                idx = j;
+                break;
+            }
+        }
+
+        return { 
+            "reals": reals, 
+            "density": (reals.length - idx - 1) / MAX_ITER 
+        };
+    }
+
+    calculatePoints = (n) => {
+
+        let r = 1.5;
+        let range_min = -r;
+        let range_max = r;
+        let range = range_max - range_min;
+
+        let dx = range / n;
+        let dy = range / n;
+
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n; j++) {
+                let x = i * dx + range_min + Math.random() * dx;
+                let y = j * dy + range_min + Math.random() * dy;
+                let mapping = map(x, y);
+                let density = mapping.density;
+                for (let z of mapping.reals.slice(mapping.reals.length - 8, mapping.reals.length - 1)) {
+                    points.push(x); points.push(-z * scaleZ); points.push(y);
+                    colors.push(1.0); colors.push(1-density); colors.push(1-density); //colors.push(0.0);
+                }
+            }
+        }
+    }
+
+    calculateAntenna = (n) => {
+        let dx = 1 / n;
+        for (let i = 0; i < n; i++) {
+            let x = -(2 * i * dx + 0.8) + Math.random() * dx;
+            let y = 0;
+            let mapping = map(x, y);
+            let density = mapping.density / 512;
+            for (let z of mapping.reals) {
+                points.push(x); points.push(-z * scaleZ); points.push(y);
+                colors.push(1.0); colors.push(1.0); colors.push(1.0); //colors.push(1.0);
+            }
+        }
+    }
+
+    camera.position.set(0.6607354632320636, 2.4002587038272174, -1.7982202890694792);
+    controls.target.set(-0.6923297953455696, 0.03261458061658461, 0.15632730091286046);
+    let renderAntenna = true;
+
+    const animate = () => {
+
+        if (points.length < 10000000) {
+            calculatePoints(250);
+            geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(points), 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
+            console.log(points.length);
+        }
+
+        if (renderAntenna) {
+            calculateAntenna(1000);
+            renderAntenna = false;
+        }
+
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    animate();
+</script>
+
+To create the rendering, the following steps are taken.
+
+<ol>
+    <li>Generate a $(x, y)$ point that is used for $c$ when iterating $z^2 + c$.</li>
+    <li>Store all the real values of $z$ that we encounter during the iteration.</li>
+    <li>Discard everything if $z$ is outside of the Mandelbrot set, e.g. the conjugate is greater than 2.</li>
+    <li>Generate points for all the real values, using those as the z-coordinate, using the $x$ and $y$ that has been generated in step 1.</li>
+    <li>Create a point cloud to render all the points.</li>
+</ol></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

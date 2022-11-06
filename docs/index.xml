@@ -6,7 +6,16 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Nov 2022 10:42:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Nov 2022 18:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bifurcation diagram of the logistics map in the Mandelbrot set</title>
+      <link>https://rotgers.io/posts/mandelbrot-bifurcation/</link>
+      <pubDate>Sun, 06 Nov 2022 18:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/mandelbrot-bifurcation/</guid>
+      <description>This is one of those thing that absolutely blew my mind when I found about it. The first the I came across this is in a video about the logistics map by Veritasium.I suggest to check out the video if you want to know more about it.The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis.</description>
+    </item>
+    
     <item>
       <title>Sin(z) fractals</title>
       <link>https://rotgers.io/posts/sinz_fractal/</link>

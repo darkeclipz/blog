@@ -2,11 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://rotgers.io/posts/mandelbrot-bifurcation/</loc>
+    <lastmod>2022-11-06T18:47:11+01:00</lastmod>
+  </url><url>
     <loc>https://rotgers.io/</loc>
-    <lastmod>2022-11-06T10:42:11+01:00</lastmod>
+    <lastmod>2022-11-06T18:47:11+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/</loc>
-    <lastmod>2022-11-06T10:42:11+01:00</lastmod>
+    <lastmod>2022-11-06T18:47:11+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/sinz_fractal/</loc>
     <lastmod>2022-11-06T10:42:11+01:00</lastmod>
