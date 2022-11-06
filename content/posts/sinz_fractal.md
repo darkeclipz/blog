@@ -82,3 +82,13 @@ The colorization is done with the cosine color function that is defined in the [
 
 [![florets](/florets.png)](/florets.png)
 <figcaption>$c = 0.2 + i$</figcaption>
+
+## Shadertoy implementation
+
+I have also implemented the fractal as a shader on Shadertoy. 
+It is included below.
+You can use the mouse to view the different Julia sets.
+
+<div style="text-align: center">
+    <iframe frameborder="0" src="https://www.shadertoy.com/embed/ms23Dw?gui=true&t=10&paused=true&muted=false" allowfullscreen></iframe>
+</div>
