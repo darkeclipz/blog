@@ -453,7 +453,7 @@ To create the rendering, the following steps are taken.
 <ol>
     <li>Generate a $(x, y)$ point that is used for $c$ when iterating $z^2 + c$.</li>
     <li>Store all the real values of $z$ that we encounter during the iteration.</li>
-    <li>Discard everything if $z$ is outside of the Mandelbrot set, e.g. the conjugate is greater than 2.</li>
+    <li>Discard everything if $z$ is outside of the Mandelbrot set, e.g. the argument is greater than 2.</li>
     <li>Generate points for all the real values, using those as the z-coordinate, using the $x$ and $y$ that has been generated in step 1.</li>
     <li>Create a point cloud to render all the points.</li>
 </ol></article>
