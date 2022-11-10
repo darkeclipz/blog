@@ -13,8 +13,11 @@
 <title>Posts | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.918a73902ba707b3b2d371c06c5018fb44647c03f7a74e0a69401c9594aeb750.css" integrity="sha256-kYpzkCunB7Oy03HAbFAY&#43;0RkfAP3p04KaUAclZSut1A=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.a71fb717611343978968a75e72fdb00490a4df9e797298af6edb8d7c3ee502fb.css" integrity="sha256-px&#43;3F2ETQ5eJaKdecv2wBJCk3555cpivbtuNfD7lAvs=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
 <link rel="alternate" type="application/rss+xml" href="https://rotgers.io/posts/index.xml" title="Lars' blog" />
 <!--
 Made with Book Theme
@@ -34,14 +37,16 @@ https://github.com/alex-shpak/hugo-book
   <a class="flex align-center" href="/"><div class="site-brand">
       <div class="site-title">
         <span class="lars">
-          LARS ROTGERS
+          ROTGERS
         </span>
       </div>
     </div>
   </a>
 </h2>
 
-<div>Software engineer</div>
+<div class="p-title">Ad Infinitum</div>
+
+<hr/>
 
 
 
@@ -49,157 +54,24 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-
-
-
-
-
-
-  <hr />
 
 
 
 
 
   
-  <ul>
+
+
+
+  
+  <ul class="nav-menu">
     <li><a href="/">Home</a></li>
     <li><a href="/posts">Posts</a></li>
     <li><a href="#">About</a></li>
   </ul>
-  <hr />
-  <b>Latest posts</b>
+  
+  
   <ul>
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/mandelbrot-bifurcation/" class="">Bifurcation diagram of the logistics map in the Mandelbrot set</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/sinz_fractal/" class="">Sin(z) fractals</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/mandelbrot-rust/" class="">Mandelbrot with Rust</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/2-body-potential-energy/" class="">2-body potential energy function</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/n-body/" class="">N-body simulation in 2D</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/ordered-fractions/" class="">Ordered fractions</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/counting-rectangles/" class="">Counting rectangles</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/path-sum-two-ways/" class="">Path sum: two ways</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/plotting-trees-recursively/" class="">Plotting trees recursively</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/posts/sqrt-x/" class="">Sqrt(x)</a>
-  
-
-        </li>
-      
     
   </ul>
 
@@ -262,6 +134,29 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/ray-sphere-intersection/">Ray-sphere intersection</a>
+    </h2>
+    
+  <h5>November 10, 2022</h5>
+
+
+
+  
+
+
+
+
+    <p>One of the first things you will stumble across when writing a raytracer is to find out where a ray and a sphere intersect. In this post we will derive a method that finds this point from first principles.
+Vector-form definition of a sphere#A sphere is mathematically defined, in vector-form, as
+$$ ||\ \mathbf{x} - \mathbf{c}\ ||^2 = r^2, $$
+where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the sphere, and $r^2$ is the radius of the sphere.
+        <a href="/posts/ray-sphere-intersection/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/mandelbrot-bifurcation/">Bifurcation diagram of the logistics map in the Mandelbrot set</a>
     </h2>
     
@@ -296,7 +191,7 @@ https://github.com/alex-shpak/hugo-book
 
     <p>Another interesting set of fractals is produced by looking at the Julia set of the iterated function
 $$ z_{n+1} = \sin (z_n) \cdot c. $$
-Instead of looking at the conjugate of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.
+Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.
         <a href="/posts/sinz_fractal/">...</a>
       
     </p>
@@ -451,27 +346,6 @@ Problem statement#In the 5 by 5 matrix below, the minimal path sum from the to
 
     <p>The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.
         <a href="/posts/plotting-trees-recursively/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/sqrt-x/">Sqrt(x)</a>
-    </h2>
-    
-  <h5>May 12, 2022</h5>
-
-
-
-  
-
-
-
-
-    <p>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
-My approach was to determine a upper and a lower bound, and do a binary search to find the solution.
-        <a href="/posts/sqrt-x/">...</a>
       
     </p>
   </article>

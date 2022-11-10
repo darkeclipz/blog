@@ -39,6 +39,7 @@ After trying to find any patterns in the development of the sequence of fraction
 
 If we quote Wikipedia, then a Farey sequence is defined in the following manner.
 
+<blockquote>
 <i>
   The n-th Farey sequence $F_n$ is defined as (ordered with respect to magnitude) sequence of reduced fractions $a/b$ (with coprime $a$, $b$) such that $b \leq n$.
   <br/><br/>
@@ -46,7 +47,7 @@ If we quote Wikipedia, then a Farey sequence is defined in the following manner.
   <br/><br/>
   Thus the mediant will then (first) appear in the $(c+d)$-th Farey sequence and is the "next" fraction that is inserted between $a / c$ and $b / d$.
 </i>
-
+</blockquote>
 
 <p>
   Well, well, well, if this isn't exactly what we are looking for! This gives a method to calculate the "next" fraction that appears between $a / c$ and $b / d$.

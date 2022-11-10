@@ -4,14 +4,16 @@ date: 2022-11-06T18:47:11+01:00
 draft: false
 ---
 
-This is one of those thing that absolutely blew my mind when I found about it. 
-The first the I came across this is in a <a href="https://www.youtube.com/watch?v=ovJcsL7vyrk">video about the logistics map by Veritasium</a>.
-I suggest to check out the video if you want to know more about it.
-The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis.
-You can use the mouse to move it around.
+<p>
+    This is one of those thing that absolutely blew my mind when I found about it. 
+    The first the I came across this is in a <a href="https://www.youtube.com/watch?v=ovJcsL7vyrk">video about the logistics map by Veritasium</a>.
+    I suggest to check out the video if you want to know more about it.
+    The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis.
+    You can use the mouse to move it around.
+</p>
 
 <div style="width: 100%; display: flex; margin: 24px 0; border: 1px #ddd solid; border-radius: 8px; overflow: hidden;">
-    <div id="render" style="width: min(670px, 100%); aspect-ratio: 1;"></div>
+    <div id="render" style="width: min(850px, 100%); aspect-ratio: 1;"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
@@ -175,12 +177,15 @@ You can use the mouse to move it around.
     animate();
 </script>
 
-To create the rendering, the following steps are taken.
+<p>
+    To create the rendering, the following steps are taken.
 
-<ol>
-    <li>Generate a $(x, y)$ point that is used for $c$ when iterating $z^2 + c$.</li>
-    <li>Store all the real values of $z$ that we encounter during the iteration.</li>
-    <li>Discard everything if $z$ is outside of the Mandelbrot set, e.g. the argument is greater than 2.</li>
-    <li>Generate points for all the real values, using those as the z-coordinate, using the $x$ and $y$ that has been generated in step 1.</li>
-    <li>Create a point cloud to render all the points.</li>
-</ol>
+    <ol>
+        <li>Generate a $(x, y)$ point that is used for $c$ when iterating $z^2 + c$.</li>
+        <li>Store all the real values of $z$ that we encounter during the iteration.</li>
+        <li>Discard everything if $z$ is outside of the Mandelbrot set, e.g. the argument is greater than 2.</li>
+        <li>Generate points for all the real values, using those as the z-coordinate, using the $x$ and $y$ that has been generated in step 1.</li>
+        <li>Create a point cloud to render all the points.</li>
+    </ol>
+</p>
+

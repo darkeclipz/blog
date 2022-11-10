@@ -6,7 +6,19 @@
     <description>Recent content in Posts on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Nov 2022 18:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ray-sphere intersection</title>
+      <link>https://rotgers.io/posts/ray-sphere-intersection/</link>
+      <pubDate>Thu, 10 Nov 2022 10:08:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/ray-sphere-intersection/</guid>
+      <description>One of the first things you will stumble across when writing a raytracer is to find out where a ray and a sphere intersect. In this post we will derive a method that finds this point from first principles.
+Vector-form definition of a sphere#A sphere is mathematically defined, in vector-form, as
+$$ ||\ \mathbf{x} - \mathbf{c}\ ||^2 = r^2, $$
+where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the sphere, and $r^2$ is the radius of the sphere.</description>
+    </item>
+    
     <item>
       <title>Bifurcation diagram of the logistics map in the Mandelbrot set</title>
       <link>https://rotgers.io/posts/mandelbrot-bifurcation/</link>
@@ -24,7 +36,7 @@
       <guid>https://rotgers.io/posts/sinz_fractal/</guid>
       <description>Another interesting set of fractals is produced by looking at the Julia set of the iterated function
 $$ z_{n+1} = \sin (z_n) \cdot c. $$
-Instead of looking at the conjugate of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.</description>
+Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.</description>
     </item>
     
     <item>

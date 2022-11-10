@@ -1,0 +1,204 @@
+---
+title: "Creating beautiful diagrams with TikZ"
+date: 2022-11-10T11:42:11+01:00
+draft: true
+---
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+          \draw (0, 0) -- (4,0);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[step=2cm,gray,very thin] (0, 0) grid (20, 20);
+            \draw[thick,->] (0,0) -- (4.5,0) node[anchor=north west] {x-axis};
+            \draw[thick,->] (0,0) -- (0,4.5) node[anchor=south east] {y-axis};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[step=1cm,gray,very thin] (-2,-2) grid (6,6);
+            \draw[thick,->] (0,0) -- (4.5,0) node[anchor=north west] {x axis};
+            \draw[thick,->] (0,0) -- (0,4.5) node[anchor=south east] {y axis};
+            \foreach \x in {0,1,2,3,4}
+                \draw (\x cm,1pt) -- (\x cm,-1pt) node[anchor=north] {$\x$};
+            \foreach \y in {0,1,2,3,4}
+                \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw (2,2) circle (3cm);
+            \draw (2,2) ellipse (3cm and 1cm);
+            \draw (2,2) ellipse (1cm and 3cm);
+            \draw (5,2) arc (0:270:3.6cm);
+            \draw[red,thick,dashed] (2,2) circle (3.5cm);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \fill[blue!40!white] (0,0) rectangle (4,4);
+            \filldraw[fill=blue!40!white, draw=black] (6,0) rectangle (10,4);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \shade[shading=ball, ball color=blue] (-6,0) circle (2);
+            \shade[shading=ball, ball color=white] (0,0) circle (2);
+            \shade[shading=ball, ball color=black] (6,0) circle (2);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \tikzstyle{every node} = [circle, fill=gray!30]
+            \node (a) at (0, 0) {A};
+            \node (b) at +(0: 1.5) {B};
+            \node (c) at +(60: 1.5) {C};
+            \foreach \from/\to in {a/b, b/c, c/a}
+            \draw [->] (\from) -- (\to);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \fill (0,2) circle (3pt) node[above] {Here!};
+            \draw (0,0) node[below left] {$A$} --
+            (1,0) node[below right] {$B$} --
+            (1,1) node[above right] {$C$} --
+            (0,1) node[above left] {$D$} -- cycle;
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[->] (-5.5,0) -- (5.5,0) node [below] {R};
+            \foreach \x in {-5,...,5}
+            \draw (\x, 0.1) -- (\x, -0.1) node [below] {\x};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \foreach \x in {1,3,...,10}
+              \shade[ball color=red!\x 0!green] (\x,0) circle (3mm);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \foreach \x in {9,...,1}
+                \draw[fill=blue!\x0] (-0.1*\x - 1, -0.1*\x ) rectangle (0.1*\x + 1, 0.1*\x );
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[->] (0,0) -- (1,0);
+            \draw[dotted, >->>] (0,1) -- (1,1);
+            \draw[|<->|] (0,2) -- (1,2);
+     
+            \draw[loosely dashed] (0,4) -- (1,4);
+            \draw[densely dotted] (0,5) -- (1,5);
+        
+
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}[domain=0:2]
+        \draw[thick,color=gray,step=.5cm,
+        dashed] (-0.5,-.5) grid (3,3);
+        \draw[->] (-1,0) -- (3.5,0)
+        node[below right] {$x$};
+        \draw[->] (0,-1) -- (0,3.5)
+        node[left] {$y$};
+        \draw plot[id=x] function{x*x};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+
+            \shade[shading=ball, ball color=white] (0, 0) circle (2);
+            \shade[shading=ball, ball color=blue] (1,0) circle (2);
+            
+
+            \draw[thin,color=gray,step=0.33333cm] (-6,-6) grid (-3, -3);
+            \draw[->] (-4.5,-4.5) -- (-3,-4.5) node[below right] {width};
+            \draw[->] (-4.5,-4.5) -- (-4.5,-3) node[left] {height};
+
+            
+            
+            
+            \draw (-7, -7) -- (-6, -6);
+            \draw (-7, -7) -- (-3, -6);
+            \draw (-7, -7) -- (-6, -3);
+            \draw (-7, -7) -- (-3, -3);
+            
+            
+            \fill (-7, -7) circle (3pt) node[below right] {$C$};
+            \fill (0, 0) circle (3pt) node[below right] {$Q_2$};
+            
+            \draw[red,thick,->] (-7, -7) -- (0, 0);
+            \fill (-4.5, -4.5) circle (3pt) node[below right] {$Q_1$};
+
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[<->] (-5.5,0) -- (5.5,0) node [below] {R};
+            \foreach \x in {-5,...,5}
+                \draw (\x, 0.1) -- (\x, -0.1) node [below] {$\x$};
+
+            \draw[<->] (0,-5.5) -- (0,5.5) node [right] {I};
+                \foreach \y in {-5,...,5}
+                    \draw (0.1, \y) -- (-0.1, \y) node [left] {$\y$};
+        \end{tikzpicture}
+    </script>
+</tikz>

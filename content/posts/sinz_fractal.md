@@ -10,7 +10,7 @@ $$
 z_{n+1} = \sin (z_n) \cdot c.
 $$
 
-Instead of looking at the conjugate of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity. This is important to get the correct result, because it won't work if the escape criteria of a Mandelbrot set are used.
+Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity. This is important to get the correct result, because it won't work if the escape criteria of a Mandelbrot set are used.
 
 ## The function sin(z)
 
@@ -63,25 +63,17 @@ If we use different values for $c$, we will get different Julia sets. There are 
 
 The colorization is done with the cosine color function that is defined in the [Mandelbrot with Rust](mandelbrot-rust) post. Note that we are using a few different color palettes here, which can be found on [Inigo Quilez's page about this colorization technique](https://iquilezles.org/articles/palettes/).
 
-### Vortex
-
 [![vortex](/vortex.png)](/vortex.png)
-<figcaption>$c = 1 + 0.1i$</figcaption>
-
-### Virus
+<figcaption>Vortex. Generated with paramater $c = 1 + 0.1i$.</figcaption>
 
 [![virus](/virus.png)](/virus.png)
-<figcaption>$c = 1 + i$</figcaption>
-
-### Swirl
+<figcaption>Virus. Generated with parameter $c = 1 + i$.</figcaption>
 
 [![swirl](/swirl.png)](/swirl.png)
-<figcaption>$c = 1 + 0.3i$</figcaption>
-
-### Florets
+<figcaption>Swirl. Generated with parameter $c = 1 + 0.3i$.</figcaption>
 
 [![florets](/florets.png)](/florets.png)
-<figcaption>$c = 0.2 + i$</figcaption>
+<figcaption>Florets. Generated with parameter $c = 0.2 + i$.</figcaption>
 
 ## Shadertoy implementation
 
