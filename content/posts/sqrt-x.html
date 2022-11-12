@@ -4,34 +4,117 @@ date: 2022-05-12T11:42:11+01:00
 draft: false
 ---
 
-<p>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as <code>Math.Pow</code> or <code>x**0.5</code>. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.</p><p>My approach was to determine a upper and a lower bound, and do a binary search to find the solution. Let $L$ be the lower bound. Since we know that a square root function requires that $x &gt; 0$, we can set $L = 0$. Likewise, let $U$ be the upper bound. We know that $\sqrt x &lt; x$ (if $x &gt; 1$), which we use to define the upper bound $U = \max(1, x)$.</p><p>Now we are going to guess what $\sqrt x$ is. We know that $\sqrt{x}$ lies between $L &lt; \sqrt x &lt; U$. Let $k$ be our guess and initially set this to $k = \frac{L + U}{2}$.</p><p>Next we calculate the <i>error</i>&nbsp;of our guess, which we can do with $\left|\ \sqrt{x} - k\ \right| \leq \epsilon$. However, because we cannot calculate square root functions, we need to square it and compare $k^2$ with $x$, giving $\left|\ x - k^2\ \right| \leq \epsilon$.</p><p>While the error is bigger than $\epsilon$, we need to adjust our guess. We do this by comparing $k^2$ to $x$.</p><p></p><ul style="text-align: left;"><li>If $x &lt; k^2$ then we adjust the upper bound and set it to $U = k$.</li><li>If $x &gt; k^2$ then we adjust the lower bound and set it to $L = k$.</li></ul><div>Once the bounds are updated, we recalculate our guess. The illustration below demonstrates the entire process by calculating $\sqrt 8$ as an example. The red cross is the guess $k$, and the green cross is the answer.</div><p></p>
+<p>
+    I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions. 
+    Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a fun excercise to come up with a solution of my own.
+</p>
 
-<img src="/sqrt_x.png" alt="sqrt x" >
+<h2>Binary search algorithm</h2>
+<p>
+    My approach was to determine an upper and a lower bound, and do a binary search to find the solution. Let $L$ be the lower bound. Since we know that a square root function requires that $x &gt; 0$, we can set $L = 0$. Likewise, let $U$ be the upper bound. We know that $\sqrt x &lt; x$ (if $x &gt; 1$), which we use to define the upper bound $U = \max(1, x)$.
+</p>
 
-<div>This entire idea is the same as a well known game where you have to guess a number between $0$ and $100$. After every guess the player will learn if the guess was above the number or below the number. Based on that information, the player can adjust the guess. The binary search technique is a common strategy for solving this game.</div><div>The implementation of the algorithm can be found below. It has been implemented in C#. The time complexity of the algorithm is $O(\log x)$, because the search space is reduced by half on each iteration.<br /><p></p>{{< highlight csharp >}}public class Solution {
-    public int MySqrt(int x) {
+<h2>The guessing game</h2>
+<p>
+    Now we are going to guess what $\sqrt x$ is. We know that $\sqrt{x}$ lies between $L &lt; \sqrt x &lt; U$. Let $k$ be our guess and initially set this to $k = \frac{L + U}{2}$.
+</p>
+<p>
+    Next we <i>calculate the absolute error of our guess</i>, which is $\left|\ \sqrt{x} - k\ \right| \leq \epsilon$. 
+    However, because of the challenge we cannot calculate square root functions. 
+    Therefore we are going to square it and compare $k^2$ with $x$, giving $\left|\ x - k^2\ \right| \leq \epsilon^2$.
+    While the error is bigger than $\epsilon^2$, we need to adjust our guess. 
+    We do this by comparing $k^2$ to $x$ to determine which bound needs to be adjusted.
+</p>
+<ul>
+    <li>If $x &lt; k^2$ then we adjust the upper bound to $U := k$.</li>
+    <li>If $x &gt; k^2$ then we adjust the lower bound to $L := k$.</li>
+</ul>
+
+<p>
+    Once the bounds are updated, we recalculate our guess. The illustration below demonstrates the entire process by calculating $\sqrt 8$ as an example. The red circle is the guess $k$, and the black dot is the answer.
+</p>
+
+<!-- <img src="/sqrt_x.png" alt="sqrt x" > -->
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[|<->|, line width=0.75mm, gray] (-5,0) -- (5,0);
+            \fill[gray] (-5, 0) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $L$};
+            \fill[gray] (5, 0) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $U$};
+            \draw[thick, gray] (0, 0) circle (0.125) node[below, yshift=-0.25cm] {\Large $(L+U)/2$};
+
+            \draw[|<->|, line width=0.75mm] (-5,-2) -- (5,-2);
+            \fill (-5, -2) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $0$};
+            \fill (5, -2) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $8$};
+            \draw[thick, red] (0, -2) circle (0.125) node[below, yshift=-0.25cm] {\LARGE $4$};
+            \fill[thick, black] (-1.25, -2) circle (0.1) node[below, yshift=-0.25cm] {\LARGE $2.82$};
+
+            \draw[|<->|, line width=0.75mm] (-5,-4) -- (0,-4);
+            \fill (-5, -4) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $0$};
+            \fill (0, -4) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $4$};
+            \draw[thick, red] (-2.5, -4) circle (0.125) node[below, yshift=-0.25cm] {\LARGE $2$};
+            \fill[thick, black] (-1.25, -4) circle (0.1) node[below, yshift=-0.25cm] {\LARGE $2.82$};
+
+            \draw[|<->|, line width=0.75mm] (-2.5,-6) -- (0,-6);
+            \fill (-2.5, -6) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $2$};
+            \fill (0, -6) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $4$};
+            \fill[thick, black] (-1.25, -6) circle (0.1) node[below, yshift=-0.25cm] {\LARGE $2.82$};
+            \draw[thick, red] (-1.22, -6) circle (0.125);
+
+            \draw[->, thick, red, dotted] (-0.1, -2.1) -- (-2.4, -3.9);
+            \draw[->, thick, red, dotted] (-2.4, -4.1) -- (-1.25, -5.85);
+            
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<p>
+    It starts by defining the upper and the lower bound to get to the first guess which is $4$. 
+    Comparing this to $k^2$ results in over-shooting, so the upper bound is adjusted and the next guess is $2$.
+    Here it finds that it under-shoots so the lower bound is adjusted resulting in the next guess which is $3$.
+    This process repeats until the absolute error is less than $\epsilon^2$.
+</p>
+
+<p>
+    This entire idea is the same as a well known game where you have to guess a number between $0$ and $100$. After every guess the player will learn if the guess was above the number or below the number. Based on that information, the player can adjust the guess. The binary search technique is a common strategy for solving this game efficiently.
+</p>
+
+<h2>Implementation in C#</h2>
+<p>
+    The implementation of the algorithm can be found below. It has been implemented in C#. The time complexity of the algorithm is $O(\log x)$, because the search space is reduced by half on each iteration.
+</p>
+
+{{< highlight csharp >}}
+public int MySqrt(int x) {
+    
+    double lowerBound = 0;
+    double upperBound = Math.Max(1, x);
+    double guess = (upperBound + lowerBound) / 2;
+    double epsilon = 0.1;
+    double epsilonSquared = epsilon * epsilon;
+    
+    while (Math.Abs(guess * guess - x) > epsilonSquared 
+        || guess * guess < x) 
+    {
+        double guessSquared = guess * guess;
         
-        double lowerBound = 0;
-        double upperBound = Math.Max(1, x);
-        double guess = (upperBound + lowerBound) / 2;
-        double epsilon = 0.1;
-        
-        while (Math.Abs(guess * guess - x) > epsilon || guess * guess < x) {
-            
-            double guess2 = guess * guess;
-            
-            if (x < guess2) {
-                upperBound = guess;
-            }
-            
-            if (x > guess2) {
-                lowerBound = guess;
-            }
-            
-            guess = (upperBound + lowerBound) / 2;
+        if (x < guessSquared) {
+            upperBound = guess;
         }
         
-        return (int)guess;
+        if (x > guessSquared) {
+            lowerBound = guess;
+        }
+        
+        guess = (upperBound + lowerBound) / 2;
     }
-}{{< /highlight >}}
-<p>The extra check <code>guess * guess &lt; x</code> ensures that we are always over estimating $x$ and getting the correct answer after truncating the output.</p></div></div>
+    
+    return (int)guess;
+}
+{{< /highlight >}}
+
+<p>
+    The check $\text{guess}^2 < x$ ensures that it is always over-estimating the guess.
+    This is an important step to get the correct solution because the answer needs to be truncated.
+</p>

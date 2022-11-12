@@ -12,7 +12,7 @@ $$
 
 Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity. This is important to get the correct result, because it won't work if the escape criteria of a Mandelbrot set are used.
 
-## The function sin(z)
+## Complex function sin(z)
 
 The sine function of a complex number $z$ is defined with the relationship
 
@@ -31,7 +31,7 @@ fn complex_sin(z: Complex) -> Complex {
 }
 {{</highlight>}}
 
-## The map of sin(z)
+## Iterated map of sin(z)
 
 With that out of the way, a `csinz` function is defined that will generate the fractal.
 Note that the smooth iteration counter is not used here because it is for exponential functions, which is not the case here.

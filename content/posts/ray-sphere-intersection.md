@@ -18,6 +18,16 @@ $$
 where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the sphere, and $r^2$ is the radius of the sphere.
 It is saying that the vector between the center of the sphere and the point on the sphere must have a length of $r^2$.
 
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \shade[shading=ball, ball color=white] (0,0) circle (4);
+            \draw[dashed] (0,0) ellipse (4cm and 1.5cm);
+            \draw[->, dashed] (0, 0) -- (2.2, -1.2) node[xshift=-0.8cm,yshift=0.8cm] {\LARGE $r$};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
 The interesting thing about this _vector-form definition of a sphere_ is that it upholds in 2D, 3D, and even more dimensions, although more than 3 dimensions is a little bit hard to interpret geometrically.
 
 {{< hint info >}}
@@ -143,9 +153,9 @@ with the value of $d$ that we have found earlier.
 **Todo.** Add an implementation in Rust or C# of the ray—sphere intersection algorithm.
 {{< /hint >}}
 
-### Afterword
+## Afterword
 
-In this post we showed how to derive the equations that are used for a ray—sphere intersection from first principles. We started with the definition of a ray and a sphere. Using those definitions, we replaced $\mathbf{x}$ in the sphere equation with the equation of the ray. We then algebraically manipulated the equation into the form of a quadratic equation, which we solved with the quadratic formula. Finally we looked at the solutions of the quadratic formula to determine the value of $d$ that corresponds to the solution, which we then used to find the point $\mathbf x$ by plugging this back into the ray equation.
+In this post we showed how to derive the equations that are used for a ray—sphere intersection from first principles. Starting with the definition of a ray and a sphere. Using those definitions, we replaced $\mathbf{x}$ in the sphere equation with the equation of the ray. We algebraically manipulated the equation into the form of a quadratic equation, which can then be solved with the quadratic formula. Finally we looked at the solutions of the quadratic formula to determine the value of $d$ that corresponds to the solution, which we then used to find the point $\mathbf x$ by plugging this back into the ray equation.
 
 <!-- ## Implementation of the theory
 

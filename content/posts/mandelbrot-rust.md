@@ -5,6 +5,9 @@ draft: false
 ---
 
 This write-up will explain how an image of the Mandelbrot set can be created with Rust.
+The image that the program generates is displayed below.
+It uses a smooth iteration counter that is used to get a smooth coloring.
+This is one of the first programs that I have written in Rust, and I have kept it pretty simple, meaning that it does not feature multi-threaded support.
 
 ![Mandelbrot](/mandelbrot.png)
 
@@ -17,7 +20,7 @@ To generate images in Rust we can use the `image` crate. We can add this crate b
 image = "0.24.4"
 {{< /highlight >}}
 
-And by importing the symbol.
+And by importing the symbol in the top of our program.
 
 {{< highlight rust >}}
 extern crate image;
@@ -25,7 +28,7 @@ extern crate image;
 
 ## Defining Complex arithmetic
 
-To create the Mandelbrot set, we will first define a `Complex` type that will implement `Add`, `Mul`, and a method for the `conjugate()`.
+To create the Mandelbrot set, we will first define a `Complex` type that will implement `Add`, `Mul`, and a method for the argument squared.
 
 {{< highlight rust >}}
 #[derive(Clone, Copy)]
@@ -77,22 +80,27 @@ impl std::ops::Mul for Complex {
 }
 {{< /highlight >}}
 
-### Conjugate
+### Argument
 
-Finally, we will also add a method to calculate the conjugate. The conjugate is defined as 
+Finally, we will also add a method to calculate the argument. The argument is defined as 
 $$
 |\ a + bi\ | = \sqrt{a^2 + b^2}
 $$
 
-However we will leave the square root out of it, since we do not need it. We define this function as `conj_sq`.
+However we will leave the square root out of it, since we do not need it. We define this function as `arg_sq`.
 
 {{< highlight rust >}}
 impl Complex {
-    fn conj_sq(self) -> f32 {
+    fn arg_sq(self) -> f32 {
         self.a * self.a + self.b * self.b
     }
 }
 {{< /highlight >}}
+
+{{< hint info >}}
+**Computational efficiency.** While iterating the formula, the escape criteria is $\sqrt{a^2 + b^2} \gt 2$, 
+which can be more efficiently computed by squaring both sides to get rid of the square root, giving $a^2 + b^2 \gt 4$.
+{{< /hint >}}
 
 ## The Mandelbrot set 
 
@@ -105,7 +113,7 @@ where $z$ is a complex number $(a + bi)$.
  * If $|\ z\ | \rightarrow \infty$, then the complex number does not belong to the Mandelbrot set.
  * If $|\ z\ | \leq 2$, then we say the the complex number *does* belong to the Mandelbrot set. 
 
-We can check if the complex numbers shoot off to infinity by evaluating the recursive relationship, say, for 256 times. If it hasn't escaped by then, we assume that it is in the Mandelbrot set and we will color that pixel black. The more iterations that we use, the more detailed the image will look. The result of the function is a value $t \in [0, 1]$ that indicates the number of iterations it reached before it escaped to infinity. If the conjugate is greater than $4$, then the orbit will escape to infinity. We are checking with $32$ instead of $2^2$ to get rid of some artifacts in the image.
+We can check if the complex numbers shoot off to infinity by evaluating the recursive relationship, say, for 256 times. If it hasn't escaped by then, we assume that it is in the Mandelbrot set and we will color that pixel black. The more iterations that we use, the more detailed the image will look. The result of the function is a value $t \in [0, 1]$ that indicates the number of iterations it reached before it escaped to infinity. If the argument squared is greater than $4$, then the orbit will escape to infinity. We are checking with $32$ instead of $2^2$ to get rid of some artifacts in the image.
 
 {{< highlight rust >}}
 fn mandelbrot(x: f32, y: f32) -> f32 {
@@ -113,11 +121,11 @@ fn mandelbrot(x: f32, y: f32) -> f32 {
     let c = Complex { a: x, b: y };
     let max = 256;
     let mut i = 0;
-    while i < max && z.conj_sq() < 32.0 {
+    while i < max && z.arg_sq() < 32.0 {
         z = z * z + c;
         i += 1;
     }
-    return (i as f32 - z.conj_sq().log2().log2()) / (max as f32);
+    return (i as f32 - z.arg_sq().log2().log2()) / (max as f32);
 }
 {{< /highlight >}}
 
@@ -140,11 +148,11 @@ fn color(t: f32) -> [u8; 3] {
 }
 {{< /highlight >}}
 
-The color function is created by *Inogo Quilez*, and is used a lot in the Shadertoy community.
+The *color function is created by Inigo Quilez*, and is used a lot in the Shadertoy community.
 
 ## Generating the image
 
-Finally we tie all of this together in the `main` method, where we are going to generate the image. The image has a domain of $x \in [0, \mathrm{image\_width}]$ and $y \in [0, \mathrm{image\_height}]$ which we need to normalize, because the domain of the Mandelbrot is $x \in [-2, 2]$ and $y \in [-2, 2]$.
+Finally we tie all of this together in the `main` method, where we are going to generate the image. Let $w$ be the width of the image in pixels, and $h$ the height of the image. Then the image has a domain of $x \in [0, \mathrm{w}]$ and $y \in [0, \mathrm{h}]$ which we need to normalize, because the interesting part of the Mandelbrot set resides in the rectangle $[-2, 2] \times [-2, 2]$.
 
 We will also scale and translate the coordinates to get a better looking image.
 
@@ -183,11 +191,11 @@ fn julia(x: f32, y: f32) -> f32 {
     let c = Complex { a: 0.38, b: 0.28 };
     let max = 256;
     let mut i = 0;
-    while i < max && z.conj_sq() < 32.0 {
+    while i < max && z.arg_sq() < 32.0 {
         z = z * z + c;
         i += 1;
     }
-    return (i as f32 - z.conj_sq().log2().log2()) / (max as f32);
+    return (i as f32 - z.arg_sq().log2().log2()) / (max as f32);
 }
 {{< /highlight >}}
 
@@ -201,7 +209,7 @@ If we take the absolute value of $z$ during the iteration, we can generate the B
 $$
 \mathrm{abs}({z}) = |\ Re(z)\ | + i|\ Im(z)\ |
 $$
-The absolute bars are already used to indicate the conjugate of $z$, so I have named the function $\mathrm{abs}$ just to be clear.
+The absolute bars are already used to indicate the argument of $z$, so I have named the function $\mathrm{abs}$ just to be clear.
 
 We will implement this as another trait:
 
@@ -219,7 +227,7 @@ impl Complex {
 In the while loop in the Mandelbrot function, we take the absolute of $z$ at each iteration.
 
 {{< highlight rust >}}
-while i < max && z.conj_sq() < 32.0 {
+while i < max && z.arg_sq() < 32.0 {
 	z = z.abs();
 	z = z * z + c;
 	i += 1;
@@ -268,7 +276,7 @@ impl std::ops::Mul for Complex {
 }
 
 impl Complex {
-    fn conj_sq(self) -> f32 {
+    fn arg_sq(self) -> f32 {
         self.a * self.a + self.b * self.b
     }
 }
@@ -287,11 +295,11 @@ fn mandelbrot(x: f32, y: f32) -> f32 {
     let c = Complex { a: x, b: y };
     let max = 256;
     let mut i = 0;
-    while i < max && z.conj_sq() < 32.0 {
+    while i < max && z.arg_sq() < 32.0 {
         z = z * z + c;
         i += 1;
     }
-    return (i as f32 - z.conj_sq().log2().log2()) / (max as f32);
+    return (i as f32 - z.arg_sq().log2().log2()) / (max as f32);
 }
 
 fn julia(x: f32, y: f32) -> f32 {
@@ -299,11 +307,11 @@ fn julia(x: f32, y: f32) -> f32 {
     let c = Complex { a: 0.38, b: 0.28 };
     let max = 256;
     let mut i = 0;
-    while i < max && z.conj_sq() < 32.0 {
+    while i < max && z.arg_sq() < 32.0 {
         z = z * z + c;
         i += 1;
     }
-    return (i as f32 - z.conj_sq().log2().log2()) / (max as f32);
+    return (i as f32 - z.arg_sq().log2().log2()) / (max as f32);
 }
 
 fn burning_ship(x: f32, y: f32) -> f32 {
@@ -311,12 +319,12 @@ fn burning_ship(x: f32, y: f32) -> f32 {
     let c = Complex { a: x, b: y };
     let max = 256;
     let mut i = 0;
-    while i < max && z.conj_sq() < 32.0 {
+    while i < max && z.arg_sq() < 32.0 {
         z = z.abs();
         z = z * z + c;
         i += 1;
     }
-    return (i as f32 - z.conj_sq().log2().log2()) / (max as f32);
+    return (i as f32 - z.arg_sq().log2().log2()) / (max as f32);
 }
 
 fn color(t: f32) -> [u8; 3] {
