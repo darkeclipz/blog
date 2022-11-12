@@ -28,7 +28,7 @@ extern crate image;
 
 ## Defining Complex arithmetic
 
-To create the Mandelbrot set, we will first define a `Complex` type that will implement `Add`, `Mul`, and a method for the argument squared.
+To create the Mandelbrot set, we will first define a `Complex` type that will implement `Add`, `Mul`, and a method for the magnitude squared.
 
 {{< highlight rust >}}
 #[derive(Clone, Copy)]
@@ -80,9 +80,9 @@ impl std::ops::Mul for Complex {
 }
 {{< /highlight >}}
 
-### Argument
+### Magnitude
 
-Finally, we will also add a method to calculate the argument. The argument is defined as 
+Finally, we will also add a method to calculate the magnitude. The magnitude is defined as 
 $$
 |\ a + bi\ | = \sqrt{a^2 + b^2}
 $$
@@ -113,7 +113,7 @@ where $z$ is a complex number $(a + bi)$.
  * If $|\ z\ | \rightarrow \infty$, then the complex number does not belong to the Mandelbrot set.
  * If $|\ z\ | \leq 2$, then we say the the complex number *does* belong to the Mandelbrot set. 
 
-We can check if the complex numbers shoot off to infinity by evaluating the recursive relationship, say, for 256 times. If it hasn't escaped by then, we assume that it is in the Mandelbrot set and we will color that pixel black. The more iterations that we use, the more detailed the image will look. The result of the function is a value $t \in [0, 1]$ that indicates the number of iterations it reached before it escaped to infinity. If the argument squared is greater than $4$, then the orbit will escape to infinity. We are checking with $32$ instead of $2^2$ to get rid of some artifacts in the image.
+We can check if the complex numbers shoot off to infinity by evaluating the recursive relationship, say, for 256 times. If it hasn't escaped by then, we assume that it is in the Mandelbrot set and we will color that pixel black. The more iterations that we use, the more detailed the image will look. The result of the function is a value $t \in [0, 1]$ that indicates the number of iterations it reached before it escaped to infinity. If the magnitude squared is greater than $4$, then the orbit will escape to infinity. We are checking with $32$ instead of $2^2$ to get rid of some artifacts in the image.
 
 {{< highlight rust >}}
 fn mandelbrot(x: f32, y: f32) -> f32 {
@@ -209,7 +209,7 @@ If we take the absolute value of $z$ during the iteration, we can generate the B
 $$
 \mathrm{abs}({z}) = |\ Re(z)\ | + i|\ Im(z)\ |
 $$
-The absolute bars are already used to indicate the argument of $z$, so I have named the function $\mathrm{abs}$ just to be clear.
+The absolute bars are already used to indicate the magnitude of $z$, so I have named the function $\mathrm{abs}$ just to be clear.
 
 We will implement this as another trait:
 

@@ -10,7 +10,7 @@ $$
 z_{n+1} = \sin (z_n) \cdot c.
 $$
 
-Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity. This is important to get the correct result, because it won't work if the escape criteria of a Mandelbrot set are used.
+Instead of looking at the magnitude of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity. This is important to get the correct result, because it won't work if the escape criteria of a Mandelbrot set are used.
 
 ## Complex function sin(z)
 
@@ -54,6 +54,7 @@ Because this is a Julia set, we pick the point $1 + 0i$ as a start. The fractal 
 
 ![sinz](/sinz.png)
 <figcaption>Plot of $f(z) = c \sin(z)$ at $c = 1.0 + 0i$.</figcaption>
+
 
 And voila, there it is.
 

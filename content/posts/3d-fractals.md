@@ -8,4 +8,4 @@ draft: false
 
 ![Mandelbox](/mandelbox.png)
 
-![IFS](/ifs_small.png)
+![IFS](/ifs_small.png)1
