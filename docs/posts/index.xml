@@ -6,7 +6,25 @@
     <description>Recent content in Posts on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 11 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>3D fractals</title>
+      <link>https://rotgers.io/posts/3d-fractals/</link>
+      <pubDate>Fri, 11 Nov 2022 10:08:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/3d-fractals/</guid>
+      <description>1</description>
+    </item>
+    
+    <item>
+      <title>Creating beautiful diagrams with TikZ</title>
+      <link>https://rotgers.io/posts/tikz/</link>
+      <pubDate>Thu, 10 Nov 2022 11:42:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/tikz/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Ray-sphere intersection</title>
       <link>https://rotgers.io/posts/ray-sphere-intersection/</link>
@@ -36,7 +54,7 @@ where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the
       <guid>https://rotgers.io/posts/sinz_fractal/</guid>
       <description>Another interesting set of fractals is produced by looking at the Julia set of the iterated function
 $$ z_{n+1} = \sin (z_n) \cdot c. $$
-Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.</description>
+Instead of looking at the magnitude of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.</description>
     </item>
     
     <item>
@@ -45,10 +63,8 @@ Instead of looking at the argument of the complex number to determine if the orb
       <pubDate>Sun, 23 Oct 2022 08:47:11 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/mandelbrot-rust/</guid>
-      <description>This write-up will explain how an image of the Mandelbrot set can be created with Rust.
-Importing the image crate#To generate images in Rust we can use the image crate. We can add this crate by adding a dependency in the Cargo.toml file.
-1[dependencies] 2image = &amp;#34;0.24.4&amp;#34; And by importing the symbol.
-1extern crate image; Defining Complex arithmetic#To create the Mandelbrot set, we will first define a Complex type that will implement Add, Mul, and a method for the conjugate().</description>
+      <description>This write-up will explain how an image of the Mandelbrot set can be created with Rust. The image that the program generates is displayed below. It uses a smooth iteration counter that is used to get a smooth coloring. This is one of the first programs that I have written in Rust, and I have kept it pretty simple, meaning that it does not feature multi-threaded support.
+Importing the image crate#To generate images in Rust we can use the image crate.</description>
     </item>
     
     <item>
@@ -121,8 +137,7 @@ Problem statement#In the 5 by 5 matrix below, the minimal path sum from the to
       <pubDate>Thu, 12 May 2022 11:42:11 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/sqrt-x/</guid>
-      <description>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
-My approach was to determine a upper and a lower bound, and do a binary search to find the solution.</description>
+      <description>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a fun excercise to come up with a solution of my own.Binary search algorithmMy approach was to determine an upper and a lower bound, and do a binary search to find the solution.</description>
     </item>
     
     <item>
@@ -187,7 +202,10 @@ Problem statement#Euler&amp;rsquo;s Totient function, $\varphi(n)$, is used to
       <pubDate>Sun, 20 Dec 2020 08:47:11 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/nova-fractals/</guid>
-      <description>In the previous post we looked at creating Newton fractals. We can generalize the method even further, which is then known as a Nova fractal.The &#34;Mandelbrot&#34; version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.The Nova fractal is created by using Newton&#39;s method, and adding a parameter $c$ to the end:$$z_{n+1} = z - \frac{f(z)}{f&#39;(z)} + c.$$We can get a &#34;</description>
+      <description>In the previous post we looked at creating Newton fractals at arrived at the generalized Newton&amp;rsquo;s method.
+The method can be generalized even further, which is then known as a Nova fractal.
+Mandelbrot version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.The Nova fractal is created by using Newton&amp;rsquo;s method, and adding a parameter $c$ to the end:
+$$ z_{n+1} = z - \frac{f(z)}{f&amp;rsquo;(z)} + c.</description>
     </item>
     
     <item>
@@ -196,7 +214,7 @@ Problem statement#Euler&amp;rsquo;s Totient function, $\varphi(n)$, is used to
       <pubDate>Sun, 20 Dec 2020 07:47:11 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/newton-fractals/</guid>
-      <description>Another interesting set of fractals, are Newton fractals.Newton fractals are created by applying Newton&#39;s method to complex function $f(z)$. The method uses the iterated equation$$z_{n+1} = z - \frac{f(z)}{f&#39;(z)}.$$If we want to apply Newton&#39;s method, we also need to find the derivative of the function $f(z)$.Since Newton&#39;s method is used to find the zero&#39;s of a function, if we repeatedly apply it to a point $z$, then $f(z_{n\rightarrow\infty}) = 0$.</description>
+      <description>Another interesting set of fractals, are Newton fractals.Newton fractals are created by applying Newton&#39;s method to complex function $f(z)$. The method uses the iterated equation$$z_{n+1} = z - \frac{f(z_n)}{f&#39;(z_n)}.$$If we want to apply Newton&#39;s method, we also need to find the derivative of the function $f(z)$.Since Newton&#39;s method is used to find the zero&#39;s of a function, if we repeatedly apply it to a point $z$, then $f(z_{n\rightarrow\infty}) = 0$, meaning that every point converges to a root of the complex function.</description>
     </item>
     
     <item>

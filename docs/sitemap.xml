@@ -3,10 +3,17 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rotgers.io/</loc>
-    <lastmod>2022-11-10T10:08:00+01:00</lastmod>
+    <lastmod>2022-11-11T10:08:00+01:00</lastmod>
+    <priority>0</priority>
+  </url><url>
+    <loc>https://rotgers.io/posts/3d-fractals/</loc>
+    <lastmod>2022-11-11T10:08:00+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/</loc>
-    <lastmod>2022-11-10T10:08:00+01:00</lastmod>
+    <lastmod>2022-11-11T10:08:00+01:00</lastmod>
+  </url><url>
+    <loc>https://rotgers.io/posts/tikz/</loc>
+    <lastmod>2022-11-10T11:42:11+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/ray-sphere-intersection/</loc>
     <lastmod>2022-11-10T10:08:00+01:00</lastmod>
@@ -74,6 +81,9 @@
     <loc>https://rotgers.io/posts/compartment-model-epidemiology/</loc>
     <lastmod>2020-03-14T08:47:11+01:00</lastmod>
   </url><url>
+    <loc>https://rotgers.io/list-repos-ai/</loc>
+    <priority>0</priority>
+  </url><url>
     <loc>https://rotgers.io/list-repos-cpp/</loc>
     <priority>0</priority>
   </url><url>
@@ -93,6 +103,9 @@
     <priority>0</priority>
   </url><url>
     <loc>https://rotgers.io/list-repos-python/</loc>
+    <priority>0</priority>
+  </url><url>
+    <loc>https://rotgers.io/list-repos-unity/</loc>
     <priority>0</priority>
   </url><url>
     <loc>https://rotgers.io/tags/</loc>

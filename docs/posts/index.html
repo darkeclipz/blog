@@ -13,7 +13,7 @@
 <title>Posts | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.61581ad96362706f9e998ad5b186abbb1a7e8f3839925bccebaeac654a349b74.css" integrity="sha256-YVga2WNicG&#43;emYrVsYaruxp&#43;jzg5klvM666sZUo0m3Q=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.b9e12264ea8d143b917be6d09093da0d00d53e83aefd9a22f16002eba7c84fc3.css" integrity="sha256-ueEiZOqNFDuRe&#43;bQkJPaDQDVPoOu/Zoi8WAC66fIT8M=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
 <script src="https://tikzjax.com/v1/tikzjax.js"></script>
@@ -37,6 +37,7 @@ https://github.com/alex-shpak/hugo-book
   <a class="flex align-center" href="/"><div class="site-brand">
       <div class="site-title">
         <span class="lars">
+          LARS<br/>
           ROTGERS
         </span>
       </div>
@@ -44,9 +45,7 @@ https://github.com/alex-shpak/hugo-book
   </a>
 </h2>
 
-<div class="p-title">Ad Infinitum</div>
-
-<hr/>
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
 
 
 
@@ -58,17 +57,15 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-
-  
 
 
 
   
-  <ul class="nav-menu">
-    <li><a href="/">Home</a></li>
-    <li><a href="/posts">Posts</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
+
+
+
+  
+  
   
   
   <ul>
@@ -134,6 +131,44 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/3d-fractals/">3D fractals</a>
+    </h2>
+    
+  <h5>November 11, 2022</h5>
+
+
+
+  
+
+
+
+
+
+    <p>1
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/tikz/">Creating beautiful diagrams with TikZ</a>
+    </h2>
+    
+  <h5>November 10, 2022</h5>
+
+
+
+  
+
+
+
+
+
+    <p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/ray-sphere-intersection/">Ray-sphere intersection</a>
     </h2>
     
@@ -142,6 +177,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   
+
 
 
 
@@ -169,6 +205,7 @@ where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the
 
 
 
+
     <p>This is one of those thing that absolutely blew my mind when I found about it. The first the I came across this is in a video about the logistics map by Veritasium.I suggest to check out the video if you want to know more about it.The scene below renders the Mandelbrot set and uses all the real values of $z$ that are in the set as the y-axis.
         <a href="/posts/mandelbrot-bifurcation/">...</a>
       
@@ -189,9 +226,10 @@ where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the
 
 
 
+
     <p>Another interesting set of fractals is produced by looking at the Julia set of the iterated function
 $$ z_{n+1} = \sin (z_n) \cdot c. $$
-Instead of looking at the argument of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.
+Instead of looking at the magnitude of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.
         <a href="/posts/sinz_fractal/">...</a>
       
     </p>
@@ -211,10 +249,9 @@ Instead of looking at the argument of the complex number to determine if the orb
 
 
 
-    <p>This write-up will explain how an image of the Mandelbrot set can be created with Rust.
-Importing the image crate#To generate images in Rust we can use the image crate. We can add this crate by adding a dependency in the Cargo.toml file.
-1[dependencies] 2image = &#34;0.24.4&#34; And by importing the symbol.
-1extern crate image; Defining Complex arithmetic#To create the Mandelbrot set, we will first define a Complex type that will implement Add, Mul, and a method for the conjugate().
+
+    <p>This write-up will explain how an image of the Mandelbrot set can be created with Rust. The image that the program generates is displayed below. It uses a smooth iteration counter that is used to get a smooth coloring. This is one of the first programs that I have written in Rust, and I have kept it pretty simple, meaning that it does not feature multi-threaded support.
+Importing the image crate#To generate images in Rust we can use the image crate.
         <a href="/posts/mandelbrot-rust/">...</a>
       
     </p>
@@ -230,6 +267,7 @@ Importing the image crate#To generate images in Rust we can use the image crat
 
 
   
+
 
 
 
@@ -257,6 +295,7 @@ If we use the equation to create a contour plot, we get a pretty cool visualizat
 
 
 
+
     <p>A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
 Vectorized n-body implementation#It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.
         <a href="/posts/n-body/">...</a>
@@ -274,6 +313,7 @@ Vectorized n-body implementation#It uses a vectorized form of calculating the 
 
 
   
+
 
 
 
@@ -299,53 +339,13 @@ Problem statement#Consider the fraction $n / d$, where $n$ and $d$ are positiv
 
 
 
+
     <p>In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
 Problem statement
 By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
 Naïve&nbsp;solution
 As usual, I always try to define a naïve implementation first, and build from there.
         <a href="/posts/counting-rectangles/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/path-sum-two-ways/">Path sum: two ways</a>
-    </h2>
-    
-  <h5>June 10, 2022</h5>
-
-
-
-  
-
-
-
-
-    <p>In this post we will look at solving problem 81 on Project Euler. This problem is about finding a minimal path sum in a matrix. There are three variants of this problem, and this is the easiest one.
-Problem statement#In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.
-        <a href="/posts/path-sum-two-ways/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/plotting-trees-recursively/">Plotting trees recursively</a>
-    </h2>
-    
-  <h5>May 18, 2022</h5>
-
-
-
-  
-
-
-
-
-    <p>The idea for this visualization is something I have been thinking about for quite some time now. Although it is not this specific visualization per se, but the idea of visualizing a nested tree in an appealing way. This method is actually quite easy to implement, and HTML and CSS are doing all the heavy lifting of displaying something that actually looks nice. The illustration below is an example of what the final result will look like, and the rest of this post is about developing the visualization.
-        <a href="/posts/plotting-trees-recursively/">...</a>
       
     </p>
   </article>
@@ -403,6 +403,12 @@ Problem statement#In the 5 by 5 matrix below, the minimal path sum from the to
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
  
         
       </footer>

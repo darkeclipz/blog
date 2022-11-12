@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
-My approach was to determine a upper and a lower bound, and do a binary search to find the solution.">
+<meta name="description" content="I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a fun excercise to come up with a solution of my own.Binary search algorithmMy approach was to determine an upper and a lower bound, and do a binary search to find the solution.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Sqrt(x)" />
-<meta property="og:description" content="I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as Math.Pow or x**0.5. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.
-My approach was to determine a upper and a lower bound, and do a binary search to find the solution." />
+<meta property="og:description" content="I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a fun excercise to come up with a solution of my own.Binary search algorithmMy approach was to determine an upper and a lower bound, and do a binary search to find the solution." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rotgers.io/posts/sqrt-x/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-05-12T11:42:11+01:00" />
@@ -17,7 +15,7 @@ My approach was to determine a upper and a lower bound, and do a binary search t
 <title>Sqrt(x) | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.61581ad96362706f9e998ad5b186abbb1a7e8f3839925bccebaeac654a349b74.css" integrity="sha256-YVga2WNicG&#43;emYrVsYaruxp&#43;jzg5klvM666sZUo0m3Q=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.b9e12264ea8d143b917be6d09093da0d00d53e83aefd9a22f16002eba7c84fc3.css" integrity="sha256-ueEiZOqNFDuRe&#43;bQkJPaDQDVPoOu/Zoi8WAC66fIT8M=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
 <script src="https://tikzjax.com/v1/tikzjax.js"></script>
@@ -40,6 +38,7 @@ https://github.com/alex-shpak/hugo-book
   <a class="flex align-center" href="/"><div class="site-brand">
       <div class="site-title">
         <span class="lars">
+          LARS<br/>
           ROTGERS
         </span>
       </div>
@@ -47,9 +46,7 @@ https://github.com/alex-shpak/hugo-book
   </a>
 </h2>
 
-<div class="p-title">Ad Infinitum</div>
-
-<hr/>
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
 
 
 
@@ -61,17 +58,15 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-
-  
 
 
 
   
-  <ul class="nav-menu">
-    <li><a href="/">Home</a></li>
-    <li><a href="/posts">Posts</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
+
+
+
+  
+  
   
   
   <ul>
@@ -151,37 +146,119 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-<p>I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions such as <code>Math.Pow</code> or <code>x**0.5</code>. Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a nice challenge to come up with a solution of my own.</p><p>My approach was to determine a upper and a lower bound, and do a binary search to find the solution. Let $L$ be the lower bound. Since we know that a square root function requires that $x &gt; 0$, we can set $L = 0$. Likewise, let $U$ be the upper bound. We know that $\sqrt x &lt; x$ (if $x &gt; 1$), which we use to define the upper bound $U = \max(1, x)$.</p><p>Now we are going to guess what $\sqrt x$ is. We know that $\sqrt{x}$ lies between $L &lt; \sqrt x &lt; U$. Let $k$ be our guess and initially set this to $k = \frac{L + U}{2}$.</p><p>Next we calculate the <i>error</i>&nbsp;of our guess, which we can do with $\left|\ \sqrt{x} - k\ \right| \leq \epsilon$. However, because we cannot calculate square root functions, we need to square it and compare $k^2$ with $x$, giving $\left|\ x - k^2\ \right| \leq \epsilon$.</p><p>While the error is bigger than $\epsilon$, we need to adjust our guess. We do this by comparing $k^2$ to $x$.</p><p></p><ul style="text-align: left;"><li>If $x &lt; k^2$ then we adjust the upper bound and set it to $U = k$.</li><li>If $x &gt; k^2$ then we adjust the lower bound and set it to $L = k$.</li></ul><div>Once the bounds are updated, we recalculate our guess. The illustration below demonstrates the entire process by calculating $\sqrt 8$ as an example. The red cross is the guess $k$, and the green cross is the answer.</div><p></p>
 
-<img src="/sqrt_x.png" alt="sqrt x" >
+<p>
+    I came across a fun exercise on LeetCode, where you have to calculate $f(x) = \sqrt{x}$, without using the standard library functions. 
+    Wikipedia has plenty of implementations to solve this problem efficiently, but I figured it would be a fun excercise to come up with a solution of my own.
+</p>
 
-<div>This entire idea is the same as a well known game where you have to guess a number between $0$ and $100$. After every guess the player will learn if the guess was above the number or below the number. Based on that information, the player can adjust the guess. The binary search technique is a common strategy for solving this game.</div><div>The implementation of the algorithm can be found below. It has been implemented in C#. The time complexity of the algorithm is $O(\log x)$, because the search space is reduced by half on each iteration.<br /><p></p><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">Solution</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">public</span> <span style="color:#2b91af">int</span> MySqrt(<span style="color:#2b91af">int</span> x) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#2b91af">double</span> lowerBound = 0;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#2b91af">double</span> upperBound = Math.Max(1, x);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#2b91af">double</span> guess = (upperBound + lowerBound) / 2;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#2b91af">double</span> epsilon = 0.1;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">while</span> (Math.Abs(guess * guess - x) &gt; epsilon || guess * guess &lt; x) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            <span style="color:#2b91af">double</span> guess2 = guess * guess;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            <span style="color:#00f">if</span> (x &lt; guess2) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>                upperBound = guess;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>            }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>            
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>            <span style="color:#00f">if</span> (x &gt; guess2) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>                lowerBound = guess;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>            }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>            
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>            guess = (upperBound + lowerBound) / 2;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>        }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>        
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>        <span style="color:#00f">return</span> (<span style="color:#2b91af">int</span>)guess;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>    }
+<h2>Binary search algorithm</h2>
+<p>
+    My approach was to determine an upper and a lower bound, and do a binary search to find the solution. Let $L$ be the lower bound. Since we know that a square root function requires that $x &gt; 0$, we can set $L = 0$. Likewise, let $U$ be the upper bound. We know that $\sqrt x &lt; x$ (if $x &gt; 1$), which we use to define the upper bound $U = \max(1, x)$.
+</p>
+
+<h2>The guessing game</h2>
+<p>
+    Now we are going to guess what $\sqrt x$ is. We know that $\sqrt{x}$ lies between $L &lt; \sqrt x &lt; U$. Let $k$ be our guess and initially set this to $k = \frac{L + U}{2}$.
+</p>
+<p>
+    Next we <i>calculate the absolute error of our guess</i>, which is $\left|\ \sqrt{x} - k\ \right| \leq \epsilon$. 
+    However, because of the challenge we cannot calculate square root functions. 
+    Therefore we are going to square it and compare $k^2$ with $x$, giving $\left|\ x - k^2\ \right| \leq \epsilon^2$.
+    While the error is bigger than $\epsilon^2$, we need to adjust our guess. 
+    We do this by comparing $k^2$ to $x$ to determine which bound needs to be adjusted.
+</p>
+<ul>
+    <li>If $x &lt; k^2$ then we adjust the upper bound to $U := k$.</li>
+    <li>If $x &gt; k^2$ then we adjust the lower bound to $L := k$.</li>
+</ul>
+
+<p>
+    Once the bounds are updated, we recalculate our guess. The illustration below demonstrates the entire process by calculating $\sqrt 8$ as an example. The red circle is the guess $k$, and the black dot is the answer.
+</p>
+
+<!-- <img src="/sqrt_x.png" alt="sqrt x" > -->
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[|<->|, line width=0.75mm, gray] (-5,0) -- (5,0);
+            \fill[gray] (-5, 0) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $L$};
+            \fill[gray] (5, 0) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $U$};
+            \draw[thick, gray] (0, 0) circle (0.125) node[below, yshift=-0.25cm] {\Large $(L+U)/2$};
+
+            \draw[|<->|, line width=0.75mm] (-5,-2) -- (5,-2);
+            \fill (-5, -2) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $0$};
+            \fill (5, -2) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $8$};
+            \draw[thick, red] (0, -2) circle (0.125) node[below, yshift=-0.25cm] {\LARGE $4$};
+            \fill[thick, black] (-1.25, -2) circle (0.1) node[below, yshift=-0.25cm] {\LARGE $2.82$};
+
+            \draw[|<->|, line width=0.75mm] (-5,-4) -- (0,-4);
+            \fill (-5, -4) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $0$};
+            \fill (0, -4) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $4$};
+            \draw[thick, red] (-2.5, -4) circle (0.125) node[below, yshift=-0.25cm] {\LARGE $2$};
+            \fill[thick, black] (-1.25, -4) circle (0.1) node[below, yshift=-0.25cm] {\LARGE $2.82$};
+
+            \draw[|<->|, line width=0.75mm] (-2.5,-6) -- (0,-6);
+            \fill (-2.5, -6) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $2$};
+            \fill (0, -6) circle (0pt) node[below, yshift=-0.25cm] {\LARGE $4$};
+            \fill[thick, black] (-1.25, -6) circle (0.1) node[below, yshift=-0.25cm] {\LARGE $2.82$};
+            \draw[thick, red] (-1.22, -6) circle (0.125);
+
+            \draw[->, thick, red, dotted] (-0.1, -2.1) -- (-2.4, -3.9);
+            \draw[->, thick, red, dotted] (-2.4, -4.1) -- (-1.25, -5.85);
+            
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<p>
+    It starts by defining the upper and the lower bound to get to the first guess which is $4$. 
+    Comparing this to $k^2$ results in over-shooting, so the upper bound is adjusted and the next guess is $2$.
+    Here it finds that it under-shoots so the lower bound is adjusted resulting in the next guess which is $3$.
+    This process repeats until the absolute error is less than $\epsilon^2$.
+</p>
+
+<p>
+    This entire idea is the same as a well known game where you have to guess a number between $0$ and $100$. After every guess the player will learn if the guess was above the number or below the number. Based on that information, the player can adjust the guess. The binary search technique is a common strategy for solving this game efficiently.
+</p>
+
+<h2>Implementation in C#</h2>
+<p>
+    The implementation of the algorithm can be found below. It has been implemented in C#. The time complexity of the algorithm is $O(\log x)$, because the search space is reduced by half on each iteration.
+</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">public</span> <span style="color:#2b91af">int</span> MySqrt(<span style="color:#2b91af">int</span> x) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#2b91af">double</span> lowerBound = 0;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#2b91af">double</span> upperBound = Math.Max(1, x);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#2b91af">double</span> guess = (upperBound + lowerBound) / 2;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#2b91af">double</span> epsilon = 0.1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#2b91af">double</span> epsilonSquared = epsilon * epsilon;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#00f">while</span> (Math.Abs(guess * guess - x) &gt; epsilonSquared 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        || guess * guess &lt; x) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        <span style="color:#2b91af">double</span> guessSquared = guess * guess;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        <span style="color:#00f">if</span> (x &lt; guessSquared) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>            upperBound = guess;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>        
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>        <span style="color:#00f">if</span> (x &gt; guessSquared) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>            lowerBound = guess;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>        
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>        guess = (upperBound + lowerBound) / 2;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>    <span style="color:#00f">return</span> (<span style="color:#2b91af">int</span>)guess;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>}</span></span></code></pre></div>
-<p>The extra check <code>guess * guess &lt; x</code> ensures that we are always over estimating $x$ and getting the correct answer after truncating the output.</p></div></div></article>
+
+<p>
+    The check $\text{guess}^2 < x$ ensures that it is always over-estimating the guess.
+    This is an important step to get the correct solution because the answer needs to be truncated.
+</p></article>
  
       
 
@@ -210,6 +287,12 @@ https://github.com/alex-shpak/hugo-book
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
  
         
       </footer>

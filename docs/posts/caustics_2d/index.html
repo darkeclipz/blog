@@ -15,7 +15,7 @@
 <title>Caustics 2D | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.61581ad96362706f9e998ad5b186abbb1a7e8f3839925bccebaeac654a349b74.css" integrity="sha256-YVga2WNicG&#43;emYrVsYaruxp&#43;jzg5klvM666sZUo0m3Q=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.b9e12264ea8d143b917be6d09093da0d00d53e83aefd9a22f16002eba7c84fc3.css" integrity="sha256-ueEiZOqNFDuRe&#43;bQkJPaDQDVPoOu/Zoi8WAC66fIT8M=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
 <script src="https://tikzjax.com/v1/tikzjax.js"></script>
@@ -38,6 +38,7 @@ https://github.com/alex-shpak/hugo-book
   <a class="flex align-center" href="/"><div class="site-brand">
       <div class="site-title">
         <span class="lars">
+          LARS<br/>
           ROTGERS
         </span>
       </div>
@@ -45,9 +46,7 @@ https://github.com/alex-shpak/hugo-book
   </a>
 </h2>
 
-<div class="p-title">Ad Infinitum</div>
-
-<hr/>
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
 
 
 
@@ -59,17 +58,15 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-
-  
 
 
 
   
-  <ul class="nav-menu">
-    <li><a href="/">Home</a></li>
-    <li><a href="/posts">Posts</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
+
+
+
+  
+  
   
   
   <ul>
@@ -149,6 +146,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+
 <div class="separator" style="clear: both; text-align: center;"><a href="https://1.bp.blogspot.com/-U1w0lMBqW_U/YAH-cxDb0NI/AAAAAAAAExU/oPkOz2pOTDYl5OTF8Pl4Hf88H3r23doWQCLcBGAsYHQ/s1920/2D_Caustics.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="1080" data-original-width="1920" height="360" src="https://1.bp.blogspot.com/-U1w0lMBqW_U/YAH-cxDb0NI/AAAAAAAAExU/oPkOz2pOTDYl5OTF8Pl4Hf88H3r23doWQCLcBGAsYHQ/w640-h360/2D_Caustics.png" width="640" /></a></div><p>This is a 2D shader that uses a Monte Carlo method to render the scene. For every pixel, multiple samples are taken to determine the colour of the pixel. Each sample will have a random direction ray. We will then only check if the ray hits a light source, or misses a light source. If a light source is hit, then that lights colour will contribute to the pixel sample. However, if the ray hits an object, then we will reflect the ray, and march the reflected ray through the scene. The number of times that we reflect the ray when an object is hit, is called the number of bounces.&nbsp;</p><p>Having explained the basic principle behind the rendering technique, the algorithm that follows from it is quite straightforward:</p><p></p><ol style="text-align: left;"><li>For each pixel position $O$.</li><li>Generate a random normalized direction vector $D$. This can be done by selecting a random variable $\underline{x} \sim \textrm{uniform}(0, 1)$, which is then used to create the vector $D = [\cos(2\pi\cdot\underline{x}), \sin(2\pi\cdot\underline{x})]$. Because this point is on the unit circle, it is already normalized.</li><li>Shoot the ray $O + t\cdot D$ into the scene, and determine if an object is hit.</li><li>If the object that is hit is a light source, add the contribution of the light source to the pixel result, and go to the next sample.</li><li>If the object that is hit is not a light source, calculate the reflection ray, and use this ray in step 3. If the number of bounces exceeds a certain threshold, then the result of the pixel is zero.</li></ol><p>This implementation uses two reflection ray bounces to determine if a light source is hit. If we never hit a light source we will return an ambient colour, instead of black.</p><div>The algorithm also uses an anti-aliasing technique which is called a <a href="https://en.wikipedia.org/wiki/Supersampling" rel="nofollow" target="_blank">jitter algorithm</a>, or also <a href="https://en.wikipedia.org/wiki/Stratified_sampling" rel="nofollow" target="_blank">stratified sampling</a>. The image below should illustrate how the samples are generated based on this algorithm.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Supersampling_-_Jittering.svg/420px-Supersampling_-_Jittering.svg.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="420" data-original-width="420" height="200" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Supersampling_-_Jittering.svg/420px-Supersampling_-_Jittering.svg.png" width="200" /></a></div><br /><div style="text-align: center;">Image from Wikipedia</div><div><br /></div><div>First, the pixel is divided into smaller sub-pixels, and a random point is selected within these sub-pixels. Secondly, multiple samples are created that are sent into the scene to determine if a light source is hit. The stratification is also applied in the generation of the direction vector. The stratification ensures that we do not randomly generate a clump of pixels, or a set of almost equal direction rays. This method will help the image to converge faster.</div><div><br /></div><div>The entire <a href="https://www.shadertoy.com/view/wtKczm" target="_blank">shader is hosted on ShaderToy</a>, and I have also included a live version below:</div><div><br /></div><div><b>Version A: Buffered result, denoised</b></div><div>Use the left mouse button to move the light source(s). If the button is pressed, the image will denoise a bit quicker, so that it feels more responsive. However, the trade-off is a little bit more noise.</div><p></p>
 
 <div style="text-align: center;"><iframe allowfullscreen="" frameborder="0" height="360" src="https://www.shadertoy.com/embed/wtKczm?gui=true&amp;t=10&amp;paused=true&amp;muted=false" width="640"></iframe></div>
@@ -186,6 +184,12 @@ https://github.com/alex-shpak/hugo-book
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
  
         
       </footer>

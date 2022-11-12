@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Creating beautiful diagrams with TikZ" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/tikz/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-10T11:42:11+01:00" />
+<meta property="article:modified_time" content="2022-11-10T11:42:11+01:00" />
+
+<title>Creating beautiful diagrams with TikZ | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.b9e12264ea8d143b917be6d09093da0d00d53e83aefd9a22f16002eba7c84fc3.css" integrity="sha256-ueEiZOqNFDuRe&#43;bQkJPaDQDVPoOu/Zoi8WAC66fIT8M=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Creating beautiful diagrams with TikZ</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/tikz/">Creating beautiful diagrams with TikZ</a>
+  </h1>
+  
+  <h5>November 10, 2022</h5>
+
+
+
+  
+
+
+
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+          \draw (0, 0) -- (4,0);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[step=2cm,gray,very thin] (0, 0) grid (20, 20);
+            \draw[thick,->] (0,0) -- (4.5,0) node[anchor=north west] {x-axis};
+            \draw[thick,->] (0,0) -- (0,4.5) node[anchor=south east] {y-axis};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[step=1cm,gray,very thin] (-2,-2) grid (6,6);
+            \draw[thick,->] (0,0) -- (4.5,0) node[anchor=north west] {x axis};
+            \draw[thick,->] (0,0) -- (0,4.5) node[anchor=south east] {y axis};
+            \foreach \x in {0,1,2,3,4}
+                \draw (\x cm,1pt) -- (\x cm,-1pt) node[anchor=north] {$\x$};
+            \foreach \y in {0,1,2,3,4}
+                \draw (1pt,\y cm) -- (-1pt,\y cm) node[anchor=east] {$\y$};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw (2,2) circle (3cm);
+            \draw (2,2) ellipse (3cm and 1cm);
+            \draw (2,2) ellipse (1cm and 3cm);
+            \draw (5,2) arc (0:270:3.6cm);
+            \draw[red,thick,dashed] (2,2) circle (3.5cm);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \fill[blue!40!white] (0,0) rectangle (4,4);
+            \filldraw[fill=blue!40!white, draw=black] (6,0) rectangle (10,4);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \shade[shading=ball, ball color=blue] (-6,0) circle (2);
+            \shade[shading=ball, ball color=white] (0,0) circle (2);
+            \shade[shading=ball, ball color=black] (6,0) circle (2);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \tikzstyle{every node} = [circle, fill=gray!30]
+            \node (a) at (0, 0) {A};
+            \node (b) at +(0: 1.5) {B};
+            \node (c) at +(60: 1.5) {C};
+            \foreach \from/\to in {a/b, b/c, c/a}
+            \draw [->] (\from) -- (\to);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \fill (0,2) circle (3pt) node[above] {Here!};
+            \draw (0,0) node[below left] {$A$} --
+            (1,0) node[below right] {$B$} --
+            (1,1) node[above right] {$C$} --
+            (0,1) node[above left] {$D$} -- cycle;
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[->] (-5.5,0) -- (5.5,0) node [below] {R};
+            \foreach \x in {-5,...,5}
+            \draw (\x, 0.1) -- (\x, -0.1) node [below] {\x};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \foreach \x in {1,3,...,10}
+              \shade[ball color=red!\x 0!green] (\x,0) circle (3mm);
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \foreach \x in {9,...,1}
+                \draw[fill=blue!\x0] (-0.1*\x - 1, -0.1*\x ) rectangle (0.1*\x + 1, 0.1*\x );
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[->] (0,0) -- (1,0);
+            \draw[dotted, >->>] (0,1) -- (1,1);
+            \draw[|<->|] (0,2) -- (1,2);
+     
+            \draw[loosely dashed] (0,4) -- (1,4);
+            \draw[densely dotted] (0,5) -- (1,5);
+        
+
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}[domain=0:2]
+        \draw[thick,color=gray,step=.5cm,
+        dashed] (-0.5,-.5) grid (3,3);
+        \draw[->] (-1,0) -- (3.5,0)
+        node[below right] {$x$};
+        \draw[->] (0,-1) -- (0,3.5)
+        node[left] {$y$};
+        \draw plot[id=x] function{x*x};
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+
+            \shade[shading=ball, ball color=white] (0, 0) circle (2);
+            \shade[shading=ball, ball color=blue] (1,0) circle (2);
+            
+
+            \draw[thin,color=gray,step=0.33333cm] (-6,-6) grid (-3, -3);
+            \draw[->] (-4.5,-4.5) -- (-3,-4.5) node[below right] {width};
+            \draw[->] (-4.5,-4.5) -- (-4.5,-3) node[left] {height};
+
+            
+            
+            
+            \draw (-7, -7) -- (-6, -6);
+            \draw (-7, -7) -- (-3, -6);
+            \draw (-7, -7) -- (-6, -3);
+            \draw (-7, -7) -- (-3, -3);
+            
+            
+            \fill (-7, -7) circle (3pt) node[below right] {$C$};
+            \fill (0, 0) circle (3pt) node[below right] {$Q_2$};
+            
+            \draw[red,thick,->] (-7, -7) -- (0, 0);
+            \fill (-4.5, -4.5) circle (3pt) node[below right] {$Q_1$};
+
+        \end{tikzpicture}
+    </script>
+</tikz>
+
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \draw[<->] (-5.5,0) -- (5.5,0) node [below] {R};
+            \foreach \x in {-5,...,5}
+                \draw (\x, 0.1) -- (\x, -0.1) node [below] {$\x$};
+
+            \draw[<->] (0,-5.5) -- (0,5.5) node [right] {I};
+                \foreach \y in {-5,...,5}
+                    \draw (0.1, \y) -- (-0.1, \y) node [left] {$\y$};
+        \end{tikzpicture}
+    </script>
+</tikz>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,7 +13,7 @@
 <title>Posts | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.61581ad96362706f9e998ad5b186abbb1a7e8f3839925bccebaeac654a349b74.css" integrity="sha256-YVga2WNicG&#43;emYrVsYaruxp&#43;jzg5klvM666sZUo0m3Q=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.b9e12264ea8d143b917be6d09093da0d00d53e83aefd9a22f16002eba7c84fc3.css" integrity="sha256-ueEiZOqNFDuRe&#43;bQkJPaDQDVPoOu/Zoi8WAC66fIT8M=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
 <script src="https://tikzjax.com/v1/tikzjax.js"></script>
@@ -37,6 +37,7 @@ https://github.com/alex-shpak/hugo-book
   <a class="flex align-center" href="/"><div class="site-brand">
       <div class="site-title">
         <span class="lars">
+          LARS<br/>
           ROTGERS
         </span>
       </div>
@@ -44,9 +45,7 @@ https://github.com/alex-shpak/hugo-book
   </a>
 </h2>
 
-<div class="p-title">Ad Infinitum</div>
-
-<hr/>
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
 
 
 
@@ -58,17 +57,15 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-
-  
 
 
 
   
-  <ul class="nav-menu">
-    <li><a href="/">Home</a></li>
-    <li><a href="/posts">Posts</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
+
+
+
+  
+  
   
   
   <ul>
@@ -134,6 +131,48 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/newton-fractals/">Newton fractals</a>
+    </h2>
+    
+  <h5>December 20, 2020</h5>
+
+
+
+  
+
+
+
+
+
+    <p>Another interesting set of fractals, are Newton fractals.Newton fractals are created by applying Newton's method to complex function $f(z)$. The method uses the iterated equation$$z_{n+1} = z - \frac{f(z_n)}{f'(z_n)}.$$If we want to apply Newton's method, we also need to find the derivative of the function $f(z)$.Since Newton's method is used to find the zero's of a function, if we repeatedly apply it to a point $z$, then $f(z_{n\rightarrow\infty}) = 0$, meaning that every point converges to a root of the complex function.
+        <a href="/posts/newton-fractals/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/julia-set-explorer/">Julia set explorer</a>
+    </h2>
+    
+  <h5>December 19, 2020</h5>
+
+
+
+  
+
+
+
+
+
+    <p>A live demo of this shader is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image.
+        <a href="/posts/julia-set-explorer/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/cracking-padded-xor-encryption/">Cracking padded XOR encryption</a>
     </h2>
     
@@ -142,6 +181,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   
+
 
 
 
@@ -163,6 +203,7 @@ However, most of the time people use a password to encrypt a message. If for exa
 
 
   
+
 
 
 
@@ -228,6 +269,12 @@ Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) Th
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
  
         
       </footer>

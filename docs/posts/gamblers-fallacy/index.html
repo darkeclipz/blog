@@ -17,7 +17,7 @@ Most people would assume that it is not likely to throw heads three times in a r
 <title>Gambler&#39;s Fallacy | Lars&#39; blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.61581ad96362706f9e998ad5b186abbb1a7e8f3839925bccebaeac654a349b74.css" integrity="sha256-YVga2WNicG&#43;emYrVsYaruxp&#43;jzg5klvM666sZUo0m3Q=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.b9e12264ea8d143b917be6d09093da0d00d53e83aefd9a22f16002eba7c84fc3.css" integrity="sha256-ueEiZOqNFDuRe&#43;bQkJPaDQDVPoOu/Zoi8WAC66fIT8M=" crossorigin="anonymous">
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
 <script src="https://tikzjax.com/v1/tikzjax.js"></script>
@@ -40,6 +40,7 @@ https://github.com/alex-shpak/hugo-book
   <a class="flex align-center" href="/"><div class="site-brand">
       <div class="site-title">
         <span class="lars">
+          LARS<br/>
           ROTGERS
         </span>
       </div>
@@ -47,9 +48,7 @@ https://github.com/alex-shpak/hugo-book
   </a>
 </h2>
 
-<div class="p-title">Ad Infinitum</div>
-
-<hr/>
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
 
 
 
@@ -61,17 +60,15 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-
-  
 
 
 
   
-  <ul class="nav-menu">
-    <li><a href="/">Home</a></li>
-    <li><a href="/posts">Posts</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
+
+
+
+  
+  
   
   
   <ul>
@@ -151,6 +148,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+
 <p>Suppose we are throwing coins and bet if it is going to be head ($H$) or tails ($T$). After throwing the coin three times, it resulted in heads all of the throws. Do you think that the fourth throw will be heads, or will it be tails?&nbsp;</p><p>Most people would assume that it is not likely to throw heads three times in a row, and it is even more unlikely that it would be four times. So, intuitively, we assume that the probability to throw tails is higher than the probability that we throw heads for the fourth time. However, this assumption is <i>false</i>, and is known as the Gambler's Fallacy.</p><p>To show you why it is false, we will take a mathematical approach using probability theory. Let $A_i$ be the $i$-th outcome of the coin game, which will be either $H$ or $T$, where the probability of getting either result is $\text{Pr}(A_i) = \frac{1}{2}$.</p><p>Now we want to know what the probability is of getting three times head in a row, which is</p><p>$$\text{Pr}(HHH) = \text{Pr}(H)\cdot\text{Pr}(H)\cdot\text{Pr}(H)=\frac{1}{2}\cdot\frac{1}{2}\cdot\frac{1}{2} = \frac{1}{8}.$$</p><p>Note that we can calculate each throw separately, and multiply the probabilities, because the throwing of a coin is an independent event. I don't have to convince you that the previous throw will not affect the next throw. Thus, we can write the equation above in a more general form</p><p>$$<br />\text{Pr}\left( \bigcap_{i=1}^n A_i \right) = \prod\limits_{i=1}^n \text{Pr}(A_i) = \frac{1}{2^n}.<br />$$</p><p>Now there are two key observations to make, the first one is that no matter how many times we had head or tails, the probability of the next throw to be head or tails is still $\frac{1}{2}$, so</p><p>$$<br />\text{Pr}(A_5\ |\ A_1 \cap A_2 \cap A_3 \cap A_4) = \text{Pr}(A_5) = \frac{1}{2}.<br />$$</p><p>The second observation is that you are equally likely to get $HTHTT$ as you are to get $HHHHH$. This basically tells us that you are equally likely to have any sequence of outcomes! Our brain likes patterns and thinks it is special that we have five heads in a row, while statistically the odds are the same as getting any other sequence after five throws.</p><p>Still not convinced? Let's take a look at all the possible outcomes after three throws:</p>
 
 
@@ -218,6 +216,12 @@ c4 --"T"--> d8["Pr(TTT) = 0.125"]
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
  
         
       </footer>
