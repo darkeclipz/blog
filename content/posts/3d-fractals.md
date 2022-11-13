@@ -6,6 +6,6 @@ draft: false
 
 ![Mandelbulb](/mandelbulb.png)
 
-![Mandelbox](/mandelbox.png)
+![IFS](/ifs_small.png)
 
-![IFS](/ifs_small.png)1
+![Mandelbox](/mandelbox.png)
