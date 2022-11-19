@@ -6,16 +6,7 @@
     <description>Recent content in Posts on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>3D fractals</title>
-      <link>https://rotgers.io/posts/3d-fractals/</link>
-      <pubDate>Fri, 11 Nov 2022 10:08:00 +0100</pubDate>
-      
-      <guid>https://rotgers.io/posts/3d-fractals/</guid>
-      <description></description>
-    </item>
-    
+    <lastBuildDate>Thu, 10 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ray-sphere intersection</title>
       <link>https://rotgers.io/posts/ray-sphere-intersection/</link>
