@@ -24,7 +24,7 @@ Likewise, for the vertical component the gravitational force is pushing the proj
 The acceleration at time $t$ is then denoted by
 
 $$
-\mathbf a(t) = a_x \cdot \mathbf {\hat i} + a_y \cdot \mathbf { \hat j }, \tag{1}
+\mathbf a(t) = a_x \cdot \mathbf {\hat i} + a_y \cdot \mathbf { \hat j }\ dt, \tag{1}
 $$
 
 where $\mathbf {\hat i}$ is the unit vector in the x-direction, and $\mathbf {\hat j}$ is the unit vector in the y-direction.
