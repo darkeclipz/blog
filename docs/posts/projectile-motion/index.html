@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In this post we will be looking at the motion of projectiles. Starting from first principles by deriving the equations governing projectile motion. In a later post we will be studying how the different quantities are related.
+Deriving the equations#A projectile is an object which is moving over time because of its velocity and acceleration. As we know from physics, components that are perpendicular behave independently. In our 2D case this means that the horizontal and vertical components of motion are independent of each other.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Projectile motion (part I)" />
+<meta property="og:description" content="In this post we will be looking at the motion of projectiles. Starting from first principles by deriving the equations governing projectile motion. In a later post we will be studying how the different quantities are related.
+Deriving the equations#A projectile is an object which is moving over time because of its velocity and acceleration. As we know from physics, components that are perpendicular behave independently. In our 2D case this means that the horizontal and vertical components of motion are independent of each other." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/projectile-motion/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-19T10:08:00+01:00" />
+<meta property="article:modified_time" content="2022-11-19T10:08:00+01:00" />
+
+<title>Projectile motion (part I) | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.ab515af864b47c95d23c2f5f176f7aadd75de1875ef633db4446fd03a21db34c.css" integrity="sha256-q1Fa&#43;GS0fJXSPC9fF296rddd4Yde9jPbREb9A6Ids0w=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Projectile motion (part I)</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#deriving-the-equations">Deriving the equations</a>
+      <ul>
+        <li><a href="#acceleration">Acceleration</a></li>
+        <li><a href="#velocity">Velocity</a></li>
+        <li><a href="#displacement">Displacement</a></li>
+      </ul>
+    </li>
+    <li><a href="#acceleration-from-the-gravitational-force">Acceleration from the gravitational force</a></li>
+    <li><a href="#trajectories-with-initial-velocity">Trajectories with initial velocity</a></li>
+    <li><a href="#a-simple-demonstration">A simple demonstration</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/projectile-motion/">Projectile motion (part I)</a>
+  </h1>
+  
+  <h5>November 19, 2022</h5>
+
+
+
+  
+
+
+
+
+<p>In this post we will be looking at the motion of projectiles. 
+Starting from first principles by deriving the equations governing projectile motion. 
+In a later post we will be studying how the different quantities are related.</p>
+<h2 id="deriving-the-equations">
+  Deriving the equations
+  <a class="anchor" href="#deriving-the-equations">#</a>
+</h2>
+<p>A projectile is an object which is moving over time because of its velocity and acceleration. As we know from physics, components that are perpendicular behave independently. 
+In our 2D case this means that the horizontal and vertical components of motion are independent of each other. 
+Any motion in the horizontal direction does not affect the motion in the vertical direction and vice versa.</p>
+<h3 id="acceleration">
+  Acceleration
+  <a class="anchor" href="#acceleration">#</a>
+</h3>
+<p>To keep things simple, we will start with a projectile that has no horizontal motion. 
+Because we are modeling a projectile on earth, the force of gravity, denoted by $g$, is always acting on the projectile. 
+Let $a_x$ be the horizontal acceleration and $a_y$ the vertical acceleration.
+Since no force is being excerted in the horizontal direction, we know that $a_x = 0$.
+Likewise, for the vertical component the gravitational force is pushing the projectile downwards, so $a_y = -g$.
+The acceleration at time $t$ is then denoted by</p>
+<p>$$
+\mathbf a(t) = a_x \cdot \mathbf {\hat i} + a_y \cdot \mathbf { \hat j }, \tag{1}
+$$</p>
+<p>where $\mathbf {\hat i}$ is the unit vector in the x-direction, and $\mathbf {\hat j}$ is the unit vector in the y-direction.
+Note that we could plug-in the values of $a_x$ and $a_y$, but we are not going to do that yet.</p>
+<h3 id="velocity">
+  Velocity
+  <a class="anchor" href="#velocity">#</a>
+</h3>
+<p>We need to integrate the function with respect to $t$, giving the indefinite integral</p>
+<p>$$
+\begin{align}
+\int \mathbf a(t)\ dt &amp;= \int \left ( a_x \cdot \mathbf {\hat i} + a_y \cdot \mathbf { \hat j } \right ) \  \\
+\mathbf v(t) &amp;= a_x t \cdot \mathbf {\hat i} + a_y t \cdot \mathbf {\hat j} + C
+\end{align} 
+$$</p>
+<p>Note that the constant of integration $C$ is equal to the velocity at $t=0$, denoted as $\mathbf v(t)$ giving the equation of the velocity</p>
+<p>$$
+\mathbf v(t) = a_x t \cdot \mathbf {\hat i} + a_y t \cdot \mathbf {\hat j} + \mathbf v(0) \tag{2}
+$$</p>
+<h3 id="displacement">
+  Displacement
+  <a class="anchor" href="#displacement">#</a>
+</h3>
+<p>To get the displacement of the projectile, we need to integrate (2) once more with respect to $t$.</p>
+<p>$$
+\begin{align}
+\int \mathbf v(t) &amp;= \int \left( a_x t \cdot \mathbf {\hat i} + a_y t \cdot \mathbf {\hat j} + \mathbf v(0) \right)\ dt \\
+&amp;= \frac{1}{2} a_x t^2 \cdot \mathbf {\hat i } + \frac{1}{2} a_y t^2 \cdot \mathbf {\hat j } + t \mathbf v(0) + C
+\end{align}
+$$</p>
+<p>And again, the constant of integration is equal to the displacement at $t=0$, detoned as $\mathbf d(0)$ giving the equation of the displacement</p>
+<p>$$
+\mathbf d(t) = \frac{1}{2} a_x t^2 \cdot \mathbf {\hat i } + \frac{1}{2} a_y t^2 \cdot \mathbf {\hat j } + t \mathbf v(0) + \mathbf d(0) \tag{3}
+$$</p>
+<p>Alright, it looks more ugly then it is because most of the component are going to disappear once we have the initial conditions of the projectile. 
+Let&rsquo;s look at this with an example.</p>
+<h2 id="acceleration-from-the-gravitational-force">
+  Acceleration from the gravitational force
+  <a class="anchor" href="#acceleration-from-the-gravitational-force">#</a>
+</h2>
+<p>Continuing with our example with only vertical motion. Suppose the initial position is at $(0, 0)$ and there is no initial velocity. 
+This reduces (3) to only the following terms</p>
+<p>$$
+\mathbf d (t) = -\frac{1}{2} g t^2 \cdot \mathbf { \hat j } \tag{4}
+$$</p>
+<p>which gives us the position of the projectile at $t$. 
+Because the projectile is only moving downward, this is a rather boring observation.
+What is more interesting is that the displacement is growing quadratically with respect to time. 
+This means that the particle is accelerating forever, which is happening because in this simple model there is no such thing as drag and a terminal velocity.</p>
+<h2 id="trajectories-with-initial-velocity">
+  Trajectories with initial velocity
+  <a class="anchor" href="#trajectories-with-initial-velocity">#</a>
+</h2>
+<p>To make things more interesting we will need to add an initial velocity, denoted by $\mathbf v(0)$. 
+We do so by getting a unit vector from the unit circle with angle $\theta$ to get the direction, and multiply this by the force $F$.
+This velocity is acting as a constant force, because there is no drag in this system.
+All in all, this results in the following model to define the displacement of the projectile.</p>
+<p>$$
+\mathbf d(t) = \mathbf d(0) + F \left( \cos( \theta ) \cdot \mathbf{\hat i} +  \sin( \theta ) \cdot \mathbf{\hat j}  \right )t  -\frac{1}{2} g t ^2 \cdot \mathbf { \hat j } \tag{5}
+$$</p>
+<p>To make this a bit more tangible, we will demonstrate (5) with an example.</p>
+<h2 id="a-simple-demonstration">
+  A simple demonstration
+  <a class="anchor" href="#a-simple-demonstration">#</a>
+</h2>
+<p>Suppose that we have the following initial conditions:</p>
+<ol>
+<li>The projectile starts at $(0, 0)$.</li>
+<li>The initial angle is $\pi / 4$.</li>
+<li>The initial force is $100\text m / \text s$.</li>
+<li>The gravitational force is $9.81 \text{m} / \text s ^ 2$.</li>
+</ol>
+<p>We will be using Python to model these conditions and create a plot of the trajectory.
+First we define all the constants, the velocity vector, and the initial position.
+Then we calculate the displacement at increasing values of $t$ and plot the result.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>g = 9.81
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>a = np.array([0, -g])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>angle = math.pi / 4
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>force = 100
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>vx = force * math.cos(angle)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>vy = force * math.sin(angle)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>v = np.array([vx, vy])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>p = np.array([0, 0])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>T = np.linspace(0, 14.4, 100)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>x, y = zip(*[0.5 * a * (t * t) + v * t <span style="color:#00f">for</span> t <span style="color:#00f">in</span> T])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>plt.figure(dpi=200)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>plt.plot(x, y, c=<span style="color:#a31515">&#39;#0388fc&#39;</span>, lw=2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>plt.axhline(0, c=<span style="color:#a31515">&#39;gray&#39;</span>, ls=<span style="color:#a31515">&#39;dashed&#39;</span>, alpha=0.5)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>plt.gca().set_aspect(<span style="color:#a31515">&#39;equal&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>plt.legend([<span style="color:#a31515">&#39;Projectile&#39;</span>])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>plt.xlabel(<span style="color:#a31515">&#39;Horizontal distance (m)&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>plt.ylabel(<span style="color:#a31515">&#39;Vertical distance (m)&#39;</span>)</span></span></code></pre></div>
+<p>
+  <img src="/projectile-1.png" alt="Projectile motion 1" /></p>
+<p>It is cool to see that as time progresses the gravitational force is reducing the vertical component of the velocity vector.
+In the next post we will be taking a deeper look into equation (5) and solve the equation for specific quantities. 
+This allows us to anser questions such as &ldquo;if we want to hit a point $X$, what initial angle and velocity do we need?&rdquo;.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#deriving-the-equations">Deriving the equations</a>
+      <ul>
+        <li><a href="#acceleration">Acceleration</a></li>
+        <li><a href="#velocity">Velocity</a></li>
+        <li><a href="#displacement">Displacement</a></li>
+      </ul>
+    </li>
+    <li><a href="#acceleration-from-the-gravitational-force">Acceleration from the gravitational force</a></li>
+    <li><a href="#trajectories-with-initial-velocity">Trajectories with initial velocity</a></li>
+    <li><a href="#a-simple-demonstration">A simple demonstration</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

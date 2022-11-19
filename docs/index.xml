@@ -6,7 +6,17 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 19 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Projectile motion (part I)</title>
+      <link>https://rotgers.io/posts/projectile-motion/</link>
+      <pubDate>Sat, 19 Nov 2022 10:08:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/projectile-motion/</guid>
+      <description>In this post we will be looking at the motion of projectiles. Starting from first principles by deriving the equations governing projectile motion. In a later post we will be studying how the different quantities are related.
+Deriving the equations#A projectile is an object which is moving over time because of its velocity and acceleration. As we know from physics, components that are perpendicular behave independently. In our 2D case this means that the horizontal and vertical components of motion are independent of each other.</description>
+    </item>
+    
     <item>
       <title>Ray-sphere intersection</title>
       <link>https://rotgers.io/posts/ray-sphere-intersection/</link>
