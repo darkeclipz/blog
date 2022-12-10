@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A lot of problems can be described as a constraint satisfaction problem, abbreviated as CSP. This post is intended as a short primer to help you get started.
+What is a constraint satisfaction problem?#A constraint satisfaction problem consists of three components. The first component is a variable to which a value can be assigned. The second component is the domain. Each variable has a list of possible values that can be assigned to the variable.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Primer on constraint satisfaction problems" />
+<meta property="og:description" content="A lot of problems can be described as a constraint satisfaction problem, abbreviated as CSP. This post is intended as a short primer to help you get started.
+What is a constraint satisfaction problem?#A constraint satisfaction problem consists of three components. The first component is a variable to which a value can be assigned. The second component is the domain. Each variable has a list of possible values that can be assigned to the variable." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/csp-primer/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-07T08:47:11+01:00" />
+<meta property="article:modified_time" content="2022-12-07T08:47:11+01:00" />
+
+<title>Primer on constraint satisfaction problems | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.ab515af864b47c95d23c2f5f176f7aadd75de1875ef633db4446fd03a21db34c.css" integrity="sha256-q1Fa&#43;GS0fJXSPC9fF296rddd4Yde9jPbREb9A6Ids0w=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Primer on constraint satisfaction problems</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-a-constraint-satisfaction-problem">What is a constraint satisfaction problem?</a></li>
+    <li><a href="#an-iconic-example">An iconic example</a>
+      <ul>
+        <li><a href="#defining-the-variables">Defining the variables</a></li>
+        <li><a href="#defining-the-domains-of-the-variables">Defining the domains of the variables</a></li>
+        <li><a href="#defining-the-constraints-of-the-problem">Defining the constraints of the problem</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-to-solve-the-problem">How to solve the problem?</a>
+      <ul>
+        <li><a href="#terminology">Terminology</a></li>
+        <li><a href="#a-brute-force-approach">A brute force approach</a></li>
+        <li><a href="#search-trees">Search trees</a></li>
+        <li><a href="#backtracking">Backtracking</a></li>
+      </ul>
+    </li>
+    <li><a href="#implementation-of-a-backtrack-solver">Implementation of a backtrack solver</a></li>
+    <li><a href="#finding-all-the-solutions">Finding all the solutions</a></li>
+    <li><a href="#whats-next">What&rsquo;s next?</a></li>
+    <li><a href="#source-code">Source code</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/csp-primer/">Primer on constraint satisfaction problems</a>
+  </h1>
+  
+  <h5>December 7, 2022</h5>
+
+
+
+  
+
+
+
+
+<p>A lot of problems can be described as a constraint satisfaction problem, abbreviated as CSP.
+This post is intended as a short primer to help you get started.</p>
+<h2 id="what-is-a-constraint-satisfaction-problem">
+  What is a constraint satisfaction problem?
+  <a class="anchor" href="#what-is-a-constraint-satisfaction-problem">#</a>
+</h2>
+<p>A constraint satisfaction problem consists of three components. 
+The first component is <em>a variable to which a value can be assigned</em>.
+The second component is the domain. Each variable has <em>a list of possible values</em> that can be assigned to the variable.
+Usually the domain is the same for all of the variables, but it is also possible that the variables have different domains.
+The third and last component is a set of constraints. 
+Constraints are used to <em>constrain the values that can be assigned to the variables</em>.</p>
+<p>The type of domain that is used for the variables plays a major factor in the different approaches that are used to solve the problem. If a domain contains a zero and a one, it is called a <em>Boolean domain</em>. 
+Solving constraint satisfaction problems with a Boolean domain is also known as SAT solving, where SAT stands for satisfiability. A domain can also have a discrete set of values, such as red, green, and blue. 
+Usually these are re-encoded as the integers 1, 2, and 3.</p>
+<p>A more different type of domain is when there is a range of integers or real numbers.
+Solving problems with these type of domains requires methods that will not be covered in this post.
+This post will only look at solving constraint satisfaction problems that have an unordered discrete integer or Boolean domain.</p>
+<h2 id="an-iconic-example">
+  An iconic example
+  <a class="anchor" href="#an-iconic-example">#</a>
+</h2>
+<p>The most iconic example that is used to explain constraint satisfaction problems is the Australian map coloring problem.
+The illustration below is a map of Australia and its regions.</p>
+<p><svg
+xmlns:svg="http://www.w3.org/2000/svg"
+xmlns="http://www.w3.org/2000/svg"
+version="1.0"
+width="100%"
+height="400"
+id="svg2"
+viewBox="0 0 200 186">
+<defs id="defs5" />
+<g fill="#d3d3d3" stroke="black">
+<path id="NSW" d="M 199.1875,104.4375 C 198.83653,104.43081 198.34998,104.46425 198.0625,104.4375 C 197.31177,104.36764 196.77298,104.23444 196.34375,104.09375 C 195.48529,103.81238 195.10212,103.46104 194.5625,103.46875 C 193.71456,103.48021 193.37252,103.7504 193.1875,104 C 193.00248,104.2496 192.98169,104.49188 192.78125,104.46875 C 192.3825,104.42274 192.14493,104.58987 191.96875,104.875 C 191.79257,105.16013 191.69504,105.5619 191.5625,105.96875 C 191.42996,106.3756 191.26782,106.80584 191,107.125 C 190.73218,107.44416 190.33204,107.66545 189.75,107.6875 C 189.1067,107.71125 188.63102,107.50296 188.21875,107.1875 C 187.80648,106.87204 187.4631,106.42838 187.15625,106 C 186.8494,105.57162 186.57703,105.15876 186.25,104.84375 C 185.92297,104.52874 185.53532,104.3191 185.0625,104.34375 C 183.87838,104.40547 183.48532,104.16837 183.0625,103.90625 C 182.63968,103.64413 182.19488,103.375 181,103.375 C 180.39544,103.375 180.03006,103.50748 179.75,103.71875 C 179.46994,103.93002 179.28524,104.21381 179.0625,104.5 C 178.83976,104.78619 178.58886,105.05649 178.15625,105.28125 C 177.72364,105.50601 177.09715,105.69177 176.1875,105.71875 C 175.03771,105.75229 174.35678,105.40622 173.75,105.0625 C 173.14322,104.71878 172.61423,104.35834 171.8125,104.28125 C 162.86678,103.42108 141.32486,102.26983 138.625,102.125 L 137.03125,129.53125 C 137.54917,129.75192 138.56431,129.81254 139.625,129.96875 C 140.18125,130.05067 140.7364,130.16482 141.21875,130.34375 C 141.7011,130.52268 142.08885,130.77013 142.34375,131.125 C 142.64472,131.544 142.75321,132.43548 142.90625,133.15625 C 142.98277,133.51663 143.07146,133.83373 143.21875,134.03125 C 143.36604,134.22877 143.55385,134.31173 143.84375,134.1875 C 144.58118,133.87151 145.20772,133.73096 145.71875,133.75 C 146.22978,133.76904 146.62195,133.9476 146.90625,134.21875 C 147.19055,134.4899 147.38025,134.84091 147.4375,135.28125 C 147.49475,135.72159 147.42012,136.25463 147.25,136.78125 C 147.14001,137.12174 148.23355,138.26366 149.5625,139.46875 C 150.89145,140.67384 152.47624,141.93906 153.34375,142.4375 C 153.64326,142.60959 153.85198,142.60307 154.03125,142.53125 C 154.21052,142.45943 154.35851,142.30018 154.46875,142.125 C 154.68924,141.77463 154.81085,141.35808 155.0625,141.4375 C 155.63899,141.61945 156.09667,141.52701 156.46875,141.5 C 156.84083,141.47299 157.13028,141.52068 157.40625,141.96875 C 157.64888,142.36269 157.88431,142.56006 158.125,142.65625 C 158.36569,142.75244 158.61509,142.75307 158.84375,142.71875 C 159.07241,142.68443 159.29347,142.6226 159.5,142.625 C 159.70653,142.6274 159.88819,142.69988 160.0625,142.90625 C 160.26498,143.14597 160.64031,143.3045 161.0625,143.40625 C 161.48469,143.508 161.95643,143.5547 162.3125,143.5625 C 163.99682,143.59939 165.36951,143.29586 166.34375,143.34375 C 166.83087,143.36769 167.22712,143.47707 167.5,143.75 C 167.77288,144.02293 167.9346,144.47017 167.96875,145.15625 C 168.023,146.24621 168.41182,147.191 169.03125,148.03125 C 169.65068,148.8715 170.48262,149.60479 171.40625,150.28125 C 172.45463,151.04908 173.48117,151.69999 174.5625,152.375 C 174.8182,151.87258 175.08006,151.42329 175.375,150.8125 C 176.02844,149.4593 178.06166,145.28606 179.875,141.53125 C 181.68833,137.77643 184.94923,131.98884 187.9375,129.5 C 191.29853,126.7007 194.17919,122.69785 196.125,116.1875 C 197.73949,110.78569 198.72715,108.50415 199.1875,104.4375 z M 173.15625,139.5 C 173.49282,139.48654 173.83893,139.54187 174.15625,139.6875 C 174.42841,139.81241 174.5172,139.99038 174.5,140.1875 C 174.4828,140.38462 174.34449,140.60476 174.1875,140.84375 C 173.87351,141.32172 173.44461,141.8492 173.46875,142.3125 C 173.41231,142.56664 173.14933,143.11767 172.78125,143.1875 C 172.59721,143.22241 172.37325,143.13855 172.15625,142.84375 C 171.93925,142.54895 171.71999,142.03235 171.5,141.21875 C 171.3657,140.72206 171.52233,140.30047 171.84375,140 C 172.16517,139.69953 172.6514,139.5202 173.15625,139.5 z "/>
+<path id="ACT" d="M 173.15625,139.5 C 173.49282,139.48654 173.83893,139.54187 174.15625,139.6875 C 174.42841,139.81241 174.5172,139.99038 174.5,140.1875 C 174.4828,140.38462 174.34449,140.60476 174.1875,140.84375 C 173.87351,141.32172 173.44461,141.8492 173.46875,142.3125 C 173.41231,142.56664 173.14933,143.11767 172.78125,143.1875 C 172.59721,143.22241 172.37325,143.13855 172.15625,142.84375 C 171.93925,142.54895 171.71999,142.03235 171.5,141.21875 C 171.3657,140.72206 171.52233,140.30047 171.84375,140 C 172.16517,139.69953 172.6514,139.5202 173.15625,139.5 z "/>
+<path id="WA" d="M 81.34375,116.59375 L 80.09375,84.65625 L 80.09375,84.65625 L 77.6875,23.1875 C 77.650137,23.187993 77.632299,23.187635 77.59375,23.1875 C 73.296472,23.069469 67.140263,13.184428 63.3125,18.75 C 59.504317,24.287099 57.095867,17.962153 56.15625,26.0625 C 56.024926,27.194634 54.772933,26.53125 53.875,26.53125 C 52.667486,26.53125 51.386077,27.50511 53.21875,29.28125 C 54.599569,30.619475 53.239124,32.065249 51.90625,31.75 C 49.878126,31.270312 47.919146,32.362582 48.25,32.9375 C 50.40019,36.673835 51.04898,36.105091 49.375,37.21875 C 47.938402,38.174485 49.287386,41.02806 45.59375,32.5 C 45.131405,31.432512 40.756698,37.302049 41.28125,39.3125 C 41.68541,40.861521 42.817966,43.46875 42.375,43.46875 C 41.932034,43.468749 39.726622,43.420331 39.1875,46.59375 C 38.488799,50.70649 32.766607,54.375 29.40625,54.375 C 28.277331,54.375 27.109166,54.772906 26.8125,55.25 C 26.515834,55.727093 23.246293,57.681105 19.5625,59.21875 C 15.878706,60.756394 11.260809,61.718908 10.59375,63.6875 C 10.001486,65.435361 7.267423,66.014934 5.84375,67.625 C 3.939475,69.778592 3.2900965,72.476945 2.90625,69.71875 C 1.8264064,61.959352 1.1038508,71.150969 0.40625,73.40625 C -0.068993191,74.942671 2.0117668,77.109056 2,77.6875 C 1.9335602,80.953613 -1.8794139,83.268691 3.90625,87.71875 C 5.8392429,89.205517 7.8543327,92.775264 4.53125,95.09375 C 1.9091635,96.92316 7.8253797,99.121714 7.625,102.03125 C 7.5013423,103.82677 12.281122,107.60461 12.78125,108.8125 C 13.690418,111.00828 13.850005,115.86365 16.34375,118.25 C 18.641646,120.44893 19.548817,131.26856 18.6875,131.25 C 15.825447,131.18833 15.444226,137.15372 18.9375,136.25 C 20.876685,135.74833 21.349234,137.98662 22.28125,138.78125 C 24.745238,140.88202 33.342431,138.55156 34.75,135.9375 C 35.311816,134.89413 36.460954,134.46875 37.0625,134.46875 C 38.499967,134.46875 38.432385,132.98307 39,132.15625 C 39.277705,131.75173 40.935238,131.80781 42.65625,131.40625 C 44.315193,131.01916 46.042144,129.94093 46.625,130 C 47.768966,130.11593 48.697011,131.35085 49.84375,131.40625 C 50.499486,131.43794 54.192038,129.88418 55.46875,129.75 C 57.433679,129.54348 58.079857,127.08227 58.5,126 C 59.317407,123.89439 60.501,123.8897 62.84375,123.28125 C 65.949054,122.47477 65.851995,118.89374 72.25,119.875 C 74.419133,120.20768 77.364827,118.01936 78.6875,117.21875 C 79.194641,116.91178 80.186363,116.74344 81.34375,116.59375 z "/>
+<path id="VIC" d="M 174.5625,152.375 C 173.48117,151.69999 172.45463,151.04908 171.40625,150.28125 C 170.48262,149.60479 169.65068,148.8715 169.03125,148.03125 C 168.41182,147.191 168.023,146.24621 167.96875,145.15625 C 167.9346,144.47017 167.77288,144.02293 167.5,143.75 C 167.22712,143.47707 166.83087,143.36769 166.34375,143.34375 C 165.36951,143.29586 163.99682,143.59939 162.3125,143.5625 C 161.95643,143.5547 161.48469,143.508 161.0625,143.40625 C 160.64031,143.3045 160.26498,143.14597 160.0625,142.90625 C 159.88819,142.69988 159.70653,142.6274 159.5,142.625 C 159.29347,142.6226 159.07241,142.68443 158.84375,142.71875 C 158.61509,142.75307 158.36569,142.75244 158.125,142.65625 C 157.88431,142.56006 157.64888,142.36269 157.40625,141.96875 C 157.13028,141.52068 156.84083,141.47299 156.46875,141.5 C 156.09667,141.52701 155.63899,141.61945 155.0625,141.4375 C 154.81085,141.35808 154.68924,141.77463 154.46875,142.125 C 154.35851,142.30018 154.21052,142.45943 154.03125,142.53125 C 153.85198,142.60307 153.64326,142.60959 153.34375,142.4375 C 152.47624,141.93906 150.89145,140.67384 149.5625,139.46875 C 148.23355,138.26366 147.14001,137.12174 147.25,136.78125 C 147.42012,136.25463 147.49475,135.72159 147.4375,135.28125 C 147.38025,134.84091 147.19055,134.4899 146.90625,134.21875 C 146.62195,133.9476 146.22978,133.76904 145.71875,133.75 C 145.20772,133.73096 144.58118,133.87151 143.84375,134.1875 C 143.55385,134.31173 143.36604,134.22877 143.21875,134.03125 C 143.07146,133.83373 142.98277,133.51663 142.90625,133.15625 C 142.75321,132.43548 142.64472,131.544 142.34375,131.125 C 142.08885,130.77013 141.7011,130.52268 141.21875,130.34375 C 140.7364,130.16482 140.18125,130.05067 139.625,129.96875 C 138.56431,129.81254 137.54917,129.75192 137.03125,129.53125 L 135.6875,152.25 C 136.02406,152.53882 136.25001,152.9014 136.25,153.21875 C 136.25,153.79972 137.27732,154.91695 139.09375,153.53125 C 139.87034,152.93881 141.27596,153.94319 143.3125,154.9375 C 146.39636,156.44315 147.36313,156.53541 149.03125,155.5 C 150.69119,154.46966 151.47218,154.5549 153.71875,155.90625 C 157.41953,160.03161 160.84932,158.56932 162.90625,156 C 163.93159,154.71924 167.35834,153.43344 169.78125,153.78125 C 173.16206,154.26658 174.01051,153.45957 174.5625,152.375 z "/>
+<path id="QLD" d="M 153.09375,0.625 C 151.98009,0.71116902 149.60324,2.737831 149.625,5.65625 C 149.6381,7.4507695 148.04217,8.4921947 148.1875,10.3125 C 148.42656,13.306863 146.97179,12.749563 147.28125,14.25 C 147.87829,17.144708 146.09237,16.19749 145.9375,18.03125 C 145.83105,19.29176 146.42076,19.454842 146.53125,20.8125 C 147.04031,27.129232 143.78051,36.631373 139.1875,38.15625 C 138.36522,38.429246 137.05134,39.309116 134.875,37.5625 C 133.23989,36.250227 132.23052,34.164092 130.53125,33.59375 C 129.14152,33.127311 127.53339,32.273086 127.25,31.875 C 127.20142,31.806757 126.75759,31.5756 126.6875,31.5 L 124.625,85.25 L 139.625,85.46875 L 138.625,102.125 C 141.32486,102.26983 162.86678,103.42108 171.8125,104.28125 C 172.61423,104.35834 173.14322,104.71878 173.75,105.0625 C 174.35678,105.40622 175.03771,105.75229 176.1875,105.71875 C 177.09715,105.69177 177.72364,105.50601 178.15625,105.28125 C 178.58886,105.05649 178.83976,104.78619 179.0625,104.5 C 179.28524,104.21381 179.46994,103.93002 179.75,103.71875 C 180.03006,103.50748 180.39544,103.375 181,103.375 C 182.19488,103.375 182.63968,103.64413 183.0625,103.90625 C 183.48532,104.16837 183.87838,104.40547 185.0625,104.34375 C 185.53532,104.3191 185.92297,104.52874 186.25,104.84375 C 186.57703,105.15876 186.8494,105.57162 187.15625,106 C 187.4631,106.42838 187.80648,106.87204 188.21875,107.1875 C 188.63102,107.50296 189.1067,107.71125 189.75,107.6875 C 190.33204,107.66545 190.73218,107.44416 191,107.125 C 191.26782,106.80584 191.42996,106.3756 191.5625,105.96875 C 191.69504,105.5619 191.79257,105.16013 191.96875,104.875 C 192.14493,104.58987 192.3825,104.42274 192.78125,104.46875 C 192.98169,104.49188 193.00248,104.2496 193.1875,104 C 193.37252,103.7504 193.71456,103.48021 194.5625,103.46875 C 195.10212,103.46104 195.48529,103.81238 196.34375,104.09375 C 196.77298,104.23444 197.31177,104.36764 198.0625,104.4375 C 198.34998,104.46425 198.83653,104.43081 199.1875,104.4375 C 199.39112,102.6388 199.5,100.57291 199.5,97.59375 C 199.5,89.464417 199.40034,87.542632 198.25,86.59375 C 197.4331,85.919913 196.12707,84.93271 196.28125,83.25 C 196.34755,82.52622 195.31451,79.819883 193.125,78.5625 C 189.4512,76.452713 190.60429,74.281967 190.78125,73.21875 C 191.13615,71.086368 188.01975,67.843751 186.59375,67.84375 C 185.85865,67.843749 184.19338,72.582496 184.21875,64.65625 C 184.22343,63.179926 183.85474,62.198208 183.40625,61.875 C 182.53059,61.243945 182.08891,60.760039 182.125,60.21875 C 182.17114,59.526497 183.38418,58.797241 183.375,58.15625 C 183.35845,57.00133 181.29865,56.929958 180,55.78125 C 174.50908,50.924316 166.90096,49.044563 170.21875,45.78125 C 170.70298,45.304902 168.73509,44.625824 168.3125,43.5 C 168.01601,42.710159 171.84482,42.164183 167.90625,37.5 C 165.62099,34.793721 166.6539,26.979107 166.46875,26.125 C 166.04313,24.161608 163.78055,21.459727 162.53125,21.5 C 160.67178,21.559943 160.88599,22.948951 159.28125,22.625 C 158.09652,22.38584 157.78485,17.34652 157.46875,12.59375 C 157.49838,10.920962 155.83139,10.500918 156.09375,9.5 C 156.73882,7.0390959 154.92948,7.2579828 154.9375,6.5625 C 154.99003,2.0101845 154.72967,0.49842142 153.09375,0.625 z "/>
+<path id="TAS" d="M 153.48868,183.29975 C 152.73743,182.40088 152.12645,180.1161 152.39992,176.82793 C 152.52943,175.27073 151.27114,174.15429 150.64074,172.97142 C 148.42197,168.80816 151.12927,167.02226 155.07525,169.76931 C 156.74221,170.92978 158.36558,170.95897 161.5036,170.53146 C 164.08932,170.17921 166.31008,170.26332 166.46323,170.97325 C 166.90276,173.01065 165.2328,171.45879 165.41307,175.07528 C 165.47143,176.24593 164.43423,177.77062 164.43775,178.60277 C 164.44401,180.12997 163.34639,180.8467 163.42191,181.6092 C 163.54702,182.87243 162.54823,184.16251 162.20631,184.16251 C 161.24646,184.16251 161.61718,180.9159 159.41272,184.1599 C 158.01826,186.21194 155.174,185.31623 153.48868,183.29975 z "/>
+<g id="NT">
+<path id="NT-mainland" d="M 77.6875,23.1875 L 80.09375,84.65625 L 124.625,85.25 L 126.6875,31.5 C 126.34872,31.1346 126.02985,30.798945 123.96875,29.6875 C 122.84504,29.081537 110.41237,22.506512 113.4375,20.8125 C 117.49033,18.542997 115.39667,13.994132 117.375,13.3125 C 119.14675,12.702043 122.48408,8.7074617 121.625,7.28125 C 120.27165,6.3016183 118.39536,6.26625 117.71875,7.25 C 117.2877,7.876718 116.32472,7.7911127 115.9375,7.40625 C 115.76772,7.237504 114.92082,6.3159978 114.21875,6.15625 C 113.31958,5.9516578 112.43937,7.4458851 111.1875,6.4375 C 109.4475,5.035927 106.39149,6.603752 101.71875,3.6875 C 96.096913,0.17891536 94.218295,1.161452 95.53125,4.59375 C 96.638347,7.4879052 96.015955,7.7167742 92.15625,7.59375 C 87.669121,7.4507274 86.859536,7.2576632 84.40625,10.34375 C 82.53109,12.351574 83.260056,13.838232 83.0625,14.03125 C 78.306268,18.678257 82.115635,23.12911 77.6875,23.1875 z "/>
+<path id="Groote-Eyland" d="M 122.16794,15.819607 C 121.95745,15.311193 119.81055,15.787198 119.13138,15.833157 C 118.3545,15.885729 117.86162,17.060638 118.05744,18.036737 C 118.3428,19.459183 120.1872,19.834585 120.41009,18.920037 C 120.60502,18.120236 120.83478,17.800713 121.22343,17.304492 C 121.34585,17.121172 122.31087,16.164849 122.16794,15.819607 z "/>
+<path id="Melville-Island" d="M 91.533285,1.4725605 C 91.261672,0.26024852 89.113331,2.7579 87.493323,1.8509936 C 87.164378,1.6668453 85.508297,0.96600698 84.468782,2.5627617 C 83.756802,3.6564035 86.206623,5.5438684 88.022838,5.5499127 C 89.626637,5.5550324 89.920511,4.665705 90.18996,4.4508123 C 90.428744,4.2603753 92.155402,4.249309 91.533285,1.4725605 z "/>
+</g>
+<g id="SA">
+<path id="SA-mainland" d="M 135.6875,152.25 L 137.03125,129.53125 C 137.03125,129.53125 137.03125,129.53125 137.03125,129.53125 L 138.625,102.125 C 138.625,102.125 138.625,102.125 138.625,102.125 L 139.625,85.46875 L 124.625,85.25 L 124.625,85.25 L 80.09375,84.65625 L 81.34375,116.59375 C 82.719716,116.41579 84.362272,116.27201 86.15625,116.0625 C 89.377613,115.6863 90.103338,113.2133 93.78125,116.0625 C 95.725608,117.56875 97.049318,117.30049 99.5,117.84375 C 101.21219,118.22331 105.13075,119.69202 105.875,120.65625 C 106.68451,121.70505 104.42413,121.52647 104.28125,122.53125 C 104.098,123.81992 105.47121,123.72448 106.53125,124 C 107.79709,124.32901 110.14299,126.13445 110.09375,129.03125 C 110.01314,133.77317 111.79843,134.96082 113.71875,133.78125 C 114.2142,133.4769 113.69579,131.49205 114.3125,130.75 C 114.74738,130.22674 116.84391,128.7085 118.75,127.03125 C 120.65608,125.35401 121.75814,122.95183 122.09375,123.21875 C 122.71046,123.70923 122.97314,126.63867 122.15625,127.3125 C 121.33935,127.98634 120.11005,129.47029 120.1875,130.375 C 119.94544,135.25928 117.0492,133.91439 118.53125,135 C 121.12884,136.90275 121.39368,134.08685 122,132.15625 C 122.40468,130.86769 123.33181,130.31742 123.84375,130.5625 C 124.78094,131.01118 125.89875,133.23079 125.1875,134.625 C 124.04334,136.8678 122.56325,138.35426 126,137.78125 C 128.73858,137.32464 130.15846,140.69337 130.1875,144.21875 C 130.21029,146.98404 133.06977,151.81251 134.6875,151.8125 C 135.05182,151.8125 135.40793,152.01009 135.6875,152.25 z "/>
+<path id="Kangaroo-Island" d="M 121.49204,138.51327 C 121.46821,136.73665 115.63843,136.48647 115.69496,139.03747 C 115.71911,140.12728 121.51662,140.4077 121.49204,138.51327 z "/>
+</g>
+</g>
+<text x="30" y="93" class="small" fill="black">WA</text>
+<text x="88" y="63" class="small" fill="black">NT</text>
+<text x="98" y="108" class="small" fill="black">SA</text>
+<text x="150" y="75" class="small" fill="black">Q</text>
+<text x="145" y="126" class="small" fill="black">NSW</text>
+<text x="172" y="171" class="small" fill="black">V</text>
+<text x="132" y="183" class="small" fill="black">T</text>
+</svg></p>
+<figcaption>Figure 1 - Map of Australia and the seven regions.</figcaption>
+<p>The problem is to <em>color each region such that no neighboring region has the same color</em>. 
+This does not seem that difficult, but there is a catch, it should be solved by only using three colors.
+Now that we have a description of the problem, it is time to formulate this as a constraint satisfaction problem.</p>
+<h3 id="defining-the-variables">
+  Defining the variables
+  <a class="anchor" href="#defining-the-variables">#</a>
+</h3>
+<p>There are a total of seven different regions that require a color. 
+This tells us that we need to define seven variables, one for each region. 
+This gives us a set of variables, which we will call $\mathcal V$.</p>
+<p>$$
+\mathcal V = \{ WA, NT, Q, NSW, SA, V, T \}
+$$</p>
+<h3 id="defining-the-domains-of-the-variables">
+  Defining the domains of the variables
+  <a class="anchor" href="#defining-the-domains-of-the-variables">#</a>
+</h3>
+<p>The next thing that we need to do is define the domain for each variable. 
+Because we can only use three colors—red, green, and blue—all the variables have the same domain.
+In this example we will not re-encode the colors as an integer, because this keeps the explanation simple.
+If this is implemented as a program, then it wise to do the re-encoding.
+Each of the variables has its own domain, $\mathcal D_v$, which is the set</p>
+<p>$$
+\mathcal D_{v \in \mathcal V} = \{ r, g, b \}.
+$$</p>
+<p>If you have never seen this type of notation, don&rsquo;t worry.
+The notation is telling that for each variable $v$ in $\mathcal V$ the domain is defined as $\{ r,g,b\}$.
+It is defined like this so we can refer to the domain of $SA$ as $\mathcal D_{SA}$.</p>
+<h3 id="defining-the-constraints-of-the-problem">
+  Defining the constraints of the problem
+  <a class="anchor" href="#defining-the-constraints-of-the-problem">#</a>
+</h3>
+<p>The last thing that we need to do is to define the set of constraints $\mathcal C$. 
+If we look at the map and create a node for each region, if we then connect all the adjacent regions the result is the following graph.</p>
+<p>
+  <img src="/csp-constraint-graph.png" alt="Constraint graph" /></p>
+<figcaption>Figure 2 - Constraint graph of Australia's map coloring problem.</figcaption>
+<p>This type of graph is called a <em>constraint graph</em>, and it visualizes how the variables and the constraints are related to one another.
+The constraint that is imposed on the problem says that no adjacent region can have the same color.
+To formalize this we can define this constraint as a <em>not equal constraint</em>. 
+As an example, $WA$ can not be the same as $NT$, which we can write as</p>
+<p>$$
+WA \not= NT.
+$$</p>
+<p>If we do this for all the edges in the graph, we get the set $\mathcal C$ which contains the nine constraints</p>
+<p>$$
+\begin{align}
+\mathcal C = \{ &amp;WA \not= NT, WA \not= SA, \\
+&amp;NT \not= SA, NT \not= Q, \\ 
+&amp;Q \not= SA, Q\not = NSW, \\ 
+&amp;SA \not=NSW, SA\not=V, \\
+&amp;NSW \not=V \}.
+\end{align}
+$$</p>
+<p>We have now defined the map coloring problem as a constraint satisfaction problem, and are ready to solve it.</p>
+<h2 id="how-to-solve-the-problem">
+  How to solve the problem?
+  <a class="anchor" href="#how-to-solve-the-problem">#</a>
+</h2>
+<p>There are a lot of methods that can be used to solve the problem, but we will start with a simple brute force algorithm. Before we can do so, we need to define some terminology.</p>
+<h3 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h3>
+<p>The domains define what can be assigned to the variables. The <em>search space</em> of the constraint satisfaction problem are all the possible assignments of the variables. This is defined as the Cartesian product of all of the domains, e.g.</p>
+<p>$$
+\mathcal D_0 \times \mathcal D_1 \times \cdots \times \mathcal D_n.
+$$</p>
+<p>In this specific example there are seven variables and the domain of each variable has three values. 
+This gives a search space that has a total of $3^7 = 2187$ possible configurations.
+A <em>solution</em> is a tuple with a configuration that satisfies all of the constraints. 
+An example of a configuration of the map coloring problem is $(r, r, r, r, r, r, r)$, which obviously isn&rsquo;t a solution to the problem.
+It is also possible to have a <em>partial configuration</em>, which is a tuple where not all of the variables have been assigned.</p>
+<p>We say that a constraint is <em>satisfied</em> if all of the variables have been assigned and the constraint is valid. 
+If not all of the variables have been assigned and the constraint has not been unsatisfied, we say that the constraint is <em>partially satisfied</em>. The <em>scope</em> of a constraint is the set of the variables that are used in the constraint. We say that a constraint is <em>in scope</em> if all of the variables have been assigned.</p>
+<h3 id="a-brute-force-approach">
+  A brute force approach
+  <a class="anchor" href="#a-brute-force-approach">#</a>
+</h3>
+<p>The easiest way, and the most inefficient method, to find a solution to the map coloring problem is to generate all the of the configurations and see which of those configurations satisfies all of these constraints. The map coloring problem only has 2187 different configurations so checking all of them easily done on a computer. This problem only has seven variables, but the search space grows with $3^n$, which is exponentially.
+To generalize this, if we have equal domains of size $d$ and a number of variables $n$, the size of the search space if $d^n$. 
+This quickly becomes a hopeless approach.
+So what can we do about this?</p>
+<h3 id="search-trees">
+  Search trees
+  <a class="anchor" href="#search-trees">#</a>
+</h3>
+<p>The search space can be visualized with a <em>search tree</em>. The illustration below shows the search tree of the map coloring problem.</p>
+<p>
+  <img src="/csp-map-coloring-search-tree.png" alt="Search tree" /></p>
+<figcaption>Figure 3 - Search tree</figcaption>
+<p>To draw it, start with the first variable. 
+The edges are the possible assignments of that variable. 
+At the end of the edge is the next variable, with the possible assignments of that variable and so on. The illustration becomes too big to draw pretty quickly, so usually only the assigned path is drawn. 
+This type of visualization is very helpful, because it provides a visual way of thinking about constraint satisfaction problems.</p>
+<h3 id="backtracking">
+  Backtracking
+  <a class="anchor" href="#backtracking">#</a>
+</h3>
+<p>The key is to check the partial configurations that are generated by the brute force algorithm. Once we find that a partial configuration is violating a constraint, we can immediately stop with that partial solution and try the next one. 
+As an example, suppose red is assigned to $WA$, then a constraint is violated if red is also assigned to $SA$. Therefore we can stop immediately after finding out that it is not possible to assign red to $SA$, which results in pruning all of the configuration that are under that branch of the search tree.</p>
+<p>This is already a huge improvement over the brute force approach, but even this method will fail to find solutions in a timely manner for bigger problems. In later posts we will look into other techniques that give massive performance improvements to the solving bigger problems.</p>
+<h2 id="implementation-of-a-backtrack-solver">
+  Implementation of a backtrack solver
+  <a class="anchor" href="#implementation-of-a-backtrack-solver">#</a>
+</h2>
+<p>Enough theory so far! 
+It is time to implement a program that will solve the map coloring problem using the backtracking idea.
+To do so, we will be using the C# programming language.</p>
+<p>The first thing that we need to do is to define a few variables. 
+First we define the number of variables in the problem as <code>N</code>.
+Then we need to define a mapping of the variables and colors from a name to integers.
+Finally we will create an array that will store the values that are assigned to the variables.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">#nullable disable</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#008000">// Number of variables.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#00f">const</span> <span style="color:#2b91af">int</span> N = 7;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#008000">// Define all the regions.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#00f">const</span> <span style="color:#2b91af">int</span> WA = 0, NT = 1, Q = 2, NSW = 3, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>          SA = 4, V = 5, T = 6;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#008000">// Define all the domains.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#00f">const</span> <span style="color:#2b91af">int</span> NONE = 0, RED = 1, GREEN = 2, BLUE = 3;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#008000">// Used to store the value of the variables.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#2b91af">var</span> variables = <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[N];</span></span></code></pre></div>
+<p>To make it easy to see if we have satisfied all the constraints, we will add the constraint graph to the program.
+To do so, we define a helper method <code>EdgeTo</code> which gives a nice descriptive notation about the intention of the code, despite the method doing nothing more than returning the numbers as a list of integers.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#008000">// Helper method to create a list of integers.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>List&lt;<span style="color:#2b91af">int</span>&gt; EdgeTo(<span style="color:#00f">params</span> <span style="color:#2b91af">int</span>[] xs) =&gt; xs.ToList();</span></span></code></pre></div>
+<p>The next thing we will do is use the <code>EdgeTo</code> method to define the constraint graph of the problem with an adjacency list.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#008000">// Constraint graph of the problem as adjacency list.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#2b91af">var</span> edges = <span style="color:#00f">new</span> List&lt;<span style="color:#2b91af">int</span>&gt;[N] 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#008000">/* WA  */</span> EdgeTo(NT, SA),      
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#008000">/* NT  */</span> EdgeTo(WA, SA),            
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#008000">/* Q   */</span> EdgeTo(NT, SA, NSW),       
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#008000">/* NSW */</span> EdgeTo(Q, SA, V),          
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    <span style="color:#008000">/* SA  */</span> EdgeTo(WA, NT, Q, NSW, V),   
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#008000">/* V   */</span> EdgeTo(SA, NSW),            
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    <span style="color:#008000">/* T   */</span> EdgeTo(), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>};</span></span></code></pre></div>
+<p>Now that we know how all of the variables are connected to one and another, we will implement a method that checks if all the constraints are satisfied. This means that we need to check if all the regions that are adjacent don&rsquo;t have the same color. A constraint is only checked if it is in scope, or in other words, if all the variables in the constraint have been assigned.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#008000">// Checks if the constraints are satisfied for </span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#008000">// the assigned variables.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#2b91af">bool</span> IsSatisfied()
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; N; i++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#00f">if</span> (variables[i] != NONE)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>            <span style="color:#00f">foreach</span> (<span style="color:#2b91af">int</span> j <span style="color:#00f">in</span> edges[i])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>                <span style="color:#00f">if</span> (variables[j] != NONE)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>                    <span style="color:#00f">if</span> (variables[i] == variables[j])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>                        <span style="color:#00f">return</span> <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>}</span></span></code></pre></div>
+<p>With all of that in place, we can implement the backtracking method. 
+The idea is to try all of the colors of a variable, and if the assignment is valid, it should go to the next variable.
+Once it has found a solution, it should stop searching.
+This can be implemented as a recursive method. 
+First we define the parameter <code>k</code> as the index of the variable that we are currently solving.
+The base case of the function should return if we have assigned all the variables. This happens when <code>k</code> is bigger than or equal to the number of variables. This leads to the following implementation.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#008000">// Backtrack procedure to enumerate the search space.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#2b91af">bool</span> Backtrack(<span style="color:#2b91af">int</span> k = 0) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">if</span> (k &gt;= N)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#00f">foreach</span> (<span style="color:#2b91af">var</span> color <span style="color:#00f">in</span> <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[] { RED, GREEN, BLUE })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        variables[k] = color; <span style="color:#008000">// Assign the color.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        <span style="color:#00f">if</span> (IsSatisfied())
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            <span style="color:#00f">if</span> (Backtrack(k + 1)) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>                <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        variables[k] = NONE; <span style="color:#008000">// Unassign the color.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    <span style="color:#00f">return</span> <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>}</span></span></code></pre></div>
+<p>If we run this algorithm, the solution is stored in the array <code>variables</code> after the program has finished. 
+The first solution that it finds to the problem is $(r, g, r, g, b, r, r)$, which we can visually verify to be correct.</p>
+<h2 id="finding-all-the-solutions">
+  Finding all the solutions
+  <a class="anchor" href="#finding-all-the-solutions">#</a>
+</h2>
+<p>It is possible to find all of the solution to the map coloring problem with only a minor modification to the algorithm. On line 5, instead of returning <code>true</code> which results in stopping the search procedure, we need to save the solution and return <code>false</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>List&lt;List&lt;<span style="color:#2b91af">int</span>&gt;&gt; solutions = <span style="color:#00f">new</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#2b91af">bool</span> Backtrack(<span style="color:#2b91af">int</span> k = 0) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">if</span> (k &gt;= N)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        List&lt;<span style="color:#2b91af">int</span>&gt; solution = <span style="color:#00f">new</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        solution.AddRange(variables);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        solutions.Add(solution);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">return</span> <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#00f">foreach</span> (<span style="color:#2b91af">var</span> color <span style="color:#00f">in</span> <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[] { RED, GREEN, BLUE })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        variables[k] = color;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>        <span style="color:#00f">if</span> (IsSatisfied())
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>            <span style="color:#00f">if</span> (Backtrack(k + 1)) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>                <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>        variables[k] = NONE;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>    <span style="color:#00f">return</span> <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>}</span></span></code></pre></div>
+<p>If we execute the modified backtracking algorithm, it will find a total of 18 different solutions.
+All the different solutions that is has found are listed below.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>(1, 2, 1, 2, 3, 1, 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>(1, 2, 1, 2, 3, 1, 2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>(1, 2, 1, 2, 3, 1, 3)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>(1, 3, 1, 3, 2, 1, 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>(1, 3, 1, 3, 2, 1, 2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>(1, 3, 1, 3, 2, 1, 3)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>(2, 1, 2, 1, 3, 2, 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>(2, 1, 2, 1, 3, 2, 2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>(2, 1, 2, 1, 3, 2, 3)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>(2, 3, 2, 3, 1, 2, 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>(2, 3, 2, 3, 1, 2, 2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>(2, 3, 2, 3, 1, 2, 3)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>(3, 1, 3, 1, 2, 3, 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>(3, 1, 3, 1, 2, 3, 2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>(3, 1, 3, 1, 2, 3, 3)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>(3, 2, 3, 2, 1, 3, 1)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>(3, 2, 3, 2, 1, 3, 2)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>(3, 2, 3, 2, 1, 3, 3)</span></span></code></pre></div>
+<p>Pretty neat huh? It is surprising that out of the 2187 possible configurations, only 18 are a solution to the problem!</p>
+<h2 id="whats-next">
+  What&rsquo;s next?
+  <a class="anchor" href="#whats-next">#</a>
+</h2>
+<p>This aim of this post was to give an introductory overview of the basic of constraint satisfaction problems.
+We looked at the different components of a constraint satisfaction problem and two different algorithms that can be used to solve them. Out of the two algorithms, we created an implementation of the backtracking algorithm, which we used to find all the possible solution to the map coloring problem. This knowlegde should provide a foundation of the terminology and ideas that you will encounter when defining and solving constraint satisfaction problems.</p>
+<p>The example that we solved was a very simple example (in CSP terms). 
+In another post we will look at the Sudoku puzzle.
+Thinking about it, there are 9 different values for 81 squares, this gives a solution space of $9^{81}$ possible configurations. We will see that the backtracking algorithm is not efficient enough to solve this in a timely manner. Instead we will look at other techniques that we will use to solve the puzzle in just a few milliseconds.</p>
+<h2 id="source-code">
+  Source code
+  <a class="anchor" href="#source-code">#</a>
+</h2>
+<p>This is the complete source of the backtracking algorithm that finds a solution to the map coloring problem.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">#nullable disable</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#008000">// Number of variables.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#00f">const</span> <span style="color:#2b91af">int</span> N = 7;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#008000">// Define all the regions.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#00f">const</span> <span style="color:#2b91af">int</span> WA = 0, NT = 1, Q = 2, NSW = 3, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>          SA = 4, V = 5, T = 6;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#008000">// Define all the domains.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#00f">const</span> <span style="color:#2b91af">int</span> NONE = 0, RED = 1, GREEN = 2, BLUE = 3;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#008000">// Used to store the value of the variables.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#2b91af">var</span> variables = <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[N];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span><span style="color:#008000">// Helper method to create a list of integers.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>List&lt;<span style="color:#2b91af">int</span>&gt; EdgeTo(<span style="color:#00f">params</span> <span style="color:#2b91af">int</span>[] xs) =&gt; xs.ToList();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span><span style="color:#008000">// Constraint graph of the problem as adjacency list.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span><span style="color:#2b91af">var</span> edges = <span style="color:#00f">new</span> List&lt;<span style="color:#2b91af">int</span>&gt;[N] 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#008000">/* WA  */</span> EdgeTo(NT, SA),      
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    <span style="color:#008000">/* NT  */</span> EdgeTo(WA, SA),            
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>    <span style="color:#008000">/* Q   */</span> EdgeTo(NT, SA, NSW),       
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>    <span style="color:#008000">/* NSW */</span> EdgeTo(Q, SA, V),          
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>    <span style="color:#008000">/* SA  */</span> EdgeTo(WA, NT, Q, NSW, V),   
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    <span style="color:#008000">/* V   */</span> EdgeTo(SA, NSW),            
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>    <span style="color:#008000">/* T   */</span> EdgeTo(), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>};
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span><span style="color:#008000">// Checks if the constraints are satisfied for </span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span><span style="color:#008000">// the assigned variables.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span><span style="color:#2b91af">bool</span> IsSatisfied()
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; N; i++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>        <span style="color:#00f">if</span> (variables[i] != NONE)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>            <span style="color:#00f">foreach</span> (<span style="color:#2b91af">int</span> j <span style="color:#00f">in</span> edges[i])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>                <span style="color:#00f">if</span> (variables[j] != NONE)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>                    <span style="color:#00f">if</span> (variables[i] == variables[j])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>                        <span style="color:#00f">return</span> <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>    <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span><span style="color:#008000">// Backtrack procedure to enumerate the search space.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span><span style="color:#2b91af">bool</span> Backtrack(<span style="color:#2b91af">int</span> k = 0) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>    <span style="color:#00f">if</span> (k &gt;= N)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>        <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span>    <span style="color:#00f">foreach</span> (<span style="color:#2b91af">var</span> color <span style="color:#00f">in</span> <span style="color:#00f">new</span> <span style="color:#2b91af">int</span>[] { RED, GREEN, BLUE })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>        variables[k] = color; <span style="color:#008000">// Assign the color.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>        <span style="color:#00f">if</span> (IsSatisfied())
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>            <span style="color:#00f">if</span> (Backtrack(k + 1)) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>                <span style="color:#00f">return</span> <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>        variables[k] = NONE; <span style="color:#008000">// Unassign the color.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>    <span style="color:#00f">return</span> <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span><span style="color:#008000">// Solve the puzzle.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span>Backtrack();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span>Console.WriteLine(<span style="color:#a31515">$&#34;({string.Join(&#34;</span>, <span style="color:#a31515">&#34;, variables)})&#34;</span>);</span></span></code></pre></div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-a-constraint-satisfaction-problem">What is a constraint satisfaction problem?</a></li>
+    <li><a href="#an-iconic-example">An iconic example</a>
+      <ul>
+        <li><a href="#defining-the-variables">Defining the variables</a></li>
+        <li><a href="#defining-the-domains-of-the-variables">Defining the domains of the variables</a></li>
+        <li><a href="#defining-the-constraints-of-the-problem">Defining the constraints of the problem</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-to-solve-the-problem">How to solve the problem?</a>
+      <ul>
+        <li><a href="#terminology">Terminology</a></li>
+        <li><a href="#a-brute-force-approach">A brute force approach</a></li>
+        <li><a href="#search-trees">Search trees</a></li>
+        <li><a href="#backtracking">Backtracking</a></li>
+      </ul>
+    </li>
+    <li><a href="#implementation-of-a-backtrack-solver">Implementation of a backtrack solver</a></li>
+    <li><a href="#finding-all-the-solutions">Finding all the solutions</a></li>
+    <li><a href="#whats-next">What&rsquo;s next?</a></li>
+    <li><a href="#source-code">Source code</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

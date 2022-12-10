@@ -6,7 +6,17 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 19 Nov 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 07 Dec 2022 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Primer on constraint satisfaction problems</title>
+      <link>https://rotgers.io/posts/csp-primer/</link>
+      <pubDate>Wed, 07 Dec 2022 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/csp-primer/</guid>
+      <description>A lot of problems can be described as a constraint satisfaction problem, abbreviated as CSP. This post is intended as a short primer to help you get started.
+What is a constraint satisfaction problem?#A constraint satisfaction problem consists of three components. The first component is a variable to which a value can be assigned. The second component is the domain. Each variable has a list of possible values that can be assigned to the variable.</description>
+    </item>
+    
     <item>
       <title>Projectile motion (part I)</title>
       <link>https://rotgers.io/posts/projectile-motion/</link>
