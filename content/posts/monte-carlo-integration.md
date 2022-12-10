@@ -34,7 +34,7 @@ $$
 To give an idea of how this is implemented, we are going to integrate the equation of the standard normal distribution over the interval $[-5, 5]$. The normal distribution is defined as 
 
 $$
-\text{normal_pdf}(x, \mu, \sigma) = \dfrac{1}{\sigma \sqrt {2\pi}} e^{\frac{1}{2}\left(\frac{x-\mu}{\sigma} \right)^2}
+\text{pdf}(x, \mu, \sigma) = \dfrac{1}{\sigma \sqrt {2\pi}} e^{\frac{1}{2}\left(\frac{x-\mu}{\sigma} \right)^2}
 $$
 
 where $\mu$ is the mean and $\sigma$ is the standard deviation. The standard normal distribution is when $\mu = 0$ and $\sigma = 1$. 
