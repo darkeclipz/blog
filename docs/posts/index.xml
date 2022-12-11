@@ -13,7 +13,7 @@
       <pubDate>Wed, 07 Dec 2022 08:47:11 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/csp-primer/</guid>
-      <description>A lot of problems can be described as a constraint satisfaction problem, abbreviated as CSP. This post is intended as a short primer to help you get started.
+      <description>A lot of problems can be described as a constraint satisfaction problem (CSP). This post is intended as a short primer to help you get started.
 What is a constraint satisfaction problem?#A constraint satisfaction problem consists of three components. The first component is a variable to which a value can be assigned. The second component is the domain. Each variable has a list of possible values that can be assigned to the variable.</description>
     </item>
     
