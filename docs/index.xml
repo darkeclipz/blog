@@ -265,7 +265,7 @@ Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) Th
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rotgers.io/list-repos-ai/</guid>
-      <description> Sudoku solver using OpenCV and a neural network for digit extraction] Min-conflict CSP solver for N-Queens (N = 128) Prototype of a CSP solver that solves expressions Solving Sudoku as a CSP with Forward Propagation </description>
+      <description> Sudoku solver using OpenCV and a neural network for digit extraction Min-conflict CSP solver for N-Queens (N = 128) Prototype of a CSP solver that solves expressions Solving Sudoku as a CSP with Forward Propagation </description>
     </item>
     
     <item>
