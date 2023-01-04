@@ -180,3 +180,4 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 }
 {{< /highlight >}}
 
+Note that in GLSL the smoothstep function has the parameters swapped, so instead of the definition in this post, it is `smoothstep(a,b,x)`.
