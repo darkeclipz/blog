@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Clamp#The clamp function ensures that a value stays within a certain range. This range is usually between $[0, 1]$, but it can be any range. The function is defined as
+$$ \text{ clamp(x) } = \max ( \min (x, 1), 0 ) $$
+If the value of $x$ is greater than $1$, the min function ensures that the result is $1$. Likewise, if $x$ is less than $0$, the max function ensures that the result is $0$.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Useful 1-dimensional functions" />
+<meta property="og:description" content="Clamp#The clamp function ensures that a value stays within a certain range. This range is usually between $[0, 1]$, but it can be any range. The function is defined as
+$$ \text{ clamp(x) } = \max ( \min (x, 1), 0 ) $$
+If the value of $x$ is greater than $1$, the min function ensures that the result is $1$. Likewise, if $x$ is less than $0$, the max function ensures that the result is $0$." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/useful-functions/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-04T08:47:11+01:00" />
+<meta property="article:modified_time" content="2023-01-04T08:47:11+01:00" />
+
+<title>Useful 1-dimensional functions | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Useful 1-dimensional functions</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#clamp">Clamp</a></li>
+    <li><a href="#smoothstep">Smoothstep</a></li>
+    <li><a href="#abs">Abs</a></li>
+    <li><a href="#fract">Fract</a></li>
+    <li><a href="#repeating-pulse">Repeating pulse</a></li>
+    <li><a href="#application-aliased-grid">Application: Aliased grid</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/useful-functions/">Useful 1-dimensional functions</a>
+  </h1>
+  
+  <h5>January 4, 2023</h5>
+
+
+
+  
+
+
+
+
+<h2 id="clamp">
+  Clamp
+  <a class="anchor" href="#clamp">#</a>
+</h2>
+<p>The <em>clamp function ensures that a value stays within a certain range</em>.
+This range is usually between $[0, 1]$, but it can be any range.
+The function is defined as</p>
+<p>$$
+\text{ clamp(x) } = \max ( \min (x, 1), 0 )
+$$</p>
+<p>If the value of $x$ is greater than $1$, the min function ensures that the result is $1$.
+Likewise, if $x$ is less than $0$, the max function ensures that the result is $0$.
+Combining both functions results in the clamp function.
+The clamp function has the following graph.</p>
+<iframe src="https://www.desmos.com/calculator/e8x9zyxsda?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>This function is used in a lot of other functions, as we will see with the next function.
+The range $[0, 1]$ is usually parametrized to $[a, b]$.</p>
+<h2 id="smoothstep">
+  Smoothstep
+  <a class="anchor" href="#smoothstep">#</a>
+</h2>
+<p>The <em>smoothstep function is an interpolation and clamping function</em>.
+It is defined by the $S_1(x)$ cubic Hermite function $3x^2 - 2x^3$, which is shown in black in the plot below.</p>
+<iframe src="https://www.desmos.com/calculator/c4qw14848o?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>However, the value of $x$ is clamped between $[0, 1]$ before applying $S_1$, resulting in the smoothstep function which is shown in red in the plot.
+This is one of the most used functions in for example, computer graphics and animations.</p>
+<p>It is usually defined at a starting point $a$ where the function is zero, and an endpoint $b$ where the function is one. 
+This results in the complete definition of the smoothstep function:</p>
+<p>$$
+\text {smoothstep}(x, a, b) = 3t^2 - 2t^3,
+$$</p>
+<p>where</p>
+<p>$$
+t = \text{ clamp }\left(\frac{x - a}{b - a}\right).
+$$</p>
+<p>In the second equation $x$ is first scaled between $[0, 1]$ and then clamped.</p>
+<h2 id="abs">
+  Abs
+  <a class="anchor" href="#abs">#</a>
+</h2>
+<p>The <em>abs function returns the absolute value of a number</em>. 
+In other words, it always returns a positive number.
+It is defined as</p>
+<p>$$
+\text { abs }(x) = |x| = \begin{align}\begin{cases}x \quad &amp; \text{ if}\  x \geq 0 \\ -x \quad &amp;\text{otherwise} \end{cases}\end{align}
+$$</p>
+<p>The graph of the function is rather simple, but don&rsquo;t let that simplicity deceive you. 
+It is incredibly useful!</p>
+<iframe src="https://www.desmos.com/calculator/frrempatvw?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>Another way of thinking about it is that it duplicates the domain of the function to reflect what is happening on the other half of the domain.</p>
+<h2 id="fract">
+  Fract
+  <a class="anchor" href="#fract">#</a>
+</h2>
+<p>The <em>fract function returns the fractional part of a number</em>.
+This seemingly simple operation leads the fascinating concept of domain repetition. 
+One of the definitions of this function is with the modulo function:</p>
+<p>$$
+\text{ fract }(x) = \text{mod}(x, 1)
+$$</p>
+<p>The function rises linearly from 0 to 1, before doing it again, and again&hellip;</p>
+<iframe src="https://www.desmos.com/calculator/uuk78njaob?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>In the next section we will look at an example that combined all of the function that we have looked into.</p>
+<h2 id="repeating-pulse">
+  Repeating pulse
+  <a class="anchor" href="#repeating-pulse">#</a>
+</h2>
+<p>In this example we will create a function that has a sharp, but smooth, pulse at an interval. This pattern is repeating forever.</p>
+<p>To do so, we will begin with the smoothstep function.
+Instead of having it start at zero, and gradually increase to one, we want to have this the other way around.
+This can be done by swapping $a$ and $b$ giving:</p>
+<p>$$
+\text{ smoothstep }(x, 1, 0)
+$$</p>
+<p>The graph below shows what happens if we change the value of $a$ between $[0.1, 1.0]$. Notice how the curve becomes much sharper.</p>
+<iframe src="https://www.desmos.com/calculator/cw51dlgsmv?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>The next thing we will do to shape the pulse is to take the absolute value of $x$ before we apply the smoothstep function:</p>
+<p>$$
+\text{ smoothstep }(|x|, 1, 0)
+$$</p>
+<p>This mirrors what is happening on the positive $x$ side to the negative side, which results in the pulse shape as can be seen below.</p>
+<iframe src="https://www.desmos.com/calculator/tjoskqnawl?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>We then offset the function such that the pulse sits at $x=0.5$.
+This is done by translating the domain, like so:</p>
+<p>$$
+\text{ smoothstep }(|x-0.5|, 1, 0)
+$$</p>
+<p>All in all, our pulse function now looks like this.</p>
+<iframe src="https://www.desmos.com/calculator/ml4zgobn8c?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<p>To repeat the pulse an infinite number of times, the fract function is applied to $x$:</p>
+<p>$$
+\text{ smoothstep }(|\text{fract}(x)-0.5|, 1, 0)
+$$</p>
+<p>Which is the last function that we need to create the pulse function.</p>
+<iframe src="https://www.desmos.com/calculator/dxezt9mrzd?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+<h2 id="application-aliased-grid">
+  Application: Aliased grid
+  <a class="anchor" href="#application-aliased-grid">#</a>
+</h2>
+<p>Using this pulse function turns out to be useful for rendering computer graphics. 
+The use of the smoothstep function helps with drawing a smooth aliased image.
+As an example, I have implemented the repeating pulse function to render a grid in two dimensions.
+Note that the width of the pulse is only a few pixels!
+The image is rotating to emphasize the aliasing.</p>
+<iframe width="640" height="360" frameborder="0" src="https://www.shadertoy.com/embed/mlB3z1?gui=true&t=10&paused=false&muted=false" allowfullscreen></iframe>
+<p>The shader is defined with the following code:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-glsl" data-lang="glsl"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">mat2</span> rot(<span style="color:#00f">float</span> angle) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#00f">float</span> c = cos(angle), s = sin(angle);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">return</span> <span style="color:#00f">mat2</span>(c,s,-s,c);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#00f">void</span> mainImage( <span style="color:#00f">out</span> <span style="color:#00f">vec4</span> fragColor, <span style="color:#00f">in</span> <span style="color:#00f">vec2</span> fragCoord )
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#008000">// Normalized pixel coordinates (from 0 to 1)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    <span style="color:#00f">vec2</span> uv = (2.0*fragCoord-iResolution.xy)/iResolution.y;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#008000">// Rotate the grid to show aliasing.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    uv *= rot(0.2*iTime);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#008000">// Time varying pixel color</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    <span style="color:#00f">vec3</span> col = <span style="color:#00f">vec3</span>(1);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>    <span style="color:#008000">// Scale the grid so we have more lines.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    <span style="color:#00f">float</span> gridSize = 4.;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>    <span style="color:#008000">// Grid lines size independent of the scale of uv.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#00f">float</span> gridLineSize = fwidth(uv.x) * gridSize;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>    <span style="color:#008000">// Domain repetition and offsetting.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>    <span style="color:#00f">vec2</span> repeatedUV = abs(fract(gridSize * uv) - 0.5);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    <span style="color:#008000">// Smoothstep to get the pulse.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>    <span style="color:#00f">vec2</span> grid = smoothstep(gridLineSize, 0.0, repeatedUV);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>    <span style="color:#008000">// Add the grid line colors to the output color.</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>    <span style="color:#00f">vec3</span> gridLineColor = <span style="color:#00f">vec3</span>(0.8);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>    col = mix(gridLineColor, col, clamp(grid.x + grid.y, 0.0, 1.0));
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>    <span style="color:#008000">// Output to screen</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>    fragColor = <span style="color:#00f">vec4</span>(col,1.0);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>}</span></span></code></pre></div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#clamp">Clamp</a></li>
+    <li><a href="#smoothstep">Smoothstep</a></li>
+    <li><a href="#abs">Abs</a></li>
+    <li><a href="#fract">Fract</a></li>
+    <li><a href="#repeating-pulse">Repeating pulse</a></li>
+    <li><a href="#application-aliased-grid">Application: Aliased grid</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

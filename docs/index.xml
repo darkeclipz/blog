@@ -6,7 +6,18 @@
     <description>Recent content on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Dec 2022 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Jan 2023 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Useful 1-dimensional functions</title>
+      <link>https://rotgers.io/posts/useful-functions/</link>
+      <pubDate>Wed, 04 Jan 2023 08:47:11 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/useful-functions/</guid>
+      <description>Clamp#The clamp function ensures that a value stays within a certain range. This range is usually between $[0, 1]$, but it can be any range. The function is defined as
+$$ \text{ clamp(x) } = \max ( \min (x, 1), 0 ) $$
+If the value of $x$ is greater than $1$, the min function ensures that the result is $1$. Likewise, if $x$ is less than $0$, the max function ensures that the result is $0$.</description>
+    </item>
+    
     <item>
       <title>28 Tauri Aa</title>
       <link>https://rotgers.io/posts/28-tauri-aa/</link>
