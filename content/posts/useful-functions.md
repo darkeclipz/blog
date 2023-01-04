@@ -129,10 +129,10 @@ Which is the last function that we need to create the pulse function.
 
 <iframe src="https://www.desmos.com/calculator/dxezt9mrzd?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
 
-## Application: Aliased grid
+## Application: Anti-aliased grid
 
 Using this pulse function turns out to be useful for rendering computer graphics. 
-The use of the smoothstep function helps with drawing a smooth aliased image.
+The use of the smoothstep function helps with drawing a smooth anti-aliased image.
 As an example, I have implemented the repeating pulse function to render a grid in two dimensions.
 Note that the width of the pulse is only a few pixels!
 The image is rotating to emphasize the aliasing.

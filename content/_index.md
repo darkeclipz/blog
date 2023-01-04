@@ -47,7 +47,7 @@ I tend to forget a lot of the things that I learn, so by _explaining what I have
             <ul>
                 <li><a href="/posts/caustics_2d">Caustics in 2D</a></li>
                 <li><a href="/posts/ray-sphere-intersection">Ray-sphere intersection</a></li>
-                <li><a href="/posts/useful-functions">Useful 1-dimensional functions & aliased grid</a></li>
+                <li><a href="/posts/useful-functions">Useful 1-dimensional functions & anti-aliased grid</a></li>
             </ul>
         </div>
     </div>
