@@ -3,7 +3,6 @@ title: "BarDB specification"
 date: 2023-01-08T10:08:00+01:00
 draft: false
 ---
-
 # BarDB specification
 
 Time series of low resolution charts can quickly consume a large amount of storage.
@@ -64,6 +63,8 @@ The time which a bar represents doesn't need to be stored next to the bar itself
 ### File size
 
 Using 20 bytes for each candle, the following table can be constructed. A year of minute candles consumes 10.02Mb of storage.
+
+<p>
  
 |        | candles | bytes (bars) | kilobytes (bars) | megabytes (bars) |
 | ------ | ------- | ------------ | ---------------- | ---------------- |
@@ -74,10 +75,12 @@ Using 20 bytes for each candle, the following table can be constructed. A year o
 | hour   | 8760    | 175200       | 171.09375        | 0.16708374       |
 | minute | 525600  | 10512000     | 10265.625        | 10.02502441      |
 
-## Candle Query Language (CQL)
+</p>
 
-The interface with CandleDB is specified with the Candle Query Language (CQL).
-This query language is a subset of SQL, but adapted to the needs of CandleDB.
+## Bar Query Language (BQL)
+
+The interface with BarDB is specified with the Bar Query Language (BQL).
+This query language is a subset of SQL, but adapted to the needs of BarDB.
 
 ### Creating a symbol
 
