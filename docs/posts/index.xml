@@ -6,7 +6,17 @@
     <description>Recent content in Posts on Lars&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 04 Jan 2023 08:47:11 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Jan 2023 10:08:00 +0100</lastBuildDate><atom:link href="https://rotgers.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>BarDB specification</title>
+      <link>https://rotgers.io/posts/bardb-specification/</link>
+      <pubDate>Sun, 08 Jan 2023 10:08:00 +0100</pubDate>
+      
+      <guid>https://rotgers.io/posts/bardb-specification/</guid>
+      <description>BarDB specification#Time series of low resolution charts can quickly consume a large amount of storage. The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. This document aims to explain an implemenation of a database that is optimized to solve this specific problem.
+To keep in mind if we should, instead of being to busy trying to figure out if we could, it is important to compare this solution against other implementations with a relational database and a schemaless database.</description>
+    </item>
+    
     <item>
       <title>Useful 1-dimensional functions</title>
       <link>https://rotgers.io/posts/useful-functions/</link>

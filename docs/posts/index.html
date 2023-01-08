@@ -131,6 +131,28 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/bardb-specification/">BarDB specification</a>
+    </h2>
+    
+  <h5>January 8, 2023</h5>
+
+
+
+  
+
+
+
+
+
+    <p>BarDB specification#Time series of low resolution charts can quickly consume a large amount of storage. The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. This document aims to explain an implemenation of a database that is optimized to solve this specific problem.
+To keep in mind if we should, instead of being to busy trying to figure out if we could, it is important to compare this solution against other implementations with a relational database and a schemaless database.
+        <a href="/posts/bardb-specification/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/useful-functions/">Useful 1-dimensional functions</a>
     </h2>
     
@@ -328,28 +350,6 @@ $$ u = -\frac{1-\mu}{\sqrt{(x + \mu)^2 + y^2}} - \frac{\mu}{\sqrt{[x - (1 - \mu)
 where $\mu$ is the distance from the center of rotation (the barycenter).
 If we use the equation to create a contour plot, we get a pretty cool visualization of the potential energy in the sun-earth system.
         <a href="/posts/2-body-potential-energy/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/n-body/">N-body simulation in 2D</a>
-    </h2>
-    
-  <h5>October 16, 2022</h5>
-
-
-
-  
-
-
-
-
-
-    <p>A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
-Vectorized n-body implementation#It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.
-        <a href="/posts/n-body/">...</a>
       
     </p>
   </article>

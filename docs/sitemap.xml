@@ -3,11 +3,14 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rotgers.io/</loc>
-    <lastmod>2023-01-04T08:47:11+01:00</lastmod>
+    <lastmod>2023-01-08T10:08:00+01:00</lastmod>
     <priority>0</priority>
   </url><url>
+    <loc>https://rotgers.io/posts/bardb-specification/</loc>
+    <lastmod>2023-01-08T10:08:00+01:00</lastmod>
+  </url><url>
     <loc>https://rotgers.io/posts/</loc>
-    <lastmod>2023-01-04T08:47:11+01:00</lastmod>
+    <lastmod>2023-01-08T10:08:00+01:00</lastmod>
   </url><url>
     <loc>https://rotgers.io/posts/useful-functions/</loc>
     <lastmod>2023-01-04T08:47:11+01:00</lastmod>

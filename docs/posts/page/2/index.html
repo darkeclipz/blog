@@ -131,6 +131,28 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/n-body/">N-body simulation in 2D</a>
+    </h2>
+    
+  <h5>October 16, 2022</h5>
+
+
+
+  
+
+
+
+
+
+    <p>A few days ago I implemented a n-body simulation in Python, which is used to generate the following animation:
+Vectorized n-body implementation#It uses a vectorized form of calculating the acceleration matrix, which is used to update the positions of the bodies. The velocity is integrated with leapfrog integration, which unlike Euler integration, is stable for oscillatory motion. It is pretty efficient. The acceleration matrix is calculated for 2D, but is easily extended to work in 3D as well.
+        <a href="/posts/n-body/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/ordered-fractions/">Ordered fractions</a>
     </h2>
     
@@ -322,27 +344,6 @@ Problem statement#Euler&rsquo;s Totient function, $\varphi(n)$, is used to det
 
     <p>You might wonder what Newton's law of gravitation has to do with the generation of dungeons, but if we use this concept we can use it to generate a dungeon of rooms. Instead of using something like a BSP algorithm, my idea was to just throw a bunch of rooms on top of each other, and let them push each other away until there are no longer any collisions. The result looks like this.
         <a href="/posts/dungeon-generation/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/caustics_2d/">Caustics 2D</a>
-    </h2>
-    
-  <h5>January 15, 2021</h5>
-
-
-
-  
-
-
-
-
-
-    <p>This is a 2D shader that uses a Monte Carlo method to render the scene. For every pixel, multiple samples are taken to determine the colour of the pixel. Each sample will have a random direction ray. We will then only check if the ray hits a light source, or misses a light source. If a light source is hit, then that lights colour will contribute to the pixel sample.
-        <a href="/posts/caustics_2d/">...</a>
       
     </p>
   </article>
