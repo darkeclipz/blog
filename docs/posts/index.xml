@@ -13,7 +13,8 @@
       <pubDate>Sun, 08 Jan 2023 10:08:00 +0100</pubDate>
       
       <guid>https://rotgers.io/posts/bardb-specification/</guid>
-      <description>BarDB specification#Time series of low resolution charts can quickly consume a large amount of storage. The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. This document aims to explain an implemenation of a database that is optimized to solve this specific problem.
+      <description>This document explains a proof-of-concept database that is optimized for storing OHLC data. It is far from finished.
+Time series of low resolution charts can quickly consume a large amount of storage. The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. This document aims to explain an implementation of a database that is optimized to solve this specific problem.
 To keep in mind if we should, instead of being to busy trying to figure out if we could, it is important to compare this solution against other implementations with a relational database and a schemaless database.</description>
     </item>
     

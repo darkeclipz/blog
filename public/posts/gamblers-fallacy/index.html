@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Suppose we are throwing coins and bet if it is going to be head ($H$) or tails ($T$). After throwing the coin three times, it resulted in heads all of the throws. Do you think that the fourth throw will be heads, or will it be tails?&nbsp;
+Most people would assume that it is not likely to throw heads three times in a row, and it is even more unlikely that it would be four times.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Gambler&#39;s Fallacy" />
+<meta property="og:description" content="Suppose we are throwing coins and bet if it is going to be head ($H$) or tails ($T$). After throwing the coin three times, it resulted in heads all of the throws. Do you think that the fourth throw will be heads, or will it be tails?&nbsp;
+Most people would assume that it is not likely to throw heads three times in a row, and it is even more unlikely that it would be four times." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/gamblers-fallacy/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-27T08:47:11+01:00" />
+<meta property="article:modified_time" content="2022-03-27T08:47:11+01:00" />
+
+<title>Gambler&#39;s Fallacy | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Gambler&#39;s Fallacy</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/gamblers-fallacy/">Gambler&#39;s Fallacy</a>
+  </h1>
+  
+  <h5>March 27, 2022</h5>
+
+
+
+  
+
+
+
+
+
+<p>Suppose we are throwing coins and bet if it is going to be head ($H$) or tails ($T$). After throwing the coin three times, it resulted in heads all of the throws. Do you think that the fourth throw will be heads, or will it be tails?&nbsp;</p><p>Most people would assume that it is not likely to throw heads three times in a row, and it is even more unlikely that it would be four times. So, intuitively, we assume that the probability to throw tails is higher than the probability that we throw heads for the fourth time. However, this assumption is <i>false</i>, and is known as the Gambler's Fallacy.</p><p>To show you why it is false, we will take a mathematical approach using probability theory. Let $A_i$ be the $i$-th outcome of the coin game, which will be either $H$ or $T$, where the probability of getting either result is $\text{Pr}(A_i) = \frac{1}{2}$.</p><p>Now we want to know what the probability is of getting three times head in a row, which is</p><p>$$\text{Pr}(HHH) = \text{Pr}(H)\cdot\text{Pr}(H)\cdot\text{Pr}(H)=\frac{1}{2}\cdot\frac{1}{2}\cdot\frac{1}{2} = \frac{1}{8}.$$</p><p>Note that we can calculate each throw separately, and multiply the probabilities, because the throwing of a coin is an independent event. I don't have to convince you that the previous throw will not affect the next throw. Thus, we can write the equation above in a more general form</p><p>$$<br />\text{Pr}\left( \bigcap_{i=1}^n A_i \right) = \prod\limits_{i=1}^n \text{Pr}(A_i) = \frac{1}{2^n}.<br />$$</p><p>Now there are two key observations to make, the first one is that no matter how many times we had head or tails, the probability of the next throw to be head or tails is still $\frac{1}{2}$, so</p><p>$$<br />\text{Pr}(A_5\ |\ A_1 \cap A_2 \cap A_3 \cap A_4) = \text{Pr}(A_5) = \frac{1}{2}.<br />$$</p><p>The second observation is that you are equally likely to get $HTHTT$ as you are to get $HHHHH$. This basically tells us that you are equally likely to have any sequence of outcomes! Our brain likes patterns and thinks it is special that we have five heads in a row, while statistically the odds are the same as getting any other sequence after five throws.</p><p>Still not convinced? Let's take a look at all the possible outcomes after three throws:</p>
+
+
+
+<script src="/mermaid.min.js"></script>
+
+  <script>mermaid.initialize({
+  "flowchart": {
+    "useMaxWidth":true
+  },
+  "theme": "default"
+}
+)</script>
+
+
+
+
+<p class="mermaid text-center">
+graph LR;
+a1[Start] --"H"--> b1["Pr(H) = 0.5"]
+a1 --"T"--> b2["Pr(T) = 0.5"]
+b1 --"H"--> c1["Pr(HH) = 0.25"]
+b1 --"T"--> c2["Pr(HT) = 0.25"]
+b2 --"H"--> c3["Pr(TH) = 0.25"]
+b2 --"T"--> c4["Pr(TT) = 0.25"]
+c1 --"H"--> d1["Pr(HHH) = 0.125"]
+c1 --"T"--> d2["Pr(HHT) = 0.125"]
+c2 --"H"--> d3["Pr(HTH) = 0.125"]
+c2 --"T"--> d4["Pr(HTT) = 0.125"]
+c3 --"H"--> d5["Pr(THH) = 0.125"]
+c3 --"T"--> d6["Pr(THT) = 0.125"]
+c4 --"H"--> d7["Pr(TTH) = 0.125"]
+c4 --"T"--> d8["Pr(TTT) = 0.125"]
+
+</p>
+
+
+
+<br /><p>Using the illustration, it should be easy to see that after $n$ throws, the probability that you get <i>that </i>sequence, is as likely as getting any other sequence, and is equal to $\frac{1}{2^n}$. Therefore we can conclude that there is absolutely nothing special about getting only heads or only tails. Every path you get after $n$ throws, has the same probability as any other path.</p><p><i>Note that the order of the sequence is important here. Otherwise HTT, THT, and TTH would be the same outcome! We are specifically asking, what is the probability to first throw heads, then tails, and then heads again.</i></p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

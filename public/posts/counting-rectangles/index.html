@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
+Problem statement
+By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
+Naïve&nbsp;solution
+As usual, I always try to define a naïve implementation first, and build from there.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Counting rectangles" />
+<meta property="og:description" content="In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.
+Problem statement
+By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
+Naïve&nbsp;solution
+As usual, I always try to define a naïve implementation first, and build from there." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/counting-rectangles/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-06T08:47:11+01:00" />
+<meta property="article:modified_time" content="2022-07-06T08:47:11+01:00" />
+
+<title>Counting rectangles | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Counting rectangles</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/counting-rectangles/">Counting rectangles</a>
+  </h1>
+  
+  <h5>July 6, 2022</h5>
+
+
+
+  
+
+
+
+
+<p>In this post we will work out a solution to the Project Euler problem #85 where we have to count rectangles.</p><p><b>Problem statement</b></p><p>By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles. Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.</p><p><b>Naïve&nbsp;solution</b></p><p>As usual, I always try to define a naïve implementation first, and build from there. Let $(w, h)$ be the width and the height of the rectangle $R$, and $(m, n)$ the width and the height of the sub rectangle $S$, where $S \subset R$. Note that $w, h, m, n \in \mathbb{N}$. To count how many times $S$ fits in $R$, we first find that on the x-axis it fits $w - m + 1$ times, and on the y-axis $h - n + 1$ times. Multiplying these gives the count<br />$$<br />(w - m + 1)\cdot(h - n + 1).<br />$$</p><p>Of course this is only a single rectangle $S$ in $R$, and we need to count all the possible rectangles that fit in $R$. If we combine all of this, we get the following naïve implementation that counts the rectangles.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#2b91af">int</span> CountingRectangles_Naive(<span style="color:#2b91af">int</span> maxWidth, <span style="color:#2b91af">int</span> maxHeight) 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#2b91af">int</span> count = 0;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> width = 1; width &lt;= maxWidth; width++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> height = 1; height &lt;= maxHeight; height++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            count += (maxWidth - width + 1) * (maxHeight - height + 1);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    <span style="color:#00f">return</span> count;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>}</span></span></code></pre></div>
+<p>
+  By the looks of it, most of the variables are constants. If we write this as a sum, we can probably work this out algebraically.
+</p><p><b>Optimizing</b></p><p>Let $C(w, h)$ be the count rectangles function, which we can define as<br />$$<br />C(w, h) = \sum\limits_{i=1}^w \sum\limits_{j=1}^h (w - i + 1) \cdot (h - j + 1).<br />$$</p><p>Remember that $\sum_{i=1}^n i = n (n + 1) / 2$, which we will use to define two shortcuts: $W = w(w+1)/2$ and $H = h(h+1)/2$. If we continue to work out the sum<br />$$<br />\begin{align}<br />C(w, h) &amp;= \sum\limits_{i=1}^w \sum\limits_{j=1}^h (w - i + 1) \cdot (h - j + 1) \\<br />&amp;= \sum\limits_{i=1}^w (w - i + 1) \sum\limits_{j=1}^h&nbsp; (h - j + 1) \\<br />&amp;= \left( \sum\limits_{i=1}^w (w - i + 1) \right) \left( \sum\limits_{j=1}^h h - \sum\limits_{j=1}^h j + \sum\limits_{j=1}^h 1&nbsp; \right) \\<br />&amp;= \left( \sum\limits_{i=1}^w (w - i + 1) \right) \left( h^2 - H + h \right) \\<br />&amp;= (w^2 - W + w)(h^2 - H + h).<br />\end{align}$$.</p><p>Alright, instead of evaluating the loops, we now know that<br />$$<br />C(w, h) = (w^2 - W + w)(h^2 - H + h),<br />$$</p><p>which gives the optimized function:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#2b91af">int</span> CountingRectangles(<span style="color:#2b91af">int</span> w, <span style="color:#2b91af">int</span> h)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    <span style="color:#2b91af">int</span> W = w * (w + 1) / 2;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    <span style="color:#2b91af">int</span> H = h * (h + 1) / 2;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    <span style="color:#00f">return</span> (h * h - H + h) * (w * w - W + w);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}</span></span></code></pre></div>
+<p>Note that dividing by two is the same as bitshifting once to the right:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#2b91af">int</span> CountingRectangles(<span style="color:#2b91af">int</span> w, <span style="color:#2b91af">int</span> h)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    <span style="color:#2b91af">int</span> W = w * (w + 1) &gt;&gt; 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    <span style="color:#2b91af">int</span> H = h * (h + 1) &gt;&gt; 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    <span style="color:#00f">return</span> (h * h - H + h) * (w * w - W + w);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}</span></span></code></pre></div>
+<p>Although I expect that the C# compiler will optimize this for you anyway.</p><p><b>Finding the answer</b></p><p>Now that we have an optimized function to count the number of rectangles, we can start solving the problem. We will define the problem as an optimization problem where we have the cost function<br />$$<br />F(w, h) = |\ C(w,h) - 2.000.000\ |<br />$$<br />with the following goal<br />$$\min F(w,h).$$<br /><br />A simple grid search will suffice to find the solution quickly. Notice that because of symmetry, we only have to check half of the grid. A rotated rectangle still has the same area. This gives the complete solution to the problem:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">using</span> System.Diagnostics;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#2b91af">int</span> CountingRectangles(<span style="color:#2b91af">int</span> w, <span style="color:#2b91af">int</span> h)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#2b91af">int</span> W = w * (w + 1) &gt;&gt; 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#2b91af">int</span> H = h * (h + 1) &gt;&gt; 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#00f">return</span> (h * h - H + h) * (w * w - W + w);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>Stopwatch sw = <span style="color:#00f">new</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>sw.Start();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#2b91af">int</span> limit = 2_000_000;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#2b91af">int</span> min = <span style="color:#2b91af">int</span>.MaxValue;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>(<span style="color:#2b91af">int</span> w, <span style="color:#2b91af">int</span> h) minRectangle = (0, 0);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span><span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; 1000; i++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>{
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    <span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> j = i; j &lt; 1000; j++)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>        <span style="color:#2b91af">int</span> n = CountingRectangles(i, j);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>        <span style="color:#00f">if</span> (Math.Abs(n - limit) &lt; min)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>            min = Math.Abs(n - limit);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>            minRectangle = (i, j);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>sw.Stop();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>Console.WriteLine(
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>    <span style="color:#a31515">$&#34;Solution = {minRectangle.w * minRectangle.h}, &#34;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>    + <span style="color:#a31515">$&#34;found in {sw.ElapsedMilliseconds} milliseconds.&#34;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>);</span></span></code></pre></div>
+<p>This implementation finds the solution in a mere two milliseconds, good enough! :)</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

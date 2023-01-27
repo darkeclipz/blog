@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="One of the first things you will stumble across when writing a raytracer is to find out where a ray and a sphere intersect. In this post we will derive a method that finds this point from first principles.
+Vector-form definition of a sphere#A sphere is mathematically defined, in vector-form, as
+$$ ||\ \mathbf{x} - \mathbf{c}\ ||^2 = r^2, $$
+where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the sphere, and $r^2$ is the radius of the sphere.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ray-sphere intersection" />
+<meta property="og:description" content="One of the first things you will stumble across when writing a raytracer is to find out where a ray and a sphere intersect. In this post we will derive a method that finds this point from first principles.
+Vector-form definition of a sphere#A sphere is mathematically defined, in vector-form, as
+$$ ||\ \mathbf{x} - \mathbf{c}\ ||^2 = r^2, $$
+where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the sphere, and $r^2$ is the radius of the sphere." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/ray-sphere-intersection/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-10T10:08:00+01:00" />
+<meta property="article:modified_time" content="2022-11-10T10:08:00+01:00" />
+
+<title>Ray-sphere intersection | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ray-sphere intersection</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#vector-form-definition-of-a-sphere">Vector-form definition of a sphere</a></li>
+    <li><a href="#vector-form-definition-of-a-ray">Vector-form definition of a ray</a></li>
+    <li><a href="#the-quadratic-equation">The quadratic equation</a></li>
+    <li><a href="#finding-the-intersection-point-of-the-ray-and-the-sphere">Finding the intersection point of the ray and the sphere</a>
+      <ul>
+        <li><a href="#determining-the-coefficients">Determining the coefficients</a></li>
+        <li><a href="#solving-the-quadratic-equation">Solving the quadratic equation</a></li>
+        <li><a href="#finding-the-intersection-point">Finding the intersection point</a></li>
+      </ul>
+    </li>
+    <li><a href="#afterword">Afterword</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/ray-sphere-intersection/">Ray-sphere intersection</a>
+  </h1>
+  
+  <h5>November 10, 2022</h5>
+
+
+
+  
+
+
+
+
+<p>One of the first things you will stumble across when writing a raytracer is to find out where a ray and a sphere intersect.
+In this post we will derive a method that finds this point from first principles.</p>
+<h2 id="vector-form-definition-of-a-sphere">
+  Vector-form definition of a sphere
+  <a class="anchor" href="#vector-form-definition-of-a-sphere">#</a>
+</h2>
+<p>A sphere is mathematically defined, in vector-form, as</p>
+<p>$$
+||\ \mathbf{x} - \mathbf{c}\ ||^2 = r^2,
+$$</p>
+<p>where $\mathbf{x}$ is the point on the sphere, $\mathbf{c}$ is the center of the sphere, and $r^2$ is the radius of the sphere.
+It is saying that the vector between the center of the sphere and the point on the sphere must have a length of $r^2$.</p>
+<tikz>
+    <script type="text/tikz">
+        \begin{tikzpicture}
+            \shade[shading=ball, ball color=white] (0,0) circle (4);
+            \draw[dashed] (0,0) ellipse (4cm and 1.5cm);
+            \draw[->, dashed] (0, 0) -- (2.2, -1.2) node[xshift=-0.8cm,yshift=0.8cm] {\LARGE $r$};
+        \end{tikzpicture}
+    </script>
+</tikz>
+<p>The interesting thing about this <em>vector-form definition of a sphere</em> is that it upholds in 2D, 3D, and even more dimensions, although more than 3 dimensions is a little bit hard to interpret geometrically.</p>
+<blockquote class="book-hint info">
+  <strong>A side note about notation.</strong> The expression $||\ \mathbf{x} - \mathbf{c}\ ||^2$ is the squared length of the vector. 
+The square root in the formula of the length of the vector and the squaring cancel each other out. 
+So instead of squaring the length of the vector, the dot-product $(\mathbf{x} - \mathbf{c})\cdot(\mathbf{x} - \mathbf{c})$ is more efficient to compute.
+</blockquote>
+
+<h2 id="vector-form-definition-of-a-ray">
+  Vector-form definition of a ray
+  <a class="anchor" href="#vector-form-definition-of-a-ray">#</a>
+</h2>
+<p>A ray is mathematically defined, in vector-form, as</p>
+<p>$$
+\mathbf x = \mathbf o + d \mathbf u,
+$$</p>
+<p>where $\mathbf x$ is the point on the ray, $\mathbf o$ is the origin of the ray, $d$ is the distance from the origin of the ray to the point $\mathbf x$, and $\mathbf u$ is the direction of the ray. It is important to note that the <em>direction of the ray is a normalized vector</em>, otherwise the distance will not correspond to a unit of length. As with the sphere, the <em>vector-form definition of a ray</em> will also work in 2 or 3 dimensions.</p>
+<h2 id="the-quadratic-equation">
+  The quadratic equation
+  <a class="anchor" href="#the-quadratic-equation">#</a>
+</h2>
+<p>You might wonder what this has to do with it, but bear with me for a moment. Anyone that has had high school mathematics knows that the quadratic equation is used to solve <em>any quadratic equation</em> of the form $ax^2 + bx + c = 0$. 
+Any quadratic equation is solved with the quadratic formula</p>
+<p>$$
+x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a},
+$$</p>
+<p>where $b^2 - 4ac$ is known as <em>the discriminant</em> which we will denote with the symbol $\Delta$.
+Depending on the value of the discriminant $\Delta$, there are a three different cases of outcomes.</p>
+<ol>
+<li>$\Delta &gt; 0$ means that the equation has <em>two solutions</em>.</li>
+<li>$\Delta = 0$ means that the equation has <em>exactly one solution</em>.</li>
+<li>$\Delta &lt; 0$ means that the equation has no <em>real solutions</em>. It does have <em>imaginary solutions</em>, but we will ignore those for now.</li>
+</ol>
+<p>After this small side tour of the quadratic equation, it is now time to find the intersection point of the ray and the sphere.</p>
+<h2 id="finding-the-intersection-point-of-the-ray-and-the-sphere">
+  Finding the intersection point of the ray and the sphere
+  <a class="anchor" href="#finding-the-intersection-point-of-the-ray-and-the-sphere">#</a>
+</h2>
+<p>The general idea is to replace $\mathbf x$ in the definition of the sphere with the definition of the ray and work this out algebraically until we get the equation in the form of the quadratic equation. We will then use the quadratic equation to find the solution(s) for $d$. Once we know $d$, we plug that into the equation of the ray to find the intersection point.</p>
+<h3 id="determining-the-coefficients">
+  Determining the coefficients
+  <a class="anchor" href="#determining-the-coefficients">#</a>
+</h3>
+<p>Starting with the definition of the sphere</p>
+<p>$$||\ \mathbf{x} - \mathbf{c}\ ||^2 = r^2,$$</p>
+<p>we will replace $\mathbf{x}$ with the definition of the ray to get the equation</p>
+<p>$$||\ \mathbf o + d \mathbf u - \mathbf{c}\ ||^2 = r^2.$$</p>
+<p>The first thing we need to do is to get the equation in a form that is easier to manipulate. To do so, we use the dot-product from the sphere section to rewrite the squared length of the vector. This helps us to rewrite the equation as</p>
+<p>$$
+(\mathbf o + d \mathbf u - \mathbf{c}) \cdot (\mathbf o + d \mathbf u - \mathbf{c}) = r^2.
+$$</p>
+<p>Notice that $d$ is the only unknown variable in the equation and that the vectors $\mathbf{o}$ and $\mathbf{u}$ are constants, as is $r^2$. With this in mind we will rewrite the expression as the binomial</p>
+<p>$$
+([\mathbf o - \mathbf{c}] + d \mathbf u ) \cdot ([\mathbf o - \mathbf{c}] + d \mathbf u ) = r^2.
+$$</p>
+<p>By expanding the binomial we can rewrite it as</p>
+<p>$$
+(\mathbf o - \mathbf c)\cdot (\mathbf o - \mathbf c) + 2(\mathbf o - \mathbf c) d \mathbf u + d^2 \mathbf u \cdot \mathbf u - r^2 = 0.
+$$</p>
+<p>Finally we rearrange the terms to get the equation in the form of a quadratic</p>
+<p>$$
+d^2 (\mathbf u \cdot \mathbf u) + 2d (\mathbf u \cdot [\mathbf o - \mathbf c]) + (\mathbf o - \mathbf c) \cdot (\mathbf o - \mathbf c) - r^2 = 0,
+$$</p>
+<p>where</p>
+<p>$$
+\begin{align} 
+a &amp; = \mathbf u \cdot \mathbf u  \\
+b &amp; = 2 (\mathbf u \cdot [\mathbf o - \mathbf c]) \\
+c &amp; = (\mathbf o - \mathbf c) \cdot (\mathbf o - \mathbf c) - r^2.
+\end{align}
+$$</p>
+<blockquote class="book-hint warning">
+  <strong>Caution.</strong> Be aware of not accidentaly mixing up multiplication of the scalars and the dot-products of the vectors!
+The dot-product operation has been explicitly denoted with $\cdot$.
+</blockquote>
+
+<h3 id="solving-the-quadratic-equation">
+  Solving the quadratic equation
+  <a class="anchor" href="#solving-the-quadratic-equation">#</a>
+</h3>
+<p>Once we have found the coefficients $a$, $b$, and $c$ of the quadratic equation, we can find the solutions for $d$, if any exist. The first thing we need to do is determine if there actually is a solution. We can do this by looking at the discriminant of the quadratic which is</p>
+<p>$$
+\Delta = b^2 - 4ac.
+$$</p>
+<p>There is no solution if $\Delta &lt; 0$, which means that the ray missed the sphere. In this case we stop the algorithm. There is exactly one solution if $\Delta = 0$, but since we are operating on floating point numbers, we will ignore this case and evaluate it as a the more general case where $\Delta \geq 0$.</p>
+<p>To do so, we need to determine $d_1$ and $d_2$ by evaluating both cases of the quadratic formula. Because we are only interested in the point where the ray intersects with the front of the sphere, and not in the point where the ray goes out from the back, we need to determine which of those two is the closest to us. Also note that <em>if any solution is negative, we have intersected with a sphere that is behind us</em>, and since we are not looking into that direction, we will ignore that solution.</p>
+<p>We can use the following simple procedure to find the value of $d$ that we are interested in.</p>
+<ol>
+<li>First we order the solutions such that $d_1 &gt; d_2$, if this is not the case then we swap the values.</li>
+<li>Let $d^* := d_1$.</li>
+<li>If $d^* &lt; 0$, we ignore this solution, and set $d^* := d_2$.</li>
+<li>If $d^* &lt; 0$, then both solutions are negative meaning that there is no intersection that we are interested in.</li>
+<li>If we get here this means that $d^*$ is the solution that we are interested in, thus we have found the value of $d$.</li>
+</ol>
+<p>Once we have found the value of $d$, the last step is to plug this into the ray equation to find $\mathbf{x}$.</p>
+<h3 id="finding-the-intersection-point">
+  Finding the intersection point
+  <a class="anchor" href="#finding-the-intersection-point">#</a>
+</h3>
+<p>To find the point $\mathbf x$ that we are interest in, all that is left to do is to evaluate the ray equation</p>
+<p>$$
+\mathbf x = \mathbf o + d \mathbf u,
+$$</p>
+<p>with the value of $d$ that we have found earlier.</p>
+<blockquote class="book-hint info">
+  <strong>Todo.</strong> Add an implementation in Rust or C# of the ray—sphere intersection algorithm.
+</blockquote>
+
+<h2 id="afterword">
+  Afterword
+  <a class="anchor" href="#afterword">#</a>
+</h2>
+<p>In this post we showed how to derive the equations that are used for a ray—sphere intersection from first principles. Starting with the definition of a ray and a sphere. Using those definitions, we replaced $\mathbf{x}$ in the sphere equation with the equation of the ray. We algebraically manipulated the equation into the form of a quadratic equation, which can then be solved with the quadratic formula. Finally we looked at the solutions of the quadratic formula to determine the value of $d$ that corresponds to the solution, which we then used to find the point $\mathbf x$ by plugging this back into the ray equation.</p>
+<!-- ## Implementation of the theory
+
+Now that we have a mathematical procedure to find the intersection point between a ray and a sphere, it is time to implement this as a procedure in code that we can use to solve this problem. To show a few different implementations, we will implemente it with C#, Rust, and Javascript. --></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#vector-form-definition-of-a-sphere">Vector-form definition of a sphere</a></li>
+    <li><a href="#vector-form-definition-of-a-ray">Vector-form definition of a ray</a></li>
+    <li><a href="#the-quadratic-equation">The quadratic equation</a></li>
+    <li><a href="#finding-the-intersection-point-of-the-ray-and-the-sphere">Finding the intersection point of the ray and the sphere</a>
+      <ul>
+        <li><a href="#determining-the-coefficients">Determining the coefficients</a></li>
+        <li><a href="#solving-the-quadratic-equation">Solving the quadratic equation</a></li>
+        <li><a href="#finding-the-intersection-point">Finding the intersection point</a></li>
+      </ul>
+    </li>
+    <li><a href="#afterword">Afterword</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

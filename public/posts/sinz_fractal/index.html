@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Another interesting set of fractals is produced by looking at the Julia set of the iterated function
+$$ z_{n&#43;1} = \sin (z_n) \cdot c. $$
+Instead of looking at the magnitude of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Sin(z) fractals" />
+<meta property="og:description" content="Another interesting set of fractals is produced by looking at the Julia set of the iterated function
+$$ z_{n&#43;1} = \sin (z_n) \cdot c. $$
+Instead of looking at the magnitude of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/sinz_fractal/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-06T10:42:11+01:00" />
+<meta property="article:modified_time" content="2022-11-06T10:42:11+01:00" />
+
+<title>Sin(z) fractals | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Sin(z) fractals</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#complex-function-sinz">Complex function sin(z)</a></li>
+    <li><a href="#iterated-map-of-sinz">Iterated map of sin(z)</a></li>
+    <li><a href="#renders-of-sinz">Renders of sin(z)</a></li>
+    <li><a href="#shadertoy-implementation">Shadertoy implementation</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/sinz_fractal/">Sin(z) fractals</a>
+  </h1>
+  
+  <h5>November 6, 2022</h5>
+
+
+
+  
+
+
+
+
+<p>Another interesting set of fractals is produced by looking at the Julia set of the iterated function</p>
+<p>$$
+z_{n+1} = \sin (z_n) \cdot c.
+$$</p>
+<p>Instead of looking at the magnitude of the complex number to determine if the orbit escapes to infinity, only the imaginary part of $z$ is used in this case. If the imaginary part of $z$ is greater than 50, then it is decided that the orbit escapes to infinity. This is important to get the correct result, because it won&rsquo;t work if the escape criteria of a Mandelbrot set are used.</p>
+<h2 id="complex-function-sinz">
+  Complex function sin(z)
+  <a class="anchor" href="#complex-function-sinz">#</a>
+</h2>
+<p>The sine function of a complex number $z$ is defined with the relationship</p>
+<p>$$
+\sin(z) = \sin(a + bi) = \sin a \cdot \cosh b + (\cos a \cdot \sinh b)i,
+$$</p>
+<p>which is used to define the <code>complex_sin</code> function.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">fn</span> complex_sin(z: <span style="color:#2b91af">Complex</span>) -&gt; <span style="color:#2b91af">Complex</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    Complex { 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>        a: <span style="color:#2b91af">z</span>.a.sin() * z.b.cosh(),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>        b: <span style="color:#2b91af">z</span>.a.cos() * z.b.sinh()
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}</span></span></code></pre></div>
+<h2 id="iterated-map-of-sinz">
+  Iterated map of sin(z)
+  <a class="anchor" href="#iterated-map-of-sinz">#</a>
+</h2>
+<p>With that out of the way, a <code>csinz</code> function is defined that will generate the fractal.
+Note that the smooth iteration counter is not used here because it is for exponential functions, which is not the case here.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">fn</span> csinz(x: <span style="color:#2b91af">f32</span>, y: <span style="color:#2b91af">f32</span>) -&gt; <span style="color:#2b91af">f32</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">let</span> <span style="color:#00f">mut</span> z = Complex { a: <span style="color:#2b91af">x</span>, b: <span style="color:#2b91af">y</span> };
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#00f">let</span> c = Complex { a: 1.0, b: 0.0 };
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">let</span> max = 256;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#00f">let</span> <span style="color:#00f">mut</span> i = 0;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#00f">while</span> i &lt; max &amp;&amp; z.b.abs() &lt; 50.0 {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        z = c * complex_sin(z);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        i += 1;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    <span style="color:#00f">return</span> i <span style="color:#00f">as</span> <span style="color:#2b91af">f32</span> / max <span style="color:#00f">as</span> <span style="color:#2b91af">f32</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>}</span></span></code></pre></div>
+<p>Because this is a Julia set, we pick the point $1 + 0i$ as a start. The fractal is colored with the function that is defined in the 
+  <a href="/posts/mandelbrot-rust/">Mandelbrot with Rust</a> post.</p>
+<p>
+  <img src="/sinz.png" alt="sinz" /></p>
+<figcaption>Plot of $f(z) = c \sin(z)$ at $c = 1.0 + 0i$.</figcaption>
+<p>And voila, there it is.</p>
+<h2 id="renders-of-sinz">
+  Renders of sin(z)
+  <a class="anchor" href="#renders-of-sinz">#</a>
+</h2>
+<p>If we use different values for $c$, we will get different Julia sets. There are quite a few awesome looking sets that we can find. The rest of this post shows renderings of different Julia sets.</p>
+<p>The colorization is done with the cosine color function that is defined in the 
+  <a href="/posts/mandelbrot-rust/">Mandelbrot with Rust</a> post. Note that we are using a few different color palettes here, which can be found on 
+  <a href="https://iquilezles.org/articles/palettes/">Inigo Quilez&rsquo;s page about this colorization technique</a>.</p>
+<p>
+  <a href="/vortex.png">
+  <img src="/vortex.png" alt="vortex" /></a></p>
+<figcaption>Vortex. Generated with paramater $c = 1 + 0.1i$.</figcaption>
+<p>
+  <a href="/virus.png">
+  <img src="/virus.png" alt="virus" /></a></p>
+<figcaption>Virus. Generated with parameter $c = 1 + i$.</figcaption>
+<p>
+  <a href="/swirl.png">
+  <img src="/swirl.png" alt="swirl" /></a></p>
+<figcaption>Swirl. Generated with parameter $c = 1 + 0.3i$.</figcaption>
+<p>
+  <a href="/florets.png">
+  <img src="/florets.png" alt="florets" /></a></p>
+<figcaption>Florets. Generated with parameter $c = 0.2 + i$.</figcaption>
+<h2 id="shadertoy-implementation">
+  Shadertoy implementation
+  <a class="anchor" href="#shadertoy-implementation">#</a>
+</h2>
+<p>I have also implemented the fractal as a shader on Shadertoy. 
+It is included below.
+You can use the mouse to view the different Julia sets.</p>
+<div style="text-align: center">
+    <iframe frameborder="0" src="https://www.shadertoy.com/embed/ms23Dw?gui=true&t=10&paused=true&muted=false" allowfullscreen></iframe>
+</div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#complex-function-sinz">Complex function sin(z)</a></li>
+    <li><a href="#iterated-map-of-sinz">Iterated map of sin(z)</a></li>
+    <li><a href="#renders-of-sinz">Renders of sin(z)</a></li>
+    <li><a href="#shadertoy-implementation">Shadertoy implementation</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

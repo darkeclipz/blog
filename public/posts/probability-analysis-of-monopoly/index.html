@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction#A few years ago I have written a detailed analysis of the probabilities in Monopoly. However, because of handwaving many rules to make it easier to analyze, I wanted to redo it and use all the rules this time. The main motivation for doing this is to solve a question on Project Euler. While we are at it, I also wanted to take the time to answer a few different questions as well.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Monopoly odds" />
+<meta property="og:description" content="Introduction#A few years ago I have written a detailed analysis of the probabilities in Monopoly. However, because of handwaving many rules to make it easier to analyze, I wanted to redo it and use all the rules this time. The main motivation for doing this is to solve a question on Project Euler. While we are at it, I also wanted to take the time to answer a few different questions as well." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/probability-analysis-of-monopoly/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-02-28T11:42:11+01:00" />
+<meta property="article:modified_time" content="2021-02-28T11:42:11+01:00" />
+
+<title>Monopoly odds | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Monopoly odds</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#what-is-a-markov-process">What is a Markov process?</a>
+      <ul>
+        <li><a href="#the-transition-matrix">The transition matrix</a></li>
+        <li><a href="#how-to-find-the-steady-state-vector">How to find the steady state vector?</a></li>
+        <li><a href="#eigenvectors-and-the-steady-state-vector">Eigenvectors and the steady state vector</a></li>
+      </ul>
+    </li>
+    <li><a href="#monopoly-as-a-markov-process">Monopoly as a Markov process</a>
+      <ul>
+        <li><a href="#probability-distribution-of-throwing-two-dice">Probability distribution of throwing two dice</a></li>
+        <li><a href="#encoding-the-probability-distribution-in-a-vector">Encoding the probability distribution in a vector</a></li>
+        <li><a href="#constructing-the-transition-matrix">Constructing the transition matrix</a></li>
+        <li><a href="#implementing-cards-and-other-cases">Implementing cards and other cases</a></li>
+      </ul>
+    </li>
+    <li><a href="#solving-the-project-euler-question">Solving the Project Euler question</a>
+      <ul>
+        <li><a href="#verifying-the-given-solution">Verifying the given solution</a></li>
+        <li><a href="#finding-the-solution">Finding the solution</a></li>
+      </ul>
+    </li>
+    <li><a href="#complete-source-code">Complete source code</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/probability-analysis-of-monopoly/">Monopoly odds</a>
+  </h1>
+  
+  <h5>February 28, 2021</h5>
+
+
+
+  
+
+
+
+
+<h2 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h2>
+<p>A few years ago I have written a detailed analysis of the probabilities in Monopoly. However, because of handwaving many rules to make it easier to analyze, I wanted to redo it and use all the rules this time. The main motivation for doing this is to solve a question on Project Euler. While we are at it, I also wanted to take the time to answer a few different questions as well. I will assume that the rules of Monopoly are known to you, and will only describe the rules which we are going to use in this model.</p>
+<p>There are two methods that we can use to find the probabilities that a player can land on each cell. We can use a Monte carlo method, where we will simply simulate the game for a large number of rounds, and track how many times each cell is visited. However, a more accurate result is given by the steady state vector of a Markov matrix, which is the method I&rsquo;m going to use.</p>
+<p>In the first section we will look at what a Markov matrix is, and how to find the steady state vector. Then we are going to translate the Monopoly rules into a Markov process, and find the steady state vector. Finally, we are going to analyze the results, and solve the Project Euler problem.</p>
+<h2 id="what-is-a-markov-process">
+  What is a Markov process?
+  <a class="anchor" href="#what-is-a-markov-process">#</a>
+</h2>
+<p>A Markov proces is a proces where we have different states, and a probability to move between each state. If we use the weather as a simple example, we will have two states: sunny or rainy. This markov process can be illustrated by drawing a graph in the following way:</p>
+<p>
+  <img src="https://martin-thoma.com/images/2015/05/markov-chain-rain-sun.png" alt="Markov chain" /></p>
+<p>We can see that if it is sunny, there is a probability of $80\%$ that it will stay sunny, and a probability of $20\%$ that it is going to rain. We can use this to answer questions like, what is the probability that the sun will shine seven consecutive days, given that today is sunny? To find this probability we know that we have to transition from $S \rightarrow S$, seven times in a row, which gives us a probability of $\left(\frac{8}{10}\right)^7 \approx 0.2097$. There is a probability of approximately $21\%$ that the sun will shine for an entire week.</p>
+<p>However, to answer a question like &ldquo;Which percentage of days in a year does the sun shine?&rdquo;, requires us to take things a bit further. Perhaps you have noticed, but this question is exactly the same as &ldquo;What is the probability that each cell is visited by a player in a game of Monopoly?&rdquo; in Markov terms.</p>
+<h3 id="the-transition-matrix">
+  The transition matrix
+  <a class="anchor" href="#the-transition-matrix">#</a>
+</h3>
+<p>The first thing we are going to do, is to describe the Markoc proces as a transition matrix. The transition matrix for the weather example will look like this:</p>
+<p>$$
+\mathbf{M} = 
+\begin{bmatrix}
+\frac{8}{10} \frac{2}{10} \
+\frac{4}{10} \frac{6}{10} \
+\end{bmatrix}
+$$</p>
+<p>If we have this matrix $\mathbf{M}_{ij}$, then each entry can be read as the probability to move from state $i$ to state $j$. Any matrix that has the following two properties is a Markov matrix:</p>
+<ol>
+<li>The sum of all the elements in a row is $1$.</li>
+<li>Every entry in the matrix is $\geq 0$.</li>
+</ol>
+<p>Once we have determined that a matrix is a Markov matrix, we can use many of the theorems and properties that apply to Markov matrices. One of these properties is that the transition matrix has a steady state vector. This steady state vector will tell us the percentage of rainy days over a long period of time, or the probability that a player is on a given cell over many games of Monopoly. In essence, it tells us the long term behaviour of the Markov process.</p>
+<h3 id="how-to-find-the-steady-state-vector">
+  How to find the steady state vector?
+  <a class="anchor" href="#how-to-find-the-steady-state-vector">#</a>
+</h3>
+<p>The steady state vector of a matrix is the vector $\pi$ (this has nothing to do with the number $\pi$) such that $\pi\mathbf{M} = \pi$, meaning that if we multiply the steady state vector by the transition matrix, we get the steady state vector back. In the case of our weather example, the steady state vector is $\pi = \begin{bmatrix}\frac{2}{3} &amp; \frac{1}{3}\end{bmatrix}$, or any scaled version of $\pi$, as long as the ratio is the same. The zero vector doesn&rsquo;t count. The example below will verify that it is indeed the steady state vector.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = np.mat([[8/10, 2/10], [4/10, 6/10]])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>x = np.mat([2/3, 1/3])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>x * M</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>matrix([[0.66666667, 0.33333333]])
+</code></pre><p>As you can see, the result is the same as the vector $\pi$, which means that this is indeed the steady state vector. But how do we find this steady state vector? Suppose we will begin on a sunny day. We can describe this initial condition with the vector $\pi_0 = \begin{bmatrix}1 &amp; 0\end{bmatrix}$. If we multiply $\pi_0$ with the transition matrix $\mathbf M$, we will get the probabilities of each state at day $1$:</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>x = np.mat([1, 0])
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>x * M</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>matrix([[0.8, 0.2]])
+</code></pre><p>This gives the state with the probabilities that we are in a certain state after one day. It says that we have a probability of $20\%$ that it will rain. If we multiply this by $\mathbf M$ again, we will get the probabilites of each state on day 2.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>np.matrix([[0.8, 0.2]]) * M</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>matrix([[0.72, 0.28]])
+</code></pre><p>On day 2 there is a probability of $28\%$ that it will rain. We can keep doing to this to find the probability up to day $n$. However, there is an easier method that we can use.</p>
+<p>First let us continue this process, and write out the consecutive steps in the following way:</p>
+<p>$$
+\begin{align}
+\pi_0 &amp;= \begin{bmatrix}1 &amp; 0\end{bmatrix} \\
+\pi_1 &amp;= \pi_0\cdot\mathbf M \\
+\pi_2 &amp;= \pi_1\cdot\mathbf M \\
+\pi_3 &amp;= \pi_2\cdot\mathbf M \\
+\end{align}
+$$</p>
+<p>If we now substitute $\pi_2$ backwards, we will get:</p>
+<p>$$
+\begin{align}
+\pi_3 &amp;= \pi_2\cdot\mathbf M \\
+\pi_3 &amp;= (\pi_1\cdot\mathbf M)\cdot\mathbf M \\
+\pi_3 &amp;= ((\pi_0\cdot\mathbf M)\cdot\mathbf M)\cdot\mathbf M \\
+\pi_3 &amp;= \pi_0\cdot\mathbf M\cdot\mathbf M\cdot\mathbf M \\
+\pi_3 &amp;= \pi_0\cdot\mathbf M^3 \\
+&amp;\vdots \\
+\pi_n &amp;= \pi_0\cdot\mathbf M^n
+\end{align}
+$$</p>
+<p>Which is a rather useful result. Instead of finding $\pi_n$ by multiplying $\pi_{n-1}\cdot\mathbf M$, we can also raise $\mathbf M$ to the $n$-th power to get the probabilities on day $n$. As more days pass, and $n \rightarrow\infty$, this will converge to the steady state vector. This means that we can find the steady state vector with</p>
+<p>$$
+\pi = \lim\limits_{n\rightarrow\infty} \pi_0\cdot\mathbf M^n.
+$$</p>
+<p>We can easily verify this by calculating $\mathbf M$ for a high power.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>x * M**32</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>matrix([[0.66666667, 0.33333333]])
+</code></pre><p>Which is the steady state vector! In this example the steady state vector tells us that:</p>
+<ul>
+<li>$\frac{2}{3}$ of the time the weather is sunny,</li>
+<li>$\frac{1}{3}$ of the time it rains.</li>
+</ul>
+<p>However, there is another method we can use to find the steady state vector.</p>
+<h3 id="eigenvectors-and-the-steady-state-vector">
+  Eigenvectors and the steady state vector
+  <a class="anchor" href="#eigenvectors-and-the-steady-state-vector">#</a>
+</h3>
+<p>If we calculate the eigenvalues and eigenvectors of the transpose of $\mathbf M$.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>eigenvalues, eigenvectors = eig(M.T)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>eigenvalues.real</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>array([1. , 0.4])
+</code></pre><p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>eigenvectors</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>array([[ 0.89442719, -0.70710678],
+       [ 0.4472136 ,  0.70710678]])
+</code></pre><p>We want to use the eigenvector where the corresponding eigenvalue is $1$. In this case it is the first column vector of the matrix of eigenvectors. You might notice that this doesn&rsquo;t look like our steady state vector at all, but if we multiply this eigenvector with $\mathbf M$, we will see that it is correct.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>eigenvectors.T[0] * M</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>matrix([[0.89442719, 0.4472136 ]])
+</code></pre><p>If we normalize the eigenvector, it becomes immediately obvious that this is our steady state vector.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>x = eigenvectors.T[0]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>x / sum(x)</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>array([0.66666667, 0.33333333])
+</code></pre><p>Nice! Now that we have a method to find the steady state vector of a transition matrix, we can start to create the transition matrix for the Monopoly model.</p>
+<h2 id="monopoly-as-a-markov-process">
+  Monopoly as a Markov process
+  <a class="anchor" href="#monopoly-as-a-markov-process">#</a>
+</h2>
+<p>Before we can create the transition matrix for the game of Monopoly, we will first have to determine which of the rules which we are going to include in the model. First, let&rsquo;s take a look at the game board:</p>
+<p>
+  <img src="https://projecteuler.net/project/images/p084_monopoly_board.png" alt="Board" /></p>
+<p>Because we want to use the result to solve the Project Euler question, we will use the 
+  <a href="https://projecteuler.net/problem=84">rules that are defined in the problem statement</a>.</p>
+<ul>
+<li>There are a total of 40 cells, which we will label as $c_0, c_1, \ldots, c_{39}$.</li>
+<li>We will throw with two dices that have four sides. However, we also want to be able to use six sides (the traditional method).</li>
+<li>If we throw a double, the player can throw again. However, if three consecutive doubles are rolled, the player moves directly to jail.</li>
+<li>There are chance cards <code>CC</code>, and community chest cards <code>CH</code> which moves the player, thus having an impact on the probability distribution.</li>
+</ul>
+<p>Now that we have defined the rules, we can start to model them as a Markov process.</p>
+<h3 id="probability-distribution-of-throwing-two-dice">
+  Probability distribution of throwing two dice
+  <a class="anchor" href="#probability-distribution-of-throwing-two-dice">#</a>
+</h3>
+<p>If we throw a single dice, we have a uniform probability to get each side. However, when two dice are used, the probability distribution is different. In this case it is the sum of two uniform probability distributions. The following table shows the sum of throwing two dice:</p>
+<p>
+  <img src="https://useruploads.socratic.org/htIJ8JIOQryq44A9JSba_SichermanTables.jpg" alt="Sum of two dice" /></p>
+<p>If we let $\underline{k}$ be a random stochast of throwing two dice with six sides, then we can see from the table that $P(\underline{k} = 2) = \frac{1}{36}$ because there is only one possible way of obtaining the sum of $2$ out of the $36$ possible outcomes. In the case of $P(\underline{k} = 7)$, we can see that there are $6$ possible outcomes, which gives the probability of $\frac{6}{36}$.</p>
+<h3 id="encoding-the-probability-distribution-in-a-vector">
+  Encoding the probability distribution in a vector
+  <a class="anchor" href="#encoding-the-probability-distribution-in-a-vector">#</a>
+</h3>
+<p>We are going to encode the probability distribution as a vector with $40$ elements. The first element will correspond with $c_0$, which is <code>GO</code>, all the way up to $c_{39}$. Starting at $c_0$, we will calculate the probability of landing on each square. We only have to calculate this distribution vector for the starting position $c_0$. If the player is not at $c_0$, but on another cell, we can simply shift the vector while wrapping, which we can do with <code>np.roll(...)</code>. Let&rsquo;s start by defining a few functions to create this vector.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> cross_sum(S):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#00f">return</span> [(a + b) <span style="color:#00f">for</span> a <span style="color:#00f">in</span> S <span style="color:#00f">for</span> b <span style="color:#00f">in</span> S]</span></span></code></pre></div>
+<p>We can use this function to obtain all the possible outcomes for a set $S$, which in the case of a four side dice is ${1, 2, 3, 4}$.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>cross_sum(range(1, 4 + 1))</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>[2, 3, 4, 5, 3, 4, 5, 6, 4, 5, 6, 7, 5, 6, 7, 8]
+</code></pre><p>Next, we are going to create this vector with $40$ elements, and count how many times we land on each cell. Finally, we divide the entire vector by the total number of outcomes to get the probabilities. Notice that the sum of all the elements in this vector is $1$, which is a requirement of the transition matrix.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> two_dice_distribution(num_sides):  
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  outcomes = cross_sum(range(1, num_sides+1))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  D = np.array([0] * 40)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  <span style="color:#00f">for</span> outcome <span style="color:#00f">in</span> outcomes:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    D[outcome] += 1
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>  D = 1 / (num_sides * num_sides) * D
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>  <span style="color:#00f">return</span> D</span></span></code></pre></div>
+<p>If we then test this method with dices that have four sides.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>two_dice_distribution(4)</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>array([0.    , 0.    , 0.0625, 0.125 , 0.1875, 0.25  , 0.1875, 0.125 ,
+       0.0625, 0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    ,
+       0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    ,
+       0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    ,
+       0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    , 0.    ])
+</code></pre><h3 id="constructing-the-transition-matrix">
+  Constructing the transition matrix
+  <a class="anchor" href="#constructing-the-transition-matrix">#</a>
+</h3>
+<p>To construct the transition matrix, we need to create this distribution vector for each cell $c_n$. We do this by creating the distribution vector starting at $c_0$, and then shift it by $n$, to get the distribution vector for $c_n$. If we repeat this for every cell, this will give us a total of $40$ vectors, which we are going to use as the rows to construct the transition matrix.</p>
+<p>We will also add a placeholder method, in which we will later add the rules for double throws.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> dice_distribution(cell_index, num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  distribution = two_dice_distribution(num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  distribution = np.roll(distribution, cell_index)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  <span style="color:#008000"># TODO: add other rules</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  <span style="color:#00f">return</span> distribution</span></span></code></pre></div>
+<p>Finally, we will construct the transition matrix by creating $40$ distribution vectors for each cell, and use them as the rows in the transition matrix.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> monopoly_transition_matrix(num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  rows = []
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(40):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    distribution = dice_distribution(i, num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    rows.append(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>  <span style="color:#00f">return</span> np.matrix(rows)</span></span></code></pre></div>
+<p>Let&rsquo;s test this function and see what this matrix looks like.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = monopoly_transition_matrix(6)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>plt.matshow(M, cmap=<span style="color:#a31515">&#34;inferno&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>plt.colorbar()
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>plt.ylabel(<span style="color:#a31515">&#34;Source&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>plt.xlabel(<span style="color:#a31515">&#34;Target&#34;</span>)</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<p>
+  <img src="/monopoly-transition-matrix.png" alt="Transition matrix" /></p>
+<p>This looks OK. We can also look at the steady state vector of this matrix, using the eigenvector method.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>eigenvalues, eigenvectors = eig(M.T)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>steady_state = eigenvectors.T[0].real
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>steady_state /= sum(steady_state)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>steady_state</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>array([0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025,
+       0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025,
+       0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025,
+       0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025,
+       0.025, 0.025, 0.025, 0.025])
+</code></pre><p>This tells us that the probability to land on each cell is $2.5\%$, which agrees with what is described in the problem statement for the problem on Project Euler.</p>
+<h3 id="implementing-cards-and-other-cases">
+  Implementing cards and other cases
+  <a class="anchor" href="#implementing-cards-and-other-cases">#</a>
+</h3>
+<p>Now that we have a basic transition matrix for a single roll of two dices, we can implement the chance and community chest cards. First let&rsquo;s recall what all the possible outcomes are.</p>
+<ul>
+<li>Chance cards (2/16 cards)
+<ol>
+<li>Advance to <code>GO</code>.</li>
+<li>Go to <code>JAIL</code>.</li>
+</ol>
+</li>
+<li>Community chest cards (10/16 cards)
+<ol>
+<li>Advance to <code>GO</code>.</li>
+<li>Go to <code>JAIL</code>.</li>
+<li>Go to <code>C1</code>.</li>
+<li>Go to <code>E3</code>.</li>
+<li>Go to <code>H2</code>.</li>
+<li>Go to <code>R1</code>.</li>
+<li>Go to next <code>R</code> (railway company)</li>
+<li>Go to next <code>R</code>.</li>
+<li>Go to next <code>U</code> (utility company)</li>
+<li>Go back $3$ squares.</li>
+</ol>
+</li>
+</ul>
+<p>To conveniently use the labels of the board, we will first declare all the different cells as an integer, and a list to find the corresponding label for a cell number.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>GO = 0; A1 = 1; CC1 = 2; A2 = 3; T1 = 4; R1 = 5; B1 = 6; CH1 = 7; B2 = 8; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>B3 = 9; JAIL = 10; C1 = 11; U1 = 12; C2 = 13; C3 = 14; R2 = 15; D1 = 16; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>CC2 = 17; D2 = 18; D3 = 19; FP = 20; E1 = 21; CH2 = 22; E2 = 23; E3 = 24; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>R3 = 25; F1 = 26; F2 = 27; U2 = 28; F3 = 29; G2J = 30; G1 = 31; G2 = 32; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>CC3 = 33; G3 = 34; R4 = 35; CH3 = 36; H1 = 37; T2 = 38; H2 = 39
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>labels = [<span style="color:#a31515">&#39;GO&#39;</span>, <span style="color:#a31515">&#39;A1&#39;</span>, <span style="color:#a31515">&#39;CC1&#39;</span>, <span style="color:#a31515">&#39;A2&#39;</span>, <span style="color:#a31515">&#39;T1&#39;</span>, <span style="color:#a31515">&#39;R1&#39;</span>, <span style="color:#a31515">&#39;B1&#39;</span>, <span style="color:#a31515">&#39;CH1&#39;</span>, <span style="color:#a31515">&#39;B2&#39;</span>, <span style="color:#a31515">&#39;B3&#39;</span>, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>          <span style="color:#a31515">&#39;JAIL&#39;</span>, <span style="color:#a31515">&#39;C1&#39;</span>, <span style="color:#a31515">&#39;U1&#39;</span>, <span style="color:#a31515">&#39;C2&#39;</span>, <span style="color:#a31515">&#39;C3&#39;</span>, <span style="color:#a31515">&#39;R2&#39;</span>, <span style="color:#a31515">&#39;D1&#39;</span>, <span style="color:#a31515">&#39;CC2&#39;</span>, <span style="color:#a31515">&#39;D2&#39;</span>, <span style="color:#a31515">&#39;D3&#39;</span>, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>          <span style="color:#a31515">&#39;FP&#39;</span>, <span style="color:#a31515">&#39;E1&#39;</span>, <span style="color:#a31515">&#39;CH2&#39;</span>, <span style="color:#a31515">&#39;E2&#39;</span>, <span style="color:#a31515">&#39;E3&#39;</span>, <span style="color:#a31515">&#39;R3&#39;</span>, <span style="color:#a31515">&#39;F1&#39;</span>, <span style="color:#a31515">&#39;F2&#39;</span>, <span style="color:#a31515">&#39;U2&#39;</span>, <span style="color:#a31515">&#39;F3&#39;</span>, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>          <span style="color:#a31515">&#39;G2J&#39;</span>, <span style="color:#a31515">&#39;G1&#39;</span>, <span style="color:#a31515">&#39;G2&#39;</span>, <span style="color:#a31515">&#39;CC3&#39;</span>, <span style="color:#a31515">&#39;G3&#39;</span>, <span style="color:#a31515">&#39;R4&#39;</span>, <span style="color:#a31515">&#39;CH3&#39;</span>, <span style="color:#a31515">&#39;H1&#39;</span>, <span style="color:#a31515">&#39;T2&#39;</span>, <span style="color:#a31515">&#39;H2&#39;</span>]</span></span></code></pre></div>
+<h4 id="case-1--chance-cards">
+  Case 1 — Chance cards
+  <a class="anchor" href="#case-1--chance-cards">#</a>
+</h4>
+<p>Looking at the two different type of cards, we find the following probabilities:</p>
+<ul>
+<li>Advance to <code>GO</code> is $P(CC = \textrm{GO}) = \frac{1}{16}$.</li>
+<li>Go to <code>JAIL</code> is $P(CC = \textrm{JAIL}) = \frac{1}{16}$.</li>
+<li>A probability of $\frac{14}{16}$ to not move.</li>
+</ul>
+<p>Because there are three cells: <code>CH1</code>, <code>CH2</code>, and <code>CH3</code>, we have to redistribute the probabilities for these cells. Let&rsquo;s look at an example. The probability that we land in jail, is the probability that we land on the chance card multiplied by the probability that we pick the go to jail card. Suppose the probability that we land on <code>CH4</code> is $10\%$. This will then give $10\%\cdot\frac{1}{16} = 0.625\%$ as a result.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> apply_chance_card(x):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#00f">for</span> CC <span style="color:#00f">in</span> [CC1, CC2, CC3]:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    p_cc = x[CC]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    x[CC] *= 14 / 16
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    x[GO] += 1 / 16 * p_cc
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    x[JAIL] += 1 / 16 * p_cc</span></span></code></pre></div>
+<p>We can now apply this function to the probability distribution for any $c_n$, and it will redistribute the probabilities. If the probability to land on the chance card is $0\%$ to begin with, then nothing will be redistributed.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> dice_distribution(cell_index, num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  distribution = two_dice_distribution(num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  distribution = np.roll(distribution, cell_index)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  apply_chance_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  <span style="color:#00f">return</span> distribution</span></span></code></pre></div>
+<p>Let&rsquo;s quickly test this by checking if the probability to land on <code>JAIL</code> has increased.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = monopoly_transition_matrix(6)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>eigenvalues, eigenvectors = eig(M.T)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>steady_state = eigenvectors.T[0].real
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>steady_state /= sum(steady_state)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>steady_state[JAIL]</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>0.02946038636979632
+</code></pre><p>Which has indeed been increased to approximately $2.9\%$.</p>
+<h4 id="case-2--community-chest-cards">
+  Case 2 — Community chest cards
+  <a class="anchor" href="#case-2--community-chest-cards">#</a>
+</h4>
+<p>Because there are quite a few more community chest cards that have an impact on the probability distribution, implementing this one takes more time. Let&rsquo;s start with creating a dictionary that helps us to find the correct railway and utility companies.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>nearest_railway = {CH1: R2, CH2: R3, CH3: R1}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>nearest_utility = {CH1: U1, CH2: U2, CH3: U1}</span></span></code></pre></div>
+<p>Here we use the same approach as with the chance cards, except it is easier here to store all the other cards in a list. We can then remove the probability from the <code>CH</code> cell, iterate over all the cards and then distribute the probabilities to the cells.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">def</span> apply_community_chest_card(x):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#00f">for</span> CH <span style="color:#00f">in</span> [CH1, CH2, CH3]:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    p_ch = x[CH]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    x[CH] *= 6/16
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    cards = [GO, JAIL, C1, E3, H2, R1, CH-3, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>             nearest_railway[CH], 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>             nearest_railway[CH], 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>             nearest_utility[CH]]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#00f">for</span> card <span style="color:#00f">in</span> cards:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>      x[card] += 1/16 * p_ch</span></span></code></pre></div>
+<p>Again, we will add this function to the <code>dice_distribution</code> function.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> dice_distribution(cell_index, num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  distribution = two_dice_distribution(num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  distribution = np.roll(distribution, cell_index)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  apply_chance_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  apply_community_chest_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>  <span style="color:#00f">return</span> distribution</span></span></code></pre></div>
+<p>We can quickly test this by confirming that the sum of every row is $1$.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = monopoly_transition_matrix(6)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>M.sum(axis=1).T</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>matrix([[1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+         1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+         1., 1., 1., 1., 1., 1., 1., 1.]])
+</code></pre><p>Which it is indeed!</p>
+<h4 id="case-3--go-to-jail">
+  Case 3 — Go to jail
+  <a class="anchor" href="#case-3--go-to-jail">#</a>
+</h4>
+<p>At this moment, <code>G2J</code> is still considered as a cell, however, the probabilities of <code>G2J</code> have to be added to <code>JAIL</code> because you can&rsquo;t end up at <code>G2J</code>. Implementing this is rather straightforward.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> apply_go_to_jail(x):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  x[JAIL] += x[G2J]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  x[G2J] = 0</span></span></code></pre></div>
+<p>Again, we will add this to the <code>dice_distribution</code> function.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">def</span> dice_distribution(cell_index, num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  distribution = two_dice_distribution(num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  distribution = np.roll(distribution, cell_index)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  apply_chance_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  apply_community_chest_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>  apply_go_to_jail(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>  <span style="color:#00f">return</span> distribution</span></span></code></pre></div>
+<p>With almost all the rules applied, let&rsquo;s take another look at how the transition matrix looks.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = monopoly_transition_matrix(6)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>plt.matshow(M, cmap=<span style="color:#a31515">&#34;inferno&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>plt.colorbar()
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>plt.ylabel(<span style="color:#a31515">&#34;Source&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>plt.xlabel(<span style="color:#a31515">&#34;Target&#34;</span>)</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<p>
+  <img src="/monopoly-transition-matrix-correct.png" alt="Correct transition matrix" /></p>
+<p>The effect of this rule is pretty visible, all the probabilities from row $30$ (<code>G2J</code>) have been moved to row $10$ (<code>JAIL</code>). We can also clearly see where the community chest cards are.</p>
+<h2 id="solving-the-project-euler-question">
+  Solving the Project Euler question
+  <a class="anchor" href="#solving-the-project-euler-question">#</a>
+</h2>
+<p>The questions asks us to concatenate the cell numbers for the three cells which have the highest probability to land on. As a method to verify our work, the question has included the answer for throwing with 6-sided dices. In this case, the answer is <code>102400</code>.</p>
+<h3 id="verifying-the-given-solution">
+  Verifying the given solution
+  <a class="anchor" href="#verifying-the-given-solution">#</a>
+</h3>
+<p>Let&rsquo;s see if our method gives the same result.</p>
+<p>First we will create the transition matrix for 6-sides dices.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = monopoly_transition_matrix(6)</span></span></code></pre></div>
+<p>Then we are going to calculate the steady state vector for the transition matrix.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>eigenvalues, eigenvectors = eig(M.T)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>steady_state = eigenvectors.T[0].real
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>steady_state /= sum(steady_state)</span></span></code></pre></div>
+<p>Once we have the steady state vector, we create a list of tuples with the probability to land on the cell, and the cell number.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>cells = [(p, i) <span style="color:#00f">for</span> i, p <span style="color:#00f">in</span> enumerate(steady_state)]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>cells[:3]</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>[(0.031073154066202282, 0),
+ (0.021547417364822227, 1),
+ (0.019013909910947927, 2)]
+</code></pre><p>Finally we can sort this in descending order with the sorted(&hellip;) function, select the first three tuples, and concatenate them into the correct string.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#a31515">&#34;&#34;</span>.join([str(c).rjust(2, <span style="color:#a31515">&#39;0&#39;</span>) <span style="color:#00f">for</span> _, c <span style="color:#00f">in</span> sorted(cells, reverse=<span style="color:#00f">True</span>)[:3]])</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>102400
+</code></pre><p>Awesome, we have found the correct result, which validates that our method is correct.</p>
+<h3 id="finding-the-solution">
+  Finding the solution
+  <a class="anchor" href="#finding-the-solution">#</a>
+</h3>
+<p>Now we simple change the number of sides for the dices to four to find the answer to the problem.</p>
+<p><strong>Input</strong>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>M = monopoly_transition_matrix(4)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>eigenvalues, eigenvectors = eig(M.T)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>steady_state = eigenvectors.T[0].real
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>steady_state /= sum(steady_state)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>cells = [(p, i) <span style="color:#00f">for</span> i, p <span style="color:#00f">in</span> enumerate(steady_state)]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>cells[:3]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#a31515">&#34;&#34;</span>.join([str(c).rjust(2, <span style="color:#a31515">&#39;0&#39;</span>) <span style="color:#00f">for</span> _, c <span style="color:#00f">in</span> sorted(cells, reverse=<span style="color:#00f">True</span>)[:3]])</span></span></code></pre></div></p>
+<p><strong>Output</strong></p>
+<pre tabindex="0"><code>****** // Solution redacted
+</code></pre><p>Which tells us that <code>******</code> is the answer to the problem. If we use this as the solution to the question, Project Euler indeed verifies that this is correct! Pfew, that was quite some work, but we have solved the question!</p>
+<p>OK, I have to admit that I cheated a little. I tried to find the solution before applying the rules of double throwing. To my surprise, the answer was correct! However, the same result is found if we apply the rules for double throwing, which in my opinion makes the model more accurate, although the error might be negligible.</p>
+<h2 id="complete-source-code">
+  Complete source code
+  <a class="anchor" href="#complete-source-code">#</a>
+</h2>
+<p>This is the complete source code that will print the solution.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#00f">from</span> scipy.linalg <span style="color:#00f">import</span> eig
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>GO = 0; A1 = 1; CC1 = 2; A2 = 3; T1 = 4; R1 = 5; B1 = 6; CH1 = 7; B2 = 8; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>B3 = 9; JAIL = 10; C1 = 11; U1 = 12; C2 = 13; C3 = 14; R2 = 15; D1 = 16; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>CC2 = 17; D2 = 18; D3 = 19; FP = 20; E1 = 21; CH2 = 22; E2 = 23; E3 = 24; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>R3 = 25; F1 = 26; F2 = 27; U2 = 28; F3 = 29; G2J = 30; G1 = 31; G2 = 32; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>CC3 = 33; G3 = 34; R4 = 35; CH3 = 36; H1 = 37; T2 = 38; H2 = 39
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>labels = [<span style="color:#a31515">&#39;GO&#39;</span>, <span style="color:#a31515">&#39;A1&#39;</span>, <span style="color:#a31515">&#39;CC1&#39;</span>, <span style="color:#a31515">&#39;A2&#39;</span>, <span style="color:#a31515">&#39;T1&#39;</span>, <span style="color:#a31515">&#39;R1&#39;</span>, <span style="color:#a31515">&#39;B1&#39;</span>, <span style="color:#a31515">&#39;CH1&#39;</span>, <span style="color:#a31515">&#39;B2&#39;</span>, <span style="color:#a31515">&#39;B3&#39;</span>, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>          <span style="color:#a31515">&#39;JAIL&#39;</span>, <span style="color:#a31515">&#39;C1&#39;</span>, <span style="color:#a31515">&#39;U1&#39;</span>, <span style="color:#a31515">&#39;C2&#39;</span>, <span style="color:#a31515">&#39;C3&#39;</span>, <span style="color:#a31515">&#39;R2&#39;</span>, <span style="color:#a31515">&#39;D1&#39;</span>, <span style="color:#a31515">&#39;CC2&#39;</span>, <span style="color:#a31515">&#39;D2&#39;</span>, <span style="color:#a31515">&#39;D3&#39;</span>, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>          <span style="color:#a31515">&#39;FP&#39;</span>, <span style="color:#a31515">&#39;E1&#39;</span>, <span style="color:#a31515">&#39;CH2&#39;</span>, <span style="color:#a31515">&#39;E2&#39;</span>, <span style="color:#a31515">&#39;E3&#39;</span>, <span style="color:#a31515">&#39;R3&#39;</span>, <span style="color:#a31515">&#39;F1&#39;</span>, <span style="color:#a31515">&#39;F2&#39;</span>, <span style="color:#a31515">&#39;U2&#39;</span>, <span style="color:#a31515">&#39;F3&#39;</span>, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>          <span style="color:#a31515">&#39;G2J&#39;</span>, <span style="color:#a31515">&#39;G1&#39;</span>, <span style="color:#a31515">&#39;G2&#39;</span>, <span style="color:#a31515">&#39;CC3&#39;</span>, <span style="color:#a31515">&#39;G3&#39;</span>, <span style="color:#a31515">&#39;R4&#39;</span>, <span style="color:#a31515">&#39;CH3&#39;</span>, <span style="color:#a31515">&#39;H1&#39;</span>, <span style="color:#a31515">&#39;T2&#39;</span>, <span style="color:#a31515">&#39;H2&#39;</span>]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span><span style="color:#00f">def</span> cross_sum(S):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>  <span style="color:#00f">return</span> [(a + b) <span style="color:#00f">for</span> a <span style="color:#00f">in</span> S <span style="color:#00f">for</span> b <span style="color:#00f">in</span> S]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span><span style="color:#00f">def</span> two_dice_distribution(num_sides):  
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>  outcomes = cross_sum(range(1, num_sides+1))
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>  D = np.array([0] * 40)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>  <span style="color:#00f">for</span> outcome <span style="color:#00f">in</span> outcomes:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    D[outcome] += 1
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>  D = 1 / (num_sides * num_sides) * D
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>  <span style="color:#00f">return</span> D
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span><span style="color:#00f">def</span> apply_chance_card(x):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>  <span style="color:#00f">for</span> CC <span style="color:#00f">in</span> [CC1, CC2, CC3]:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>    p_cc = x[CC]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>    x[CC] *= 14 / 16
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>    x[GO] += 1 / 16 * p_cc
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>    x[JAIL] += 1 / 16 * p_cc
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>nearest_railway = {CH1: R2, CH2: R3, CH3: R1}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>nearest_utility = {CH1: U1, CH2: U2, CH3: U1}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span><span style="color:#00f">def</span> apply_community_chest_card(x):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>  <span style="color:#00f">for</span> CH <span style="color:#00f">in</span> [CH1, CH2, CH3]:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>    p_ch = x[CH]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>    x[CH] *= 6/16
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>    cards = [GO, JAIL, C1, E3, H2, R1, CH-3, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>             nearest_railway[CH], 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>             nearest_railway[CH], 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>             nearest_utility[CH]]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>    <span style="color:#00f">for</span> card <span style="color:#00f">in</span> cards:
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>      x[card] += 1/16 * p_ch
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span><span style="color:#00f">def</span> apply_go_to_jail(x):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>  x[JAIL] += x[G2J]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>  x[G2J] = 0
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span><span style="color:#00f">def</span> dice_distribution(cell_index, num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>  distribution = two_dice_distribution(num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>  distribution = np.roll(distribution, cell_index)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>  apply_chance_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>  apply_community_chest_card(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>  apply_go_to_jail(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>  <span style="color:#00f">return</span> distribution
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span><span style="color:#00f">def</span> monopoly_transition_matrix(num_sides):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>  rows = []
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>  <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(40):
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span>    distribution = dice_distribution(i, num_sides)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span>    rows.append(distribution)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span>  <span style="color:#00f">return</span> np.matrix(rows)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span><span>M = monopoly_transition_matrix(6)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span><span>eigenvalues, eigenvectors = eig(M.T)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span><span>steady_state = eigenvectors.T[0].real
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span><span>steady_state /= sum(steady_state)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span><span>cells = [(p, i) <span style="color:#00f">for</span> i, p <span style="color:#00f">in</span> enumerate(steady_state)]
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span><span><span style="color:#a31515">&#34;&#34;</span>.join([str(c).rjust(2, <span style="color:#a31515">&#39;0&#39;</span>) <span style="color:#00f">for</span> _, c <span style="color:#00f">in</span> sorted(cells, reverse=<span style="color:#00f">True</span>)[:3]])</span></span></code></pre></div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#what-is-a-markov-process">What is a Markov process?</a>
+      <ul>
+        <li><a href="#the-transition-matrix">The transition matrix</a></li>
+        <li><a href="#how-to-find-the-steady-state-vector">How to find the steady state vector?</a></li>
+        <li><a href="#eigenvectors-and-the-steady-state-vector">Eigenvectors and the steady state vector</a></li>
+      </ul>
+    </li>
+    <li><a href="#monopoly-as-a-markov-process">Monopoly as a Markov process</a>
+      <ul>
+        <li><a href="#probability-distribution-of-throwing-two-dice">Probability distribution of throwing two dice</a></li>
+        <li><a href="#encoding-the-probability-distribution-in-a-vector">Encoding the probability distribution in a vector</a></li>
+        <li><a href="#constructing-the-transition-matrix">Constructing the transition matrix</a></li>
+        <li><a href="#implementing-cards-and-other-cases">Implementing cards and other cases</a></li>
+      </ul>
+    </li>
+    <li><a href="#solving-the-project-euler-question">Solving the Project Euler question</a>
+      <ul>
+        <li><a href="#verifying-the-given-solution">Verifying the given solution</a></li>
+        <li><a href="#finding-the-solution">Finding the solution</a></li>
+      </ul>
+    </li>
+    <li><a href="#complete-source-code">Complete source code</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

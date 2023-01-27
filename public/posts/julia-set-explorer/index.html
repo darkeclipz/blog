@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A live demo of this shader is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Julia set explorer" />
+<meta property="og:description" content="A live demo of this shader is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/julia-set-explorer/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-19T08:47:11+01:00" />
+<meta property="article:modified_time" content="2020-12-19T08:47:11+01:00" />
+
+<title>Julia set explorer | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Julia set explorer</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/julia-set-explorer/">Julia set explorer</a>
+  </h1>
+  
+  <h5>December 19, 2020</h5>
+
+
+
+  
+
+
+
+
+
+<p>
+    A <a href="https://www.shadertoy.com/view/wltyRr" target="_blank">live demo of this shader</a> is available on ShaderToy. You can select a point on the Mandelbrot set to see the corresponding Julia set. If the mouse is not used, the point follows a path along the main cardioid. The selected point is displayed in red.
+  </p>
+  
+  <div style="text-align: center">
+      <iframe width="810" height="448" frameborder="0" src="https://www.shadertoy.com/embed/wltyRr?gui=true&t=10&paused=false&muted=false" allowfullscreen></iframe>
+  </div>
+  
+  <p>
+      Everyone who starts making fractals, usually starts with rendering the Mandelbrot set. 
+        If this is rendered on the CPU, per pixel, it will usually take quite some time to render the image.
+        This problem is better suited to be calculated on the GPU, in parellel, and using GLSL (a programming language for shaders) is an efficient method to do this.
+        Actually, rendering the Mandelbrot set with GLSL, can be seen as the hello world of GLSL.
+  </p>
+  
+  <p>
+    The Mandelbrot set is calculated with the following iterated function
+    $$
+    z_{n+1} = z^2 +c,
+    $$
+    where $z$ and $c$ are complex numbers. I am not going to explain how <a href="https://www.youtube.com/watch?v=nT3WYFxvPLk" target="_blank">complex arithmetic</a> works, there are plenty of resources already available.
+    To render it, $z$ would be set to $0$, and $c$ is the normalized pixel position written as a complex number.
+  </p>
+  
+  <h2>Julia set</h2>
+  
+  <p>
+    The Julia set can be found when $z$ is set to the normalized pixel position, and $c$ is a fixed position.
+    If for example, we let $c = (-0.161, 0.6483)$, the following Julia set will be rendered:
+  </p>
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/--axP7Jaay7Q/X96G1XX9g3I/AAAAAAAAEpw/pYxMocjo4n0bOovtvy0sfz5jgXye0eqjACLcBGAsYHQ/s1505/julia1.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" height="400" data-original-height="1505" data-original-width="1503" src="https://1.bp.blogspot.com/--axP7Jaay7Q/X96G1XX9g3I/AAAAAAAAEpw/pYxMocjo4n0bOovtvy0sfz5jgXye0eqjACLcBGAsYHQ/s400/julia1.png"/></a></div>
+  <div style="text-align: center">Julia set at $(−0.161, 0.6483)$</div>
+  
+  <p>
+    Something which I find very fascinating is that if we look at a region in the Mandelbrot set, the Julia set for that region will display the same patterns. 
+    In essence, the Mandelbrot can be seen as the super version of all Julia sets. In this perspective, the Mandelbrot is essentially a map for all the Julia sets.
+  </p>
+  
+  <p>
+    Knowing this, I always wanted to make a shader where you can choose a point in the Mandelbrot set, and see the corresponding Julia set. With this shader, I have finally created exactly that.
+  </p>
+  
+  <h2>The main cardioid</h2>
+  
+  <p>
+    Another thing I always wanted to do, is let the point follow a path along the main cardioid. This way, the most interesting Julia sets can be seen with a cool animation.
+    I found <a href="http://cosinekitty.com/mandel_orbits_analysis.html">a method to find the main cardioid on this website</a>. The main cardioid is located at
+    $$ 
+    c = \frac{\textrm{e}^{i\theta}}{2} - \frac{\textrm{e}^{2i\theta}}{4},
+    $$
+    where $\theta \in [0, 2\pi]$. Because GLSL doesn't handle complex numbers this way, it can also be rewritten as:
+    
+    $$
+    c = \frac{1}{4}\left(2\cos\theta-\cos(2\theta)\right) + i\sin(\theta)\sin^2\left(\frac{\theta}{2}\right)
+    $$
+    
+    If we <a href="https://www.desmos.com/calculator/bc8hqvuc3p" target="_blank">plot this with Desmos</a>, we will indeed see that it is the cardioid:
+  </p>
+  
+  <div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-6yeBXg-lfeM/X96R-0pnO8I/AAAAAAAAEp8/mqEucgP3aU0jsSugyjBM4sDD1xn2u_2kQCLcBGAsYHQ/s916/cardioid.PNG" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" height="320" data-original-height="916" data-original-width="915" src="https://1.bp.blogspot.com/-6yeBXg-lfeM/X96R-0pnO8I/AAAAAAAAEp8/mqEucgP3aU0jsSugyjBM4sDD1xn2u_2kQCLcBGAsYHQ/s320/cardioid.PNG"/></a></div>
+  
+  
+  </article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

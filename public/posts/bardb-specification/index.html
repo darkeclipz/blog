@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BarDB specification#Time series of low resolution charts can quickly consume a large amount of storage. The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. This document aims to explain an implemenation of a database that is optimized to solve this specific problem.
+To keep in mind if we should, instead of being to busy trying to figure out if we could, it is important to compare this solution against other implementations with a relational database and a schemaless database.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="BarDB specification" />
+<meta property="og:description" content="BarDB specification#Time series of low resolution charts can quickly consume a large amount of storage. The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. This document aims to explain an implemenation of a database that is optimized to solve this specific problem.
+To keep in mind if we should, instead of being to busy trying to figure out if we could, it is important to compare this solution against other implementations with a relational database and a schemaless database." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/bardb-specification/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-08T10:08:00+01:00" />
+<meta property="article:modified_time" content="2023-01-08T10:08:00+01:00" />
+
+<title>BarDB specification | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>BarDB specification</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#binary-storage-format">Binary storage format</a>
+      <ul>
+        <li><a href="#symbol-file-table-sft">Symbol File Table (SFT)</a></li>
+        <li><a href="#block">Block</a></li>
+        <li><a href="#bar">Bar</a></li>
+        <li><a href="#file-size">File size</a></li>
+      </ul>
+    </li>
+    <li><a href="#bar-query-language-bql">Bar Query Language (BQL)</a>
+      <ul>
+        <li><a href="#creating-a-symbol">Creating a symbol</a></li>
+        <li><a href="#dropping-a-symbol">Dropping a symbol</a></li>
+        <li><a href="#inserting-bars">Inserting bars</a></li>
+        <li><a href="#retrieving-bars">Retrieving bars</a></li>
+        <li><a href="#updating-bars">Updating bars</a></li>
+        <li><a href="#deleting-bars">Deleting bars</a></li>
+      </ul>
+    </li>
+    <li><a href="#bucketization-of-a-ticker-stream">Bucketization of a ticker stream</a></li>
+    <li><a href="#performance">Performance</a></li>
+    <li><a href="#proof-of-concept">Proof of concept</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/bardb-specification/">BarDB specification</a>
+  </h1>
+  
+  <h5>January 8, 2023</h5>
+
+
+
+  
+
+
+
+
+<h1 id="bardb-specification">
+  BarDB specification
+  <a class="anchor" href="#bardb-specification">#</a>
+</h1>
+<p>Time series of low resolution charts can quickly consume a large amount of storage.
+The goal of BarDB is to store market data structured as OHLCV candles as efficiently as possible. 
+This document aims to explain an implemenation of a database that is optimized to solve this specific problem.</p>
+<p>To keep in mind if we should, instead of being to busy trying to figure out if we could, it is important to compare this solution against other implementations with a relational database and a schemaless database.</p>
+<h2 id="binary-storage-format">
+  Binary storage format
+  <a class="anchor" href="#binary-storage-format">#</a>
+</h2>
+<p>The candles are written as a binary file to disk. This section documents the layout of the binary storage format.</p>
+<h3 id="symbol-file-table-sft">
+  Symbol File Table (SFT)
+  <a class="anchor" href="#symbol-file-table-sft">#</a>
+</h3>
+<p>The symbol file table is a high level index table of the data that is stored in the database.</p>
+<p>If data is requested from the database, the symbol file table (SFT) is used to determine in which blocks the requested data is located.</p>
+<p>This symbol file table is stored as a B-tree where the key is the time. Each symbol and resolution has their own B-tree.</p>
+<p>The symbol file table is stored in <code>bardb.sft</code>. Ideally the database runs as a server and the symbol file table is present in memory at all times.</p>
+<h3 id="block">
+  Block
+  <a class="anchor" href="#block">#</a>
+</h3>
+<p>Data is stored in so called blocks. The first type is the time $t$, which is Unix time (UTC) in seconds, and the second type is the resolution, or $t_{inc}$ (time increment). The third type is the size $s$ of the block.</p>
+<ul>
+<li>The total size in bytes of a block is $20s + 16$.</li>
+<li>The offset of each bar is $t + k\cdot t_{inc}$, where $k \in \mathbb N$.</li>
+<li>To get the index of a bar given a Unix time $T$, first get the remainder $r = T - t$, and then the index is $i = \lfloor r / t_{inc} \rfloor $.</li>
+</ul>
+<pre tabindex="0"><code>i64 time           8 bytes
+u32 resolution     4 bytes 
+u32 size           4 bytes
+bar[] bars         20 bytes per bar
+</code></pre><p>In theory, there is no maximum size that a block can have. The only condition is that the bars are stored contiguously because the time and resolution is used to determine the offset of a bar.</p>
+<p>Perhaps this is not feasible due to file system limitations. In this case a block can be splitted it if a maximum file size is reached.</p>
+<p>A block is stored with the following naming convention: <code>SYMBOL.RESOLUTION.bin</code>.</p>
+<h3 id="bar">
+  Bar
+  <a class="anchor" href="#bar">#</a>
+</h3>
+<p>A bar represents one OHLCV candle. The data of a candle is stored with the following types. The total size of one bar is 20 bytes.</p>
+<pre tabindex="0"><code>f32 open           4 bytes
+f32 high           4 bytes
+f32 low            4 bytes
+f32 close          4 bytes
+f32 volume         4 bytes
+</code></pre><p>The time which a bar represents doesn&rsquo;t need to be stored next to the bar itself, because this is determined by the offset at which the bar is stored.</p>
+<h3 id="file-size">
+  File size
+  <a class="anchor" href="#file-size">#</a>
+</h3>
+<p>Using 20 bytes for each candle, the following table can be constructed. A year of minute candles consumes 10.02Mb of storage.</p>
+<p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>candles</th>
+<th>bytes (bars)</th>
+<th>kilobytes (bars)</th>
+<th>megabytes (bars)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>year</td>
+<td>1</td>
+<td>20</td>
+<td>0.01953125</td>
+<td>1.90735E-05</td>
+</tr>
+<tr>
+<td>month</td>
+<td>12</td>
+<td>240</td>
+<td>0.234375</td>
+<td>0.000228882</td>
+</tr>
+<tr>
+<td>week</td>
+<td>52</td>
+<td>1040</td>
+<td>1.015625</td>
+<td>0.000991821</td>
+</tr>
+<tr>
+<td>day</td>
+<td>365</td>
+<td>7300</td>
+<td>7.12890625</td>
+<td>0.006961823</td>
+</tr>
+<tr>
+<td>hour</td>
+<td>8760</td>
+<td>175200</td>
+<td>171.09375</td>
+<td>0.16708374</td>
+</tr>
+<tr>
+<td>minute</td>
+<td>525600</td>
+<td>10512000</td>
+<td>10265.625</td>
+<td>10.02502441</td>
+</tr>
+</tbody>
+</table>
+</p>
+<h2 id="bar-query-language-bql">
+  Bar Query Language (BQL)
+  <a class="anchor" href="#bar-query-language-bql">#</a>
+</h2>
+<p>The interface with BarDB is specified with the Bar Query Language (BQL).
+This query language is a subset of SQL, but adapted to the needs of BarDB.</p>
+<h3 id="creating-a-symbol">
+  Creating a symbol
+  <a class="anchor" href="#creating-a-symbol">#</a>
+</h3>
+<p>A symbol can be created with:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">CREATE</span> SYMBOL &lt;SYMBOL_NAME:EXCHANGE&gt;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#00f">WITH</span> RESOLUTION 3600 <span style="color:#008000">-- hourly
+</span></span></span></code></pre></div><p>Note that if a symbol is tracked on multiple exchanges, the symbol name should include the name of the exchange.</p>
+<h3 id="dropping-a-symbol">
+  Dropping a symbol
+  <a class="anchor" href="#dropping-a-symbol">#</a>
+</h3>
+<p>A symbol can be dropped from the database with</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">DROP</span> SYMBOL &lt;SYMBOL_NAME:EXCHANGE&gt;
+</span></span></code></pre></div><h3 id="inserting-bars">
+  Inserting bars
+  <a class="anchor" href="#inserting-bars">#</a>
+</h3>
+<p>Bars can be inserted with the <code>INSERT</code> command, like so</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">INSERT</span> <span style="color:#00f">INTO</span> &lt;SYMBOL_NAME:EXCHANGE&gt;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#00f">WITH</span> RESOLUTION 3600
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#00f">VALUES</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    (T, O, H, L, <span style="color:#00f">C</span>, V),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    (T, O, H, L, <span style="color:#00f">C</span>, V),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    (T, O, H, L, <span style="color:#00f">C</span>, V),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>    (T, O, H, L, <span style="color:#00f">C</span>, V),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>    (T, O, H, L, <span style="color:#00f">C</span>, V),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span>    (T, O, H, L, <span style="color:#00f">C</span>, V);
+</span></span></code></pre></div><h3 id="retrieving-bars">
+  Retrieving bars
+  <a class="anchor" href="#retrieving-bars">#</a>
+</h3>
+<p>Bars can be retrieved from the database like so</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">SELECT</span> <span style="color:#00f">FROM</span> &lt;SYMBOL_NAME:EXCHANGE&gt;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#00f">WITH</span> RESOLUTION 3600
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#00f">WHERE</span> T <span style="color:#00f">BETWEEN</span> T_START <span style="color:#00f">AND</span> T_END
+</span></span></code></pre></div><h3 id="updating-bars">
+  Updating bars
+  <a class="anchor" href="#updating-bars">#</a>
+</h3>
+<p>It is not possible to update bars in the first version of BarDB.</p>
+<h3 id="deleting-bars">
+  Deleting bars
+  <a class="anchor" href="#deleting-bars">#</a>
+</h3>
+<p>Likewise, bars can be deleted with the <code>DELETE</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#00f">DELETE</span> <span style="color:#00f">FROM</span> &lt;SYMBOL_NAME:EXCHANGE&gt;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#00f">WITH</span> RESOLUTION 3600
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#00f">WHERE</span> T <span style="color:#00f">BETWEEN</span> T_START <span style="color:#00f">AND</span> T_END
+</span></span></code></pre></div><h2 id="bucketization-of-a-ticker-stream">
+  Bucketization of a ticker stream
+  <a class="anchor" href="#bucketization-of-a-ticker-stream">#</a>
+</h2>
+<p>Suppose we get a continuous stream of buy or sells as a tuple $(t, p, v)$ where $t$ is the time, and $p$ the price, and $v$ the volume.</p>
+<p>It would be <em>very convenient</em> if this stream can be inserted into the database, and that the database bucketizes this into the correct resolution, e.g. that the database calculates the bars based on the tuple stream.</p>
+<p>Although it is very convenient, this shouldn&rsquo;t be in the scope of the project for the first version.</p>
+<h2 id="performance">
+  Performance
+  <a class="anchor" href="#performance">#</a>
+</h2>
+<p>Compare performance of this solution against MS-SQL and NoSQL databases.</p>
+<h2 id="proof-of-concept">
+  Proof of concept
+  <a class="anchor" href="#proof-of-concept">#</a>
+</h2>
+<p>During the development of a proof of concept of BarDB, the following key question should be answered:</p>
+<ol>
+<li>Is it worthwile to develop BarDB as a solution?</li>
+</ol>
+<p>An answer can be given based on the following sub-questions:</p>
+<ol>
+<li>If we add a <code>time</code> column to the bar, and store it in a conventional SQL database, is this better or worse than this solution?</li>
+<li>Why is a NoSQL database better suited to store this type of data versus a relational database? Why?</li>
+<li>How does BarDB perform versus a relational database and schemaless database?</li>
+</ol>
+<h2 id="footnotes">
+  Footnotes
+  <a class="anchor" href="#footnotes">#</a>
+</h2>
+<ul>
+<li>The type <code>i64</code> is chosen as the type to represent the time. One could argue that an unsigned type can be used, but with this it is not possible to represent values before the Unix epoch naturally. Because of this, the <code>i64</code> type has been chosen.</li>
+<li>It is only possible to create a symbol with a name and a resolution. One could argue that data can be collected for different exchanges as well, but this should be added to the symbol name instead for simplicity.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#binary-storage-format">Binary storage format</a>
+      <ul>
+        <li><a href="#symbol-file-table-sft">Symbol File Table (SFT)</a></li>
+        <li><a href="#block">Block</a></li>
+        <li><a href="#bar">Bar</a></li>
+        <li><a href="#file-size">File size</a></li>
+      </ul>
+    </li>
+    <li><a href="#bar-query-language-bql">Bar Query Language (BQL)</a>
+      <ul>
+        <li><a href="#creating-a-symbol">Creating a symbol</a></li>
+        <li><a href="#dropping-a-symbol">Dropping a symbol</a></li>
+        <li><a href="#inserting-bars">Inserting bars</a></li>
+        <li><a href="#retrieving-bars">Retrieving bars</a></li>
+        <li><a href="#updating-bars">Updating bars</a></li>
+        <li><a href="#deleting-bars">Deleting bars</a></li>
+      </ul>
+    </li>
+    <li><a href="#bucketization-of-a-ticker-stream">Bucketization of a ticker stream</a></li>
+    <li><a href="#performance">Performance</a></li>
+    <li><a href="#proof-of-concept">Proof of concept</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

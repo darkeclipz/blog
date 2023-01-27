@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="You might wonder what Newton&#39;s law of gravitation has to do with the generation of dungeons, but if we use this concept we can use it to generate a dungeon of rooms. Instead of using something like a BSP algorithm, my idea was to just throw a bunch of rooms on top of each other, and let them push each other away until there are no longer any collisions. The result looks like this.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Dungeon generation with Newton&#39;s law of gravity" />
+<meta property="og:description" content="You might wonder what Newton&#39;s law of gravitation has to do with the generation of dungeons, but if we use this concept we can use it to generate a dungeon of rooms. Instead of using something like a BSP algorithm, my idea was to just throw a bunch of rooms on top of each other, and let them push each other away until there are no longer any collisions. The result looks like this." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/dungeon-generation/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-02-03T08:47:11+01:00" />
+<meta property="article:modified_time" content="2021-02-03T08:47:11+01:00" />
+
+<title>Dungeon generation with Newton&#39;s law of gravity | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Dungeon generation with Newton&#39;s law of gravity</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/dungeon-generation/">Dungeon generation with Newton&#39;s law of gravity</a>
+  </h1>
+  
+  <h5>February 3, 2021</h5>
+
+
+
+  
+
+
+
+
+
+<p>You might wonder what Newton's law of gravitation has to do with the generation of dungeons, but if we use this concept we can use it to generate a dungeon of rooms. Instead of using something like a BSP algorithm, my idea was to just throw a bunch of rooms on top of each other, and let them push each other away until there are no longer any collisions. The result looks like this.</p>
+
+<div class="separator" style="clear: both;"><a href="https://1.bp.blogspot.com/-Q2CoKVuli5w/YB022Udlp4I/AAAAAAAAE1Y/9rXPNLv5U3U0gZZa5dB9CgcsAqvhQMahgCLcBGAsYHQ/s810/img.png" style="display: block; padding: 1em 0px; text-align: center;"><img alt="" border="0" data-original-height="800" data-original-width="810" src="https://1.bp.blogspot.com/-Q2CoKVuli5w/YB022Udlp4I/AAAAAAAAE1Y/9rXPNLv5U3U0gZZa5dB9CgcsAqvhQMahgCLcBGAsYHQ/s320/img.png" width="320" /></a></div>
+
+<p>The method to push them away from each other, is where Newton's law of gravitation comes in. If two rooms are on top of each other, this gravitational force would be used to push the two rooms apart (instead of attracting).</p><p>The result of this method can be seen in the included demo below. This <a href="https://github.com/darkeclipz/dungeon-generator" rel="nofollow" target="_blank">demo is available on GitHub, and can be found here</a>. Press F5 if it doesn't load properly, or check it out on GitHub.</p>
+
+<div>
+	<iframe src="https://darkeclipz.github.io/dungeon-generator/" style="border: 1px #aaa solid; height: 800px; width: 100%;"></iframe> 
+</div><div><br /></div><div>The demo has the following variables that can be altered to change the result of the algorithm:</div><div><ul style="text-align: left;"><li><i>numberOfRooms</i>: pretty self explanatory, this is the number of the rooms that are generated.</li><li><i>circleRadius</i>: the radius of the circle in which the rooms are placed randomly.</li><li><i>minRoomSize</i>: the minimum width/height of a room.</li><li><i>maxRoomSize:</i><i style="font-weight: bold;">&nbsp;</i>the maximum width/height of a room.</li><li><i>gravitationalForce: </i>the gravity factor $G$ in Newton's law.</li><li><i>velocityStepSize:</i>&nbsp;the step size used for changed the position based on the velocity.</li><li><i>maxVelocity</i>: the maximum amount of velocity for a room.</li><li><i>nearestNeighbours</i>: the number of rooms a room is connected to with a line.</li></ul></div><div>The rest of this post will explain the various techniques that have been used to in this demo.</div><h2 style="text-align: left;">Vectors &amp; Math</h2><div>The first thing I did was to define a vector class for a 2D vector, which simplifies a lot of the mathematical operations. The vector class has the following methods that are used in the demo: addition/subtraction, scaling, dot product, length, length squared (faster if the distance isn't used properly), and normalize. The entire <a href="https://github.com/darkeclipz/dungeon-generator/blob/master/math.js" rel="nofollow" target="_blank">implementation can be found here</a>, because otherwise this post would get very long.</div><p>I have also added two functions to the <code>Math</code> class. A <code>clamp(x, a, b)</code> method, which ensures that $x$ stays between $a$ and $b$, and an <code>argmin(list)</code> function that will return the index of the lowest value in the list.</p><h2 style="text-align: left;">Rectangles</h2><p>Next we define a class for a rectangle, which will be used to define the position and the dimensions of a room. This allows us to define a rectangle with the four variables $x, y, w, h$.</p>
+ 
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">class</span> Rectangle {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    constructor(x, y, w, h) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#00f">this</span>.x = x;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">this</span>.y = y;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#00f">this</span>.w = w;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#00f">this</span>.h = h;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    intersect(rect) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        <span style="color:#00f">const</span> x = Math.max(<span style="color:#00f">this</span>.x, rect.x);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        <span style="color:#00f">const</span> n1 = Math.min(<span style="color:#00f">this</span>.x + <span style="color:#00f">this</span>.w, rect.x + rect.w);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        <span style="color:#00f">const</span> y = Math.max(<span style="color:#00f">this</span>.y, rect.y);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        <span style="color:#00f">const</span> n2 = Math.min(<span style="color:#00f">this</span>.y + <span style="color:#00f">this</span>.h, rect.y + rect.h);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>        <span style="color:#00f">if</span>(n1 &gt;= x &amp;&amp; n2 &gt;= y) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>            <span style="color:#00f">return</span> <span style="color:#00f">new</span> Rectangle(x, y, n1 - x, n2 - y);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>        <span style="color:#00f">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>            <span style="color:#00f">return</span> Rectangle.empty;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    <span style="color:#00f">static</span> empty = <span style="color:#00f">new</span> Rectangle(<span style="color:#00f">undefined</span>, <span style="color:#00f">undefined</span>, <span style="color:#00f">undefined</span>, <span style="color:#00f">undefined</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>}</span></span></code></pre></div>
+
+<p>The class also contains <a href="https://stackoverflow.com/a/22921131" rel="nofollow" target="_blank">a fast method for finding the rectangle that intersects two rectangles</a>, which comes from an answer on StackOverflow. This answer comes from the implementation of <code>Rectangle.Intersect</code> from the .NET Framework. (Why reinvent the wheel?)</p><h2 style="text-align: left;">Random probability functions</h2><div>To randomly generated the width and the height of the rooms, I wanted a function that usually creates a small room, and sometimes a big room. Luckily there is the exponential function $e^x$, which we can use to create such a function. If we multiply $e^x$ by $(1-x)$, we can shape the function such that $f(0) = 1$, and $f(1) = 0$. If we then subtract this from $1$, we get our function $f(x) = 1 - e^x(1-x)$. The graph below shows this function $f$ (in orange):<br /><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="https://1.bp.blogspot.com/-hHUL4xToHZ8/YBsJR-WbmjI/AAAAAAAAE1M/O3rcCUGsyvosjllboRjk1VcgOdAJb3BNgCLcBGAsYHQ/s450/download.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="422" data-original-width="450" src="https://1.bp.blogspot.com/-hHUL4xToHZ8/YBsJR-WbmjI/AAAAAAAAE1M/O3rcCUGsyvosjllboRjk1VcgOdAJb3BNgCLcBGAsYHQ/s320/download.png" width="320" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">If we look at the orange function, we can see that if $y = 0.6$, then $x \approx 0.82$. We will then generate a random uniform variable $\underline{x} \in [0, 1]$, and evaluate $f(\underline{x})$ to generate the width and the height of the room.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><p class="separator" style="clear: both; text-align: left;">The position of the room is also randomly generated. To have them all on top of each other, this should be a random position in the unit circle. To generate a random point in the unit circle, we will generate two random variables $x_0 \in [0, 1]$, and $x_1 \in [0, 1]$. These variables are used to generated a random polar coordinate $(r, \theta)$ within the unit circle. The length is $r=x_0$, and the angle is $\theta = 2\pi\sqrt{x_1}$. The square root is taken because the area of the circle grows faster as the circle becomes bigger. The Cartesian coordinates are given with $x = r\cdot\cos(\theta)$, and $y = r\cdot\sin(\theta)$. All in all, this gives us the following code to generate the random variables.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">class</span> Random {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">static</span> insideUnitCircle() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        <span style="color:#00f">const</span> theta = Math.random() * 2 * Math.PI;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#00f">const</span> r = Math.sqrt(Math.random());
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">return</span> <span style="color:#00f">new</span> Vec2(r * Math.cos(theta), r * Math.sin(theta));
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#00f">static</span> exponential() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        <span style="color:#00f">var</span> r = Math.random();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">return</span> 1 - Math.exp(r) * (1 - r);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    <span style="color:#00f">static</span> uniform() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        <span style="color:#00f">return</span> Math.random();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>}</span></span></code></pre></div>
+
+<h2 style="text-align: left;">Rooms</h2><p>Next we will create a class for the rooms. This class will hold the rectangle that defines the position and room size, and also a velocity vector which we are going to use to move the room around. We will also add a method to calculate the point at the center of the room. It would probably be better to move this to the rectangle class, but this will do for now. Finally we will add a method to calculate the squared length of the diagonal of the room. This diagonal is used to determine the mass of the room which is used to the determine the force $F$ in Newton's law of gravity.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">class</span> Room {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    constructor(x, y, w, h) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        <span style="color:#00f">this</span>.rect = <span style="color:#00f">new</span> Rectangle(x, y, w, h);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#00f">this</span>.velocity = <span style="color:#00f">new</span> Vec2(0);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">this</span>.neighbours = [];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    center() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">return</span> <span style="color:#00f">new</span> Vec2(<span style="color:#00f">this</span>.rect.w / 2 + <span style="color:#00f">this</span>.rect.x, <span style="color:#00f">this</span>.rect.h / 2 + <span style="color:#00f">this</span>.rect.y);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    lengthSquared() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        <span style="color:#00f">return</span> <span style="color:#00f">new</span> Vec2(<span style="color:#00f">this</span>.rect.w, <span style="color:#00f">this</span>.rect.h).lengthSquared();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>}</span></span></code></pre></div>
+
+<p>The neighbours list is used to store all the nearest rooms, based on the nearest neighbour algorithm. This is used to draw the lines between the rooms.</p><h2 style="text-align: left;">Generating the rooms</h2><p>Now we can generate all the rooms, which is done with the following function.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>generateRooms() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">const</span> r = <span style="color:#00f">this</span>.circleRadius;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#00f">const</span> range = <span style="color:#00f">this</span>.maxRoomSize - <span style="color:#00f">this</span>.minRoomSize;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">for</span>(<span style="color:#00f">let</span> i = 0; i &lt; <span style="color:#00f">this</span>.numberOfRooms; i++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        <span style="color:#00f">const</span> p = Random.insideUnitCircle().scale(r);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#00f">const</span> w = Random.exponential() * range + <span style="color:#00f">this</span>.minRoomSize;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#00f">const</span> h = Random.exponential() * range + <span style="color:#00f">this</span>.minRoomSize;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        <span style="color:#00f">const</span> room = <span style="color:#00f">new</span> Room(p.x - w/2, p.y - h/2, w, h, <span style="color:#00f">this</span>.numberOfRooms);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        <span style="color:#00f">this</span>.points.push(p);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        <span style="color:#00f">this</span>.rooms.push(room);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>}</span></span></code></pre></div>
+
+<p>Here we will generate $n$ rooms based on the settings provided by the user. All the rooms will be stored a list rooms. There also is a list for all the points, which is used by the drawing algorithm to draw all the rooms.</p>
+
+<h2>Applying Newton's law of gravity</h2><div>If we recall that Newton's law of gravity is</div><div><br /></div><div>$$&nbsp; F = \dfrac{G\cdot m_1\cdot m_2}{r^2}\cdot\hat{r} $$</div><div><br /></div><div>where $F$ is the force, $G$ is the gravitational constant, $m_1$ the mass of the first object, $m_2$ the mass of the second object, and $r^2$ is the squared distance between the center of mass between those objects, and $\hat{r}$ is the vector between the objects, which is normalized).</div><div><br /></div><div>The force $F$ that is calculated will be used as the velocity, so instead of attracting, we want to repel, which means that we should use $-F$. We will then use this velocity and use "Euler integration" to change the position of the room. This basically means is that at each step, we are going to add a little bit of the velocity to the position of the room. How much velocity is added, is based on the step size $h$.</div><div><br /></div><div>Now to move the rooms, we are going to check if there are any intersections. If there are intersections, then we will run the this algorithm to move the rooms.&nbsp;</div><div><ul style="text-align: left;"><li>For $i=0$ to $n$ (for each room $R_i$):</li><ul><li>For $j=i$ to $n$ (for each room from $R_i$ to room $R_j$):</li><ul><li>If the two rooms <b>do not intersect</b>, skip all below, and go to the next room (increase $j$).</li><li>Calculate the "mass" $m_1$ of room $R_i$, which is the squared length of the diagonal.</li><li>Calculate the "mass" $m_2$ of room $R_j$.</li><li>Calculate the squared distance $r^2$ between $R_i$ and $R_j$.</li><li>Calculate the force $F$ with Newton's law of gravity.</li><li>Calculate the vector $\hat{r}_i$ which is the vector from room $R_i$ to $R_j$.</li><li>Calculate the vector $\hat{r}_j$ which is the vector from room $R_j$ to $R_i$.</li><li>Calculate the velocity of room $R_i$ which is $-F\cdot\hat r_i$.</li><li>Calculate the velocity of room $R_j$ which is $-F\cdot \hat r_j$.</li><li>Add the velocity multiplied by the step size ($h\cdot\hat{r}_i$) to the position of room $R_i$.</li><li>Add the velocity multiplied by the step size ($h\cdot\hat{r}_j$) to the position of room $R_j$.</li><li>Set the intersected variable to true.</li></ul></ul></ul><div>If there are no intersections, then the algorithm has finished. If we implement this, we get the following function that performs a single step of the algorithm.</div><ol style="text-align: left;"></ol></div>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>updateVelocity() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">let</span> intersected = <span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#00f">for</span>(<span style="color:#00f">let</span> i = 0; i &lt; <span style="color:#00f">this</span>.rooms.length; i++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#00f">for</span>(<span style="color:#00f">let</span> j = i; j &lt; <span style="color:#00f">this</span>.rooms.length; j++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>            <span style="color:#00f">if</span>(i == j) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>                <span style="color:#00f">continue</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            <span style="color:#00f">const</span> intersectedRect = <span style="color:#00f">this</span>.rooms[i].rect.intersect(<span style="color:#00f">this</span>.rooms[j].rect);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            <span style="color:#00f">if</span>(intersectedRect != Rectangle.empty) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>                <span style="color:#008000">// Using an adjusted form of the formula for gravity to calculate
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#008000"></span>                <span style="color:#008000">// the force, but is instead used to push the objects apart.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#008000"></span>                <span style="color:#00f">const</span> room1 = <span style="color:#00f">this</span>.rooms[i];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>                <span style="color:#00f">const</span> room2 = <span style="color:#00f">this</span>.rooms[j];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>                <span style="color:#00f">const</span> m1 = room1.rect.w * room1.rect.h;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>                <span style="color:#00f">const</span> m2 = room2.rect.w * room2.rect.h;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>                <span style="color:#00f">const</span> r = room1.center().subtract(room2.center()).lengthSquared();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>                <span style="color:#00f">const</span> G = <span style="color:#00f">this</span>.gravitationalForce;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>                <span style="color:#00f">const</span> fg1 = G * m1 * m2 / r;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>                <span style="color:#00f">const</span> fg2 = G * m1 * m2 / r;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>                <span style="color:#00f">const</span> v1 = room1.center().subtract(room2.center()).normalize();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>                <span style="color:#00f">const</span> v2 = room2.center().subtract(room1.center()).normalize();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>                <span style="color:#00f">const</span> maxV = <span style="color:#00f">this</span>.maxVelocity;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>                room1.velocity = Vec2.clamp(v1.scale(fg1), -maxV, maxV);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>                room2.velocity = Vec2.clamp(v2.scale(fg2), -maxV, maxV);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>                <span style="color:#00f">const</span> stepSize = <span style="color:#00f">this</span>.velocityStepSize;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>                room1.rect.x += stepSize * room1.velocity.x;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>                room1.rect.y += stepSize * room1.velocity.y;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>                room2.rect.x += stepSize * room2.velocity.x;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>                room2.rect.y += stepSize * room2.velocity.y;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>                intersected = <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>            <span style="color:#00f">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>                <span style="color:#00f">this</span>.rooms[i].velocity = <span style="color:#00f">this</span>.rooms[j].velocity = Vec2.zero;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>    <span style="color:#00f">if</span>(intersected) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>        <span style="color:#00f">this</span>.stepsToConverge++;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>    <span style="color:#00f">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>        <span style="color:#00f">this</span>.converged = <span style="color:#00f">true</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>        console.log(<span style="color:#a31515">&#39;Converged in &#39;</span>, <span style="color:#00f">this</span>.stepsToConverge, <span style="color:#a31515">&#39; steps.&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>}</span></span></code></pre></div>
+
+<h2>Putting it all together</h2>
+<p>Not all the code in the demo is explained in this project, but this should give a broad idea of how it works. The final last step, is to continuously call the <code>updateVelocity</code> function, to perform a step, until there are no more intersections. After each step, the dungeon is also drawn on the canvas, which gives the animations. This is done with the following function.</p>
+
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#00f">const</span> generate = () =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">const</span> dungeon = <span style="color:#00f">new</span> DungeonGenerator(settings);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    dungeon.generate();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#00f">const</span> drawer = <span style="color:#00f">new</span> DungeonDrawer(canvas);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#00f">const</span> animate = () =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        canvas.clear();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        <span style="color:#00f">if</span> (!dungeon.step()) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            requestAnimationFrame(animate);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        <span style="color:#00f">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            dungeon.calculateNearestNeighbours();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        drawer.draw(dungeon);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    animate();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>}</span></span></code></pre></div>
+
+<h2>Finding the nearest rooms</h2><p>To draw the lines between the nearest rooms, a nearest neighbour algorithm is used. This is a quite straightforward algorithm, which I will list below:</p><p><ul style="text-align: left;"><li>For each room</li><li>Calculate the distance to every other room, and store this distance</li><li>Sort this array of distance from low to high.</li><li>Pick the first $n$ elements, which are the nearest neighbours of the room.</li><li>Draw a line to each of them.</li></ul><p>The following code will create a graph with this algorithm. This graph is then drawn to the canvas to display the lines between the rooms.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>calculateNearestNeighbours() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#00f">for</span>(<span style="color:#00f">let</span> i = 0; i &lt; <span style="color:#00f">this</span>.rooms.length; i++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#00f">let</span> distances = [];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        <span style="color:#00f">for</span>(<span style="color:#00f">let</span> j = 0; j &lt; <span style="color:#00f">this</span>.rooms.length; j++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>            <span style="color:#00f">if</span>(i == j) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>                <span style="color:#00f">continue</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            <span style="color:#00f">const</span> d = <span style="color:#00f">this</span>.rooms[i].center().subtract(<span style="color:#00f">this</span>.rooms[j].center()).lengthSquared();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            distances.push([i, j, d]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        distances.sort((first, second) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>            <span style="color:#00f">return</span> first[2] - second[2];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>        <span style="color:#00f">for</span>(<span style="color:#00f">let</span> k = 0; k &lt; <span style="color:#00f">this</span>.nearestNeighbours; k++) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>            <span style="color:#00f">const</span> neighbour = <span style="color:#00f">this</span>.rooms[distances[k][1]];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>            <span style="color:#00f">this</span>.rooms[distances[k][0]].neighbours.push(neighbour);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>            <span style="color:#00f">this</span>.graph.addEdge(...distances[k]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>}</span></span></code></pre></div>
+
+<p style="text-align: left;">Using this algorithm it is possible that the dungeon is split into multiple subgraphs. This means that the dungeon is disconnected, and a player might not be able to reach the end. This can be solved, by determining the connected components of a graph. In simpler terms, these are the subgraphs that are in a graph, and if there is only one subgraph, we know that we have a completely connected dungeon. An <a href="https://github.com/darkeclipz/graphs/blob/e191ea6c4f326381687208736bb090b948c26d3c/Graph.Algorithms/ConnectedComponents.cs#L7" rel="nofollow" target="_blank">algorithm to find the connected components of a graph can be found in my C# graph library</a>. If subgraphs are found, you could either try to connect them, or simply discard the entire dungeon and generate a new one.</p><h2>After thoughts</h2><p>This algorithm can create quite a variety of rooms. If the step size is low (or gravitational force is low), then the rooms will be clumped together. If some space between the rooms is desired, we could increase the gravitational force, or the step size.</p>
+
+<p>I also thought about a few methods for the corridors. First we could simply draw a corridor for each line, but if slanted corridors are not desired, you could perhaps only use the lines where the slope is almost vertical of horizontal, and discard the rest. This could however result in disconnected rooms, which is a problem. Because everything is randomly generated, at some point it will generate a disconnected dungeon. This is very bad.</p>
+
+<p>Another method is to use the lines as springs, and let them pull the rooms together after they have been placed. They don't have to behave like actual springs, so we could again use this formula to generate some force to attract only the rooms which are connected. I think the end result will give only horizontal and vertical lines, because that gives the shortest distance for the line between the two rooms, but I have not verified this.</p>
+
+<p>Another thing I've noticed is that if there is a big range between the minimum size of a room, and the maximum size of a room, quite ugly "corridor" like rooms are generated. Maybe you like them, maybe not. A method to get rid of them is to define a maximum range between these variables, and if the range is too big, then increase the smaller width/height with the missing range. Another method is to divide the width by the height to create a ratio, and keep generating new rooms until this ratio is between some threshold such as $[0.5, 1.5]$.</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

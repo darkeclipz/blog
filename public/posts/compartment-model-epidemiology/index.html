@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.
+SEIRD-model#The population is divided into compartments, with the assumption that every individual has the same characteristics. There are a total of five compartments:
+Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) The population flows in the following direction between the compartments.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Compartment model for epidemiology" />
+<meta property="og:description" content="This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.
+SEIRD-model#The population is divided into compartments, with the assumption that every individual has the same characteristics. There are a total of five compartments:
+Susceptible ($S$) Exposed ($E$) Infected ($I$) Recovered ($R$) Diseased ($D$) The population flows in the following direction between the compartments." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/compartment-model-epidemiology/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-03-14T08:47:11+01:00" />
+<meta property="article:modified_time" content="2020-03-14T08:47:11+01:00" />
+
+<title>Compartment model for epidemiology | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Compartment model for epidemiology</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#seird-model">SEIRD-model</a></li>
+    <li><a href="#analysis">Analysis</a></li>
+    <li><a href="#lockdown">Lockdown</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/compartment-model-epidemiology/">Compartment model for epidemiology</a>
+  </h1>
+  
+  <h5>March 14, 2020</h5>
+
+
+
+  
+
+
+
+
+<p>This post looks at a compartment model for epidemiology and analyzes the different relationships between the variables in the model. Finally, it draws conclusions about the impact the variables have on the model.</p>
+<h2 id="seird-model">
+  SEIRD-model
+  <a class="anchor" href="#seird-model">#</a>
+</h2>
+<p>The population is divided into compartments, with the assumption that every individual has the same characteristics. There are a total of five compartments:</p>
+<ul>
+<li>Susceptible ($S$)</li>
+<li>Exposed ($E$)</li>
+<li>Infected ($I$)</li>
+<li>Recovered ($R$)</li>
+<li>Diseased ($D$)</li>
+</ul>
+<p>The population flows in the following direction between the compartments.</p>
+<p>$$
+S \rightarrow E \rightarrow I \rightarrow R / D
+$$</p>
+<p>The model is described as ordinary differential equations with the following variables:</p>
+<ul>
+<li>$β$: how often a susceptible-infected result in exposure.</li>
+<li>$σ$: the rate an exposed becomes infected.</li>
+<li>$γ$: the rate an infected recovers.</li>
+<li>$δ$: the rate that a case that recovers dies.</li>
+<li>$ν$: vaccination ($ν=0$)</li>
+<li>$S$: initial susceptible.</li>
+<li>$E$: initial exposed.</li>
+<li>$I$: initial infected.</li>
+<li>$R$: initial recovered.</li>
+<li>$D$: initial deaths.</li>
+</ul>
+<p>These variables are related through the following ordinary differential equations:</p>
+<p>$$
+\begin{align}
+\dfrac{dS}{dt} &amp;= -\beta\dfrac{SI}{N}-\nu S \\
+\dfrac{dE}{dt} &amp;= \beta\dfrac{SI}{N}-\sigma E\\
+\dfrac{dI}{dt} &amp;= \sigma E - \gamma I \\
+\dfrac{dR}{dt} &amp;= \gamma I - \nu S - \gamma \delta I \\
+\dfrac{dD}{dt} &amp;= \gamma \delta I \\
+N &amp;= S + E + I + R + D
+\end{align}
+$$</p>
+<h2 id="analysis">
+  Analysis
+  <a class="anchor" href="#analysis">#</a>
+</h2>
+<p>In the analysis the initial population size is $N=100.000$, and will start with one patient zero for all simulations.</p>
+<p>In the first simulation a susceptible-infected exposure has the probability of 80% to become exposed. Once exposed, at any unit of time the case has a chance of 15% to become infected. This given an average time until infection of 6.66 days. There is a probability of 10% to recover per unit of time, whereas 5% of those cases result in death. This means it takes an average of 10 days to recover.</p>
+<p>This gives the following initial conditions for the system: $β=0.8, σ=0.15, γ=0.1, δ=0.05$ at $t=0$.</p>
+<p>Running this simulation for 120 days gives the following result:</p>
+<p>
+  <img src="/seird1.png" alt="seird model" /></p>
+<figcaption>Figure 1 - Normal initial conditions.</figcaption>
+<p>With these initial conditions there are a maximum of around 37.000 infected. Over time the population will move from susceptible (S) to recovered (R).</p>
+<p>If the value of $σ$ is increased, meaning that exposed people will get infected faster, there is an increase in maximum infected cases. There are about 39.000 infected cases.</p>
+<p>
+  <img src="/seird2.png" alt="seird model" /></p>
+<figcaption>Figure 2 - Increased infection rate $σ$.</figcaption>
+<p>If a lower value of $σ$ is used, the resulting infections are spread out a lot more over time. There are about 19.500 infected cases.</p>
+<p>
+  <img src="/seird3.png" alt="seird model" /></p>
+<figcaption>Figure 3 - Decreased infection rate $σ$.</figcaption>
+<p>Another interesting factor is the recovery rate $γ$. If the recovery rate increased, there will be a lot less people infected at any given moment. There are about 21.000 infected cases.</p>
+<p>
+  <img src="/seird4.png" alt="seird model" /></p>
+<figcaption>Figure 4 - Increased recovery rate $γ$.</figcaption>
+<p>If it takes longer to recover, a massive surge is seen in the infected cases. There are about 50.000 infected cases, which is half of the population.</p>
+<p>
+  <img src="/seird5.png" alt="seird model" /></p>
+<figcaption>Figure 5 - Decreased recovery rate $γ$.</figcaption>
+<p>The following model has an increased exposure rate $β$, which means that exposed case are infected faster. This results in 41.000 infected cases.</p>
+<p>
+  <img src="/seird6.png" alt="seird model" /></p>
+<figcaption>Figure 6 - Increased exposure rate $β$.</figcaption>
+<h2 id="lockdown">
+  Lockdown
+  <a class="anchor" href="#lockdown">#</a>
+</h2>
+<p>The following model is the same model as in the previous section. However, after a period of time a lockdown will be in effect. This is modeled by settings $β$ to a very low value during a brief period of time $t$ .</p>
+<p>
+  <img src="/seird7.png" alt="seird model" /></p>
+<figcaption>Figure 7 - No lockdown.</figcaption>
+<p>Without the lockdown there is a maximum of 38.000 infected cases, while with a good timed lockdown, there are 20.000 infected cases. This is a reduction of 47.37%.</p>
+<p>
+  <img src="/seird8.png" alt="seird model" /></p>
+<figcaption>Figure 8 - Lockdown of 14 days.</figcaption>
+<h2 id="conclusion">
+  Conclusion
+  <a class="anchor" href="#conclusion">#</a>
+</h2>
+<p>The only variable that we can use to have impact on the model is the exposure rate $β$. If we restrict contact moments between humans, we lower the peak of total infected persons. The other variables are properties for the disease, such as how susceptible a human is to infection, how long it takes to show symptoms (and be infectious), how long it takes to recover, and the death rate.</p>
+<p>It is also important for a disease to not be too deadly. If a disease is too deadly, the infected will barely have a chance to infect other people, and the disease quickly dies out.</p>
+<p>
+  <a href="https://colab.research.google.com/drive/1AjiTnED6CjMaIqqLvJr7pcwYzgLSAPuX">The notebook that has been used to create the plots can be found here.</a></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#seird-model">SEIRD-model</a></li>
+    <li><a href="#analysis">Analysis</a></li>
+    <li><a href="#lockdown">Lockdown</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

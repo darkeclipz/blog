@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In the previous post we looked at creating Newton fractals at arrived at the generalized Newton&rsquo;s method.
+The method can be generalized even further, which is then known as a Nova fractal.
+Mandelbrot version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.The Nova fractal is created by using Newton&rsquo;s method, and adding a parameter $c$ to the end:
+$$ z_{n&#43;1} = z - \frac{f(z)}{f&rsquo;(z)} &#43; c.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Nova fractals" />
+<meta property="og:description" content="In the previous post we looked at creating Newton fractals at arrived at the generalized Newton&rsquo;s method.
+The method can be generalized even further, which is then known as a Nova fractal.
+Mandelbrot version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.The Nova fractal is created by using Newton&rsquo;s method, and adding a parameter $c$ to the end:
+$$ z_{n&#43;1} = z - \frac{f(z)}{f&rsquo;(z)} &#43; c." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rotgers.io/posts/nova-fractals/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-20T08:47:11+01:00" />
+<meta property="article:modified_time" content="2020-12-20T08:47:11+01:00" />
+
+<title>Nova fractals | Lars&#39; blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.30f2cdae974438f607207b8125467528a68783e572756b0f9fe9ff4cde0822bd.css" integrity="sha256-MPLNrpdEOPYHIHuBJUZ1KKaHg&#43;VydWsPn&#43;n/TN4IIr0=" crossorigin="anonymous">
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><div class="site-brand">
+      <div class="site-title">
+        <span class="lars">
+          LARS<br/>
+          ROTGERS
+        </span>
+      </div>
+    </div>
+  </a>
+</h2>
+
+<div class="p-title">software engineer, cpq specialist, fractal artist</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+  
+  
+  <ul>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Nova fractals</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/nova-fractals/">Nova fractals</a>
+  </h1>
+  
+  <h5>December 20, 2020</h5>
+
+
+
+  
+
+
+
+
+<!--
+    https://wiki2.org/en/Nova_fractal
+    http://imajeenyus.com/mathematics/20121112_distance_estimates/distance_estimation_method_for_fractals.pdf
+    https://www.iquilezles.org/www/articles/distancefractals/distancefractals.htm
+    https://mathr.co.uk/blog/2013-06-22_distance_estimation_for_newton_fractals.html
+    Interior smooth iter: https://www.chiark.greenend.org.uk/~sgtatham/newton/
+-->
+<p>In the 
+  <a href="/posts/newton-fractals/">previous post we looked at creating Newton fractals</a> at arrived at the generalized Newton&rsquo;s method.</p>
+<p>The method can be generalized even further, which is then known as a Nova fractal.</p>
+<p>
+  <img src="/nova-fractal.png" alt="Nova fractal" /></p>
+<figcaption>Mandelbrot version of the Nova fractal, with $f(z) = z^3 - 1$, and $z=1$.</figcaption>
+<p>The Nova fractal is created by using Newton&rsquo;s method, and adding a parameter $c$ to the end:</p>
+<p>$$
+z_{n+1} = z - \frac{f(z)}{f&rsquo;(z)} + c.
+$$</p>
+<p>We can get a Julia version of the fractal if we have fixed value for $c$, and use $z$ for the pixel position. Likewise, we can also get a Mandelbrot version by setting $z$ to a fixed point, and using $c$ for the pixel position. Note that the value of $z$, should be a stable point, e.g. a root.</p>
+<p>To get the image that is displayed above, the function $f(z) = z^3 - 1$ is used, which has a stable point at $z = 1$. This gives the function:</p>
+<p>$$
+z_{n+1} = z - \frac{z^3-1}{3z^2} + c,
+$$</p>
+<p>or in more general terms, where $p$ indicates the power:</p>
+<p>$$
+z_{n+1} = z - \frac{z^p-1}{pz^{p-1}} + c.
+$$</p>
+<p>To color this, we will keep track of how many iterations it takes before $z$ reaches a root, which is when $f(z) = 0$, or when $z_{n+1}-z_n = 0$, meaning that we haven&rsquo;t moved this iteration.</p>
+<p>The 
+  <a href="https://www.shadertoy.com/view/ttccRH">live demo below is available on ShaderToy</a>. It will display the Mandelbrot version of the Nova fractal, and if the mouse is used the Julia version is displayed.</p>
+<iframe frameborder="0" src="https://www.shadertoy.com/embed/ttccRH?gui=true&t=10&paused=true&muted=false" allowfullscreen></iframe>
+<p>Another variation can be found if we set $z_0$ to $c$. This produces a more regular version, which can be seen in the image below.</p>
+<p>
+  <img src="/nova-fractal-z4.png" alt="Nova 4th power" /></p>
+<figcaption>Nova fractal of $f : z \rightarrow z^4 - 1$, and $z_0 = c$.</figcaption>
+<p>Now all that is missing is a method to get a smooth iteration count. 
+I will come back to this post once I found it, and update the images.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<hr/>
+<footer>
+  &copy; 2022 Lars Rotgers <br/>
+  All rights reserved
+</footer>
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
